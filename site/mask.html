@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mask.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand bg-body-tertiary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Module Docs</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="collapse-utils.html" class="dropdown-item">CollapseUtils.js</a>
+          <a href="confirmation.html" class="dropdown-item">Confirmation.js</a>
+          <a href="copy-text.html" class="dropdown-item">CopyText.js</a>
+          <a href="countdown.html" class="dropdown-item">Countdown.js</a>
+          <a href="mask.html" class="dropdown-item">Mask.js</a>
+          <a href="radio-button.html" class="dropdown-item">RadioButton.js</a>
+          <a href="row-click.html" class="dropdown-item">RowClick.js</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#card-1" class="dropdown-item">Phone Mask</a>
+          <a href="#card-2" class="dropdown-item">Zip Mask</a>
+          <a href="#card-3" class="dropdown-item">SSN Mask</a>
+          <a href="#card-4" class="dropdown-item">Decimal Mask</a>
+          <a href="#card-5" class="dropdown-item">Date Mask</a>
+          <a href="#card-6" class="dropdown-item">Date Time Mask</a>
+          <a href="#card-7" class="dropdown-item">Month Year Mask</a>
+          <a href="#card-8" class="dropdown-item">Year Mask</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-3">
+  <h1>Mask.js</h1>
+
+  <div id="tests" class="collapse" data-toggle="tests">
+    <div class="card mb-3">
+      <h6 class="card-header">Test Results</h6>
+      <div class="card-body">
+        <div class="row g-2">
+          <div class="col-6">Adding Phone Mask Input Test: <span id="result1" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Zip Mask Input Test: <span id="result2" class="text-warning">Running</span></div>
+          <div class="col-6">Adding SSN Mask Input Test: <span id="result3" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Decimal Mask Input Test: <span id="result4" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Date Mask Input Test: <span id="result5" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Date Time Mask Input Test: <span id="result6" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Month Year Mask Input Test: <span id="result7" class="text-warning">Running</span></div>
+          <div class="col-6">Adding Year Mask Input Test: <span id="result8" class="text-warning">Running</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="card card-body">
+        <p>
+          This module is a wrapper for the Inputmask library found below.
+          I also add a MutationObserver to initialize new masks when added to the DOM.
+        </p>
+        <a href="https://robinherbots.github.io/Inputmask/" target="_blank">https://robinherbots.github.io/Inputmask/</a>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-1" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Phone Mask</h4>
+        <div id="test1" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="phone-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template1"></code></pre>
+          <template id="template1">
+            <input type="text" class="form-control" data-isp-toggle="phone-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Zip Mask</h4>
+        <div id="test2" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="zip-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template2"></code></pre>
+          <template id="template2">
+            <input type="text" class="form-control" data-isp-toggle="zip-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">SSN Mask</h4>
+        <div id="test3" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="ssn-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3"></code></pre>
+          <template id="template3">
+            <input type="text" class="form-control" data-isp-toggle="ssn-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-4" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Decimal Mask</h4>
+        <div id="test4" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="decimal-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template4"></code></pre>
+          <template id="template4">
+            <input type="text" class="form-control" data-isp-toggle="decimal-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-5" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Date Mask</h4>
+        <div id="test5" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="date-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template5" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template5"></code></pre>
+          <template id="template5">
+            <input type="text" class="form-control" data-isp-toggle="date-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-6" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Date Time Mask</h4>
+        <div id="test6" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="date-time-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template6" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template6"></code></pre>
+          <template id="template6">
+            <input type="text" class="form-control" data-isp-toggle="date-time-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-7" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Month Year Mask</h4>
+        <div id="test7" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="month-year-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template7" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template7"></code></pre>
+          <template id="template7">
+            <input type="text" class="form-control" data-isp-toggle="month-year-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-8" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Year Mask</h4>
+        <div id="test8" class="card-body">
+          <input type="text" class="form-control" data-isp-toggle="year-mask">
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template8" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template8"></code></pre>
+          <template id="template8">
+            <input type="text" class="form-control" data-isp-toggle="year-mask">
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
+<script type="module">
+  import { dateMask, dateTimeMask, decimalMask, monthYearMask, phoneMask, ssnMask, yearMask, zipMask } from "../js/Mask.js";
+  import { initExamples, initTestRunner } from "./assets/modules.js";
+  import { tests } from "../tests/mask-tests.js";
+
+  (function main() {
+    doubleInit();
+    initExamples();
+    initTestRunner(tests);
+  })();
+
+  function doubleInit() {
+    phoneMask();
+    zipMask();
+    ssnMask();
+    decimalMask();
+    dateMask();
+    dateTimeMask();
+    monthYearMask();
+    yearMask();
+
+    phoneMask();
+    zipMask();
+    ssnMask();
+    decimalMask();
+    dateMask();
+    dateTimeMask();
+    monthYearMask();
+    yearMask();
+  }
+</script>
+</body>
+</html>

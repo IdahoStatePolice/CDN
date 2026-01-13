@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RowClick.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand bg-body-tertiary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Module Docs</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="collapse-utils.html" class="dropdown-item">CollapseUtils.js</a>
+          <a href="confirmation.html" class="dropdown-item">Confirmation.js</a>
+          <a href="copy-text.html" class="dropdown-item">CopyText.js</a>
+          <a href="countdown.html" class="dropdown-item">Countdown.js</a>
+          <a href="mask.html" class="dropdown-item">Mask.js</a>
+          <a href="radio-button.html" class="dropdown-item">RadioButton.js</a>
+          <a href="row-click.html" class="dropdown-item">RowClick.js</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#card-1" class="dropdown-item">Table w/ Row Click and Optional No Click Cell</a>
+          <a href="#card-2" class="dropdown-item">Table w/ Row Click and Opens in New Tab</a>
+          <a href="#card-3" class="dropdown-item">Table w/ Row Click that Opens a Modal</a>
+          <a href="#card-4" class="dropdown-item">Table w/ Row Click that Submits a Form</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-3">
+  <div id="tests" class="collapse" data-toggle="tests">
+    <div class="card mb-3">
+      <h6 class="card-header">Test Results</h6>
+      <div class="card-body">
+        <div class="row g-2">
+          <div class="col-6">
+            <div>Navigate to href Test: <span id="result1" class="text-warning">Running</span></div>
+            <div>No Navigate to href in data-no-click Cell Test: <span id="result2" class="text-warning">Running</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12">
+      <div id="card-1" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Table w/ Row Click and Optional No Click Cell</h4>
+        <div class="card-body">
+          <table id="table1" class="table table-hover">
+            <thead>
+            <tr>
+              <th>header</th>
+              <th>header</th>
+              <th>header</th>
+              <th style="width: 1%;"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-isp-toggle="row-click" data-href="https://www.google.com">
+              <td>content</td>
+              <td>content</td>
+              <td>content</td>
+              <td data-no-click>
+                <a href="#doStuffModal" data-bs-toggle="modal">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template1"></code></pre>
+          <template id="template1">
+            <table class="table table-hover">
+              <thead>
+              <!-- header rows -->
+              </thead>
+              <tbody>
+              <tr data-isp-toggle="row-click" data-href="url">
+                <!-- content cells -->
+                <td data-no-click>
+                  <!-- buttons -->
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Table w/ Row Click and Opens in New Tab</h4>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>header</th>
+              <th>header</th>
+              <th>header</th>
+              <th style="width: 1%;"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-isp-toggle="row-click" data-href="https://www.google.com" data-target="_blank">
+              <td>content</td>
+              <td>content</td>
+              <td>content</td>
+              <td data-no-click>
+                <a href="#doStuffModal" data-bs-toggle="modal">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template2"></code></pre>
+          <template id="template2">
+            <table class="table table-hover">
+              <thead>
+              <!-- header rows -->
+              </thead>
+              <tbody>
+              <tr data-isp-toggle="row-click" data-href="url" data-target="_blank">
+                <!-- content cells -->
+                <td data-no-click>
+                  <!-- buttons -->
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Table w/ Row Click that Opens a Modal</h4>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>header</th>
+              <th>header</th>
+              <th>header</th>
+              <th style="width: 1%;"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-isp-toggle="row-click" data-modal-target="#rowModal">
+              <td>content</td>
+              <td>content</td>
+              <td>content</td>
+              <td data-no-click>
+                <a href="#doStuffModal" data-bs-toggle="modal">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div id="rowModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Opened from Row Click</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <img src="assets/images/unicorn-surfing.png" alt="" style="width: 450px; height: auto;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3"></code></pre>
+          <template id="template3">
+            <table class="table table-hover">
+              <thead>
+              <!-- header rows -->
+              </thead>
+              <tbody>
+              <tr data-isp-toggle="row-click" data-modal-target="#rowModal">
+                <!-- content cells -->
+                <td data-no-click>
+                  <!-- buttons -->
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-4" class="anchor-offset"></div>
+      <div class="card">
+        <h4 class="card-header text-bg-primary">Table w/ Row Click that Submits a Form</h4>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>header</th>
+              <th>header</th>
+              <th>header</th>
+              <th style="width: 1%;"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-isp-toggle="row-click" data-form-target="#rowForm">
+              <td>Submit form directly</td>
+              <td>content</td>
+              <td>content</td>
+              <td data-no-click>
+                <a href="#doStuffModal" data-bs-toggle="modal">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </a>
+              </td>
+            </tr>
+            <tr data-isp-toggle="row-click" data-form-target="#rowFormBtn">
+              <td>Submit form with a button</td>
+              <td>content</td>
+              <td>content</td>
+              <td data-no-click>
+                <a href="#doStuffModal" data-bs-toggle="modal">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div id="rowFormSubmitCatcher">
+            <form id="rowForm">
+              <button id="rowFormBtn" type="submit" class="btn btn-outline-primary">Submit</button>
+            </form>
+          </div>
+
+          <div id="formSubmittedModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Form Submitted</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <img src="assets/images/marshmallow-roast-unicorn.jpg" alt="" style="width: 450px; height: auto;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template4"></code></pre>
+          <template id="template4">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <!-- header rows -->
+              </tr>
+              </thead>
+              <tbody>
+              <tr data-isp-toggle="row-click" data-form-target="#form">
+                <!-- content cells -->
+                <td data-no-click>
+                  <!-- buttons -->
+                </td>
+              </tr>
+              <tr data-isp-toggle="row-click" data-form-target="#formBtn">
+                <!-- content cells -->
+                <td data-no-click>
+                  <!-- buttons -->
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="doStuffModal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Do Stuff</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="assets/images/stuff_to_do_unicorn.jpg" alt="" style="width: 450px; height: auto;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
+<script type="module">
+  import { RowClick } from "../js/RowClick.js";
+  import { initExamples, initTestRunner } from "./assets/modules.js";
+  import { tests } from "../tests/row-click-tests.js";
+  import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+
+  (function main() {
+    doubleInit();
+    initExamples();
+    initTestRunner(tests);
+    initPreventSubmit();
+  })();
+
+  function doubleInit() {
+    RowClick.initAll();
+    RowClick.initAll();
+  }
+
+  function initPreventSubmit() {
+    const formSubmittedCatcherEl = document.querySelector('#rowFormSubmitCatcher');
+    const formSubmittedModal = new Modal(document.querySelector('#formSubmittedModal'));
+
+    formSubmittedCatcherEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      formSubmittedModal.show();
+    });
+  }
+</script>
+</body>
+</html>
