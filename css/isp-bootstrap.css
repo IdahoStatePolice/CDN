@@ -1,0 +1,110 @@
+/*-------------------- Remove Number Spin Buttons --------------------*/
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/*Customizations of Bootstrap v5.3*/
+
+/*extra small*/
+.btn-group-xs > .btn, .btn-xs {
+  --bs-btn-padding-y: 0.1rem;
+  --bs-btn-padding-x: 0.25rem;
+  --bs-btn-font-size: 0.75rem;
+  --bs-btn-border-radius: var(--bs-border-radius-sm);
+}
+
+.form-control-xs {
+  padding: 0.1rem 0.25rem;
+  font-size: 0.75rem;
+  border-radius: var(--bs-border-radius-sm);
+}
+
+.form-select-xs {
+  padding-top: 0.1rem;
+  padding-bottom: 0.15rem;
+  padding-left: 0.25rem;
+  font-size: 0.75rem;
+  border-radius: var(--bs-border-radius-sm);
+}
+
+.form-control-xs::-webkit-file-upload-button {
+  padding: 0.1rem 0.25rem;
+  margin: -0.25rem -0.5rem;
+  -webkit-margin-end: 0.5rem;
+  margin-inline-end: 0.5rem;
+}
+
+.form-control-xs::file-selector-button {
+  padding: 0.1rem 0.25rem;
+  margin: -0.25rem -0.5rem;
+  -webkit-margin-end: 0.5rem;
+  margin-inline-end: 0.5rem;
+}
+
+.form-control-plaintext.form-control-xs {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.input-group-xs > .btn,
+.input-group-xs > .form-control,
+.input-group-xs > .form-select,
+.input-group-xs > .input-group-text {
+  padding: 0.1rem 0.25rem;
+  font-size: .75rem;
+  border-radius: var(--bs-border-radius-sm);
+}
+
+.input-group-xs > .form-select {
+  padding-right: 2.25rem;
+}
+
+/*Suggest.js css rules*/
+.mark, mark {
+  padding: 0;
+}
+
+.dropdown-item.hover {
+  color: var(--bs-dropdown-link-hover-color);
+  background-color: var(--bs-dropdown-link-hover-bg);
+}
+
+/*Other css rules*/
+.list-group-sm > .list-group-item {
+  padding: .25rem .5rem;
+}
+
+.required:after {
+  content: " *";
+  color: red;
+  white-space: nowrap;
+}
+
+.required-before:before {
+  content: "* ";
+  color: red;
+  white-space: nowrap;
+}
+
+.text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.c-pointer {
+  cursor: pointer;
+}
+
+.text-invalid {
+  color: var(--bs-form-invalid-color);
+}
+
+/* muted is deprecated, use secondary */
+/*.text-muted {*/
+/*  color: var(--bs-form-muted);*/
+/*}*/
