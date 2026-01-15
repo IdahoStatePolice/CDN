@@ -96,6 +96,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   text-justify: inter-word;
 }
 
+.text-pre-wrap {
+  white-space: pre-wrap;
+}
+
 .c-pointer {
   cursor: pointer;
 }
@@ -103,8 +107,3 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 .text-invalid {
   color: var(--bs-form-invalid-color);
 }
-
-/* muted is deprecated, use secondary */
-/*.text-muted {*/
-/*  color: var(--bs-form-muted);*/
-/*}*/
