@@ -14,6 +14,15 @@ pre {
 .hljs-comment {
   color: #7A7E85FF;
 }
+.hljs-keyword {
+  color: #CF8E6DFF;
+}
+.hljs-variable {
+  color: #C77DBBFF;
+}
+.hljs-title {
+  color: #56A8F5FF;
+}
 .anchor-offset {
   margin-top: calc(-1rem - 56px);
   margin-bottom: calc(1rem + 56px);

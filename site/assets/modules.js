@@ -9,7 +9,7 @@ function initExamples() {
     for (const el of document.querySelectorAll('[data-code-target]')) {
       const template = getTemplateText(el.dataset.codeTarget);
       // noinspection JSUnresolvedReference
-      const html = hljs.highlight(template, {language: 'xml'}).value;
+      const html = hljs.highlight(template, { language: el.dataset.codeType }).value;
       el.innerHTML = html.replaceAll('=<span class="hljs-string">', '<span class="hljs-string">=');
     }
   }
@@ -26,7 +26,7 @@ function initExamples() {
   `);
 
     const toastEl = document.querySelector('#copyToast');
-    const toast = new Toast(toastEl, {delay: 2000});
+    const toast = new Toast(toastEl, { delay: 2000 });
 
     document.addEventListener('click', async function(e) {
       const clipboardEl = e.target.closest('[data-clipboard]');
