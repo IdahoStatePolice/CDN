@@ -66,6 +66,30 @@
     </div>
 
     <div class="col-12">
+      <div class="card">
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#template0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
+          <template id="template0">
+            import { dateMask, dateTimeMask, decimalMask, monthYearMask, phoneMask, ssnMask, yearMask, zipMask } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Mask.js";
+
+            phoneMask();
+            zipMask();
+            ssnMask();
+            decimalMask();
+            dateMask();
+            dateTimeMask();
+            monthYearMask();
+            yearMask();
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
       <div id="card-1" class="anchor-offset"></div>
       <div class="card">
         <h5 class="card-header text-bg-primary">Phone Mask</h5>

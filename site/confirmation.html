@@ -65,6 +65,26 @@
 
   <div class="row g-3">
     <div class="col-12">
+      <div class="card">
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#radioTemplate0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
+          <template id="radioTemplate0">
+            import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Confirmation.js";
+
+            Confirmation.initAll();
+            // or
+            const el = document.querySelector('#id');
+            const confirmation = new Confirmation(el);
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
       <div id="card-1" class="anchor-offset"></div>
       <div class="card">
         <h5 class="card-header text-bg-primary">Simplest Setup</h5>
@@ -246,6 +266,7 @@
 
   (function main() {
     doubleInit();
+    simulateSubmit();
     initExamples();
     initTestRunner(tests);
 
@@ -256,6 +277,14 @@
   function doubleInit() {
     Confirmation.initAll();
     Confirmation.initAll();
+  }
+
+  function simulateSubmit() {
+    document.addEventListener('submit', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      alert('submitted');
+    });
   }
 </script>
 </body>

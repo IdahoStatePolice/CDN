@@ -13,12 +13,6 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/CDN/">ISP CDN</a>
     <ul class="navbar-nav ms-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
-        <div class="dropdown-menu dropdown-menu-end">
-          <!--<a href="#card-1" class="dropdown-item"></a>-->
-        </div>
-      </li>
       <li class="nav-item">
         <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>
       </li>
@@ -35,9 +29,11 @@
       <div class="card-body">
         <div class="row g-2">
           <div class="col-4">
-            <div><!-- test name -->: <span id="exampleResult" class="text-warning">Running</span></div>
+            <div>Deselect Test: <span id="result1" class="text-warning">Running</span></div>
           </div>
-
+          <div class="col-4">
+            <div>Change Value Test: <span id="result2" class="text-warning">Running</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -46,9 +42,32 @@
   <div class="row g-3">
     <div class="col-12">
       <div class="card">
-        <h5 class="card-header text-bg-primary"><!-- header --></h5>
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#radioTemplate0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
         <div class="card-body">
+          <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
+          <template id="radioTemplate0">
+            import { RadioButton } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/RadioButton.js";
 
+            RadioButton.initAll();
+            // or
+            const el = document.querySelector('#id');
+            const confirmation = new RadioButton(el);
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Example</h5>
+        <div class="card-body">
+          <div class="btn-group" role="group" data-isp-toggle="radio-button" data-name="name1">
+            <button type="button" class="btn btn-outline-primary active" value="true">Yes</button>
+            <button type="button" class="btn btn-outline-primary" value="false">No</button>
+          </div>
         </div>
 
         <div class="card-header border-top d-flex">
@@ -58,7 +77,13 @@
         <div class="card-body">
           <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
           <template id="template1">
-            <!-- example code -->
+            <div class="btn-group" role="group" data-isp-toggle="radio-button" data-name="example1">
+              <button type="button" class="btn btn-outline-primary active" value="true">Yes</button>
+              <button type="button" class="btn btn-outline-primary" value="false">No</button>
+            </div>
+
+            <!-- Initialization creates the following -->
+            <!-- <input type="hidden" name="example1" value="true"> -->
           </template>
         </div>
       </div>

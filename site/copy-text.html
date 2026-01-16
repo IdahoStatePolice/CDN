@@ -16,7 +16,9 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
         <div class="dropdown-menu dropdown-menu-end">
-          <!-- add anchors here -->
+          <a href="#card-1" class="dropdown-item">Copy Text to Clipboard</a>
+          <a href="#card-2" class="dropdown-item">Copy Text From Another Element</a>
+          <a href="#card-3" class="dropdown-item">Copy Text From Input</a>
         </div>
       </li>
       <li class="nav-item">
@@ -35,9 +37,14 @@
       <div class="card-body">
         <div class="row g-2">
           <div class="col-4">
-            <div><!-- test name -->: <span id="result1" class="text-warning">Running</span></div>
+            <div>Copy text to clipboard: <span id="result1" class="text-warning">Running</span></div>
           </div>
-
+          <div class="col-4">
+            <div>Copy text from another element: <span id="result2" class="text-warning">Running</span></div>
+          </div>
+          <div class="col-4">
+            <div>Copy text from input: <span id="result3" class="text-warning">Running</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,11 +52,36 @@
 
   <div class="row g-3">
     <div class="col-12">
+      <div class="card">
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#radioTemplate0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
+          <template id="radioTemplate0">
+            import { CopyText } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CopyText.js";
+
+            CopyText.initAll();
+            // or
+            const el = document.querySelector('#id');
+            const copyText = new CopyText(el);
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
       <div id="card-1" class="anchor-offset"></div>
       <div class="card">
-        <h5 class="card-header text-bg-primary"><!-- header --></h5>
+        <h5 class="card-header text-bg-primary">Copy Text to Clipboard</h5>
         <div class="card-body">
-          <!-- working example -->
+          <div class="input-group">
+            <span class="me-1">[NAME]</span>
+            <a id="test1" href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-text="[NAME]">
+              <i class="fa-solid fa-clone"></i>
+            </a>
+          </div>
         </div>
 
         <div class="card-header border-top d-flex">
@@ -59,12 +91,72 @@
         <div class="card-body">
           <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
           <template id="template1">
-            <!-- example code -->
+            <span class="me-1">[NAME]</span>
+            <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-text="[NAME]">
+              <i class="fa-solid fa-clone"></i>
+            </a>
           </template>
         </div>
       </div>
     </div>
 
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Copy Text From Another Element</h5>
+        <div class="card-body">
+          <a id="target2" href="mailto:test@email.com">test@email.com</a>
+          <a id="test2" href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#target2">
+            <i class="fa-solid fa-clone"></i>
+          </a>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
+          <template id="template2">
+            <a id="example2" href="mailto:test@email.com">test@email.com</a>
+            <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#example2">
+              <i class="fa-solid fa-clone"></i>
+            </a>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Copy Text From Input</h5>
+        <div class="card-body">
+          <div class="input-group">
+            <input id="target3" type="text" class="form-control" name="email" value="Lorem ipsum dolor sit amet.">
+            <button id="test3" type="button" class="btn btn-outline-secondary" data-isp-toggle="copy-text" data-copy-target="#target3">
+              <i class="fa-solid fa-clone"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
+          <template id="template3">
+            <div class="input-group">
+              <input id="example3" type="text" class="form-control" name="email" value="Lorem ipsum dolor sit amet.">
+              <button type="button" class="btn btn-outline-secondary" data-isp-toggle="copy-text" data-copy-target="#example3">
+                <i class="fa-solid fa-clone"></i>
+              </button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

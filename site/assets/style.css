@@ -1,7 +1,10 @@
 pre {
   margin-bottom: 0;
+}
+pre code {
   color: #BCBEC4FF;
 }
+
 .hljs-tag, .hljs-name {
   color: #D5B778FF;
 }
@@ -20,9 +23,13 @@ pre {
 .hljs-variable {
   color: #C77DBBFF;
 }
-.hljs-title {
+.hljs-title.function_ {
   color: #56A8F5FF;
 }
+.hljs-title.class_ {
+  color: #BCBEC4FF;
+}
+
 .anchor-offset {
   margin-top: calc(-1rem - 56px);
   margin-bottom: calc(1rem + 56px);
