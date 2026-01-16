@@ -1,20 +1,27 @@
 import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
-const modalListener = function(e) {
+const modalListener = (e) => {
   const els = e.target.querySelectorAll('[autofocus]');
   [...els].filter(el => el.checkVisibility())?.[0]?.focus();
 }
 
-const collapseListener = function(e) {
+const collapseListener = (e) => {
   const inputs = e.target.querySelectorAll('[autofocus]');
   [...inputs].filter(e => e.checkVisibility())?.[0]?.focus();
 }
 
-const preventNav = function(e) {
+const preventNav = (e) => {
   e.preventDefault();
   e.returnValue = 'Any changes made will be lost. Are you sure?';
   return 'Any changes made will be lost. Are you sure?';
 }
+
+const dirtyChangeListener = () => {
+  window.removeEventListener('beforeunload', preventNav);
+  window.addEventListener('beforeunload', preventNav);
+};
+
+const dirtySubmitListener = () => window.removeEventListener('beforeunload', preventNav);
 
 /**
  * @returns {string} the current server context.
@@ -40,13 +47,16 @@ function initCollapseAutoFocus() {
 }
 
 /**
- * On page load, if a modal matching the selector has an element matching `.is-invalid, .alert.alert-danger`, it will be shown.
+ * When this function is executed, it will find modals with the `modalSelector`
+ * and then look for the existence of elements inside that modal based on the
+ * `errorSelector`. If there are matching elements, then the modal is shown.
  *
- * @param {string} [selector = '.modal'] - The selector used to decide which modals to search.
+ * @param {string} [modalSelector = '.modal'] - The selector used to decide which modals to search.
+ * @param {string} [errorSelector = '.is-invalid, .alert.alert-danger'] - The selector used to check if an error exists inside the modal.
  */
-function initModalShowOnError(selector = '.modal') {
-  for (const modalEl of document.querySelectorAll(selector)) {
-    const invalidEl = modalEl.querySelector('.is-invalid, .alert.alert-danger');
+function initModalShowOnError(modalSelector = '.modal', errorSelector = '.is-invalid, .alert.alert-danger') {
+  for (const modalEl of document.querySelectorAll(modalSelector)) {
+    const invalidEl = modalEl.querySelector(errorSelector);
 
     if (invalidEl && modalEl.parentElement.checkVisibility()) {
       Modal.getOrCreateInstance(modalEl).show();
@@ -55,12 +65,16 @@ function initModalShowOnError(selector = '.modal') {
   }
 }
 
+/**
+ * This function initializes a collection of event listeners based on
+ * the `beforeunload` event to prevent users from leaving the page.
+ */
 function dirtyCheck() {
-  document.addEventListener('change', () => {
-    window.removeEventListener('beforeunload', preventNav);
-    window.addEventListener('beforeunload', preventNav);
-  });
-  document.addEventListener('submit', () => window.removeEventListener('beforeunload', preventNav));
+  document.removeEventListener('change', dirtyChangeListener);
+  document.removeEventListener('submit', dirtySubmitListener);
+
+  document.addEventListener('change', dirtyChangeListener);
+  document.addEventListener('submit', dirtySubmitListener);
 }
 
 export { getContext, initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck };

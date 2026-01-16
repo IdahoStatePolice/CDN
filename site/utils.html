@@ -16,7 +16,11 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
         <div class="dropdown-menu dropdown-menu-end">
-          <a href="#card-1" class="dropdown-item"></a>
+          <a href="#card-1" class="dropdown-item">getContext</a>
+          <a href="#card-2" class="dropdown-item">Modal Autofocus</a>
+          <a href="#card-3" class="dropdown-item">Collapse Autofocus</a>
+          <a href="#card-4" class="dropdown-item">Modal Show on Error</a>
+          <a href="#card-5" class="dropdown-item">dirtyCheck</a>
         </div>
       </li>
       <li class="nav-item">
@@ -35,10 +39,82 @@
       <div class="card-body">
         <div class="row g-2">
           <div class="col-6">
-            <div>Navigate to href Test: <span id="result1" class="text-warning">Running</span></div>
+            <div>getContext Test: <span id="result1" class="text-warning">Running</span></div>
+            <div>Modal Autofocus Test: <span id="result2" class="text-warning">Running</span></div>
           </div>
-
+          <div class="col-6">
+            <div>Collapse Autofocus Test: <span id="result3" class="text-warning">Running</span></div>
+            <div>Modal Show on Error Test: <span id="result4" class="text-warning">Running</span></div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalAutofocusTest" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Test Modal</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label>Input without <code>autofocus</code> attribute</label>
+              <input type="text" class="form-control" placeholder="Skipped because of no autofocus attribute">
+            </div>
+            <div class="col-12">
+              <label>Input with <code>autofocus</code> and <code>display: none</code></label>
+              <input type="text" class="form-control d-none" autofocus>
+            </div>
+            <div class="col-12">
+              <label>Input with <code>autofocus</code> in container with <code>display: none</code></label>
+              <div class="d-none">
+                <input type="text" class="form-control" autofocus>
+              </div>
+            </div>
+            <div class="col-12">
+              <label>Input with <code>autofocus</code> in container with <code>content-visibility: hidden</code></label>
+              <div style="content-visibility: hidden">
+                <input type="text" class="form-control" autofocus>
+              </div>
+            </div>
+            <div class="col-12">
+              <label>Input with <code>autofocus</code> attribute</label>
+              <input type="text" class="form-control" placeholder="Should be in focus" autofocus>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="collapseAutofocusTest" class="collapse">
+    <div class="row g-3 mb-3">
+      <div class="col-4">
+        <label>Input without <code>autofocus</code> attribute</label>
+        <input type="text" class="form-control" placeholder="Skipped because of no autofocus attribute">
+      </div>
+      <div class="col-4">
+        <label>Input with <code>autofocus</code> and <code>display: none</code></label>
+        <input type="text" class="form-control d-none" autofocus>
+      </div>
+      <div class="col-4">
+        <label>Input with <code>autofocus</code> in container with <code>display: none</code></label>
+        <div class="d-none">
+          <input type="text" class="form-control" autofocus>
+        </div>
+      </div>
+      <div class="col-4">
+        <label>Input with <code>autofocus</code> in container with <code>content-visibility: hidden</code></label>
+        <div style="content-visibility: hidden">
+          <input type="text" class="form-control" autofocus>
+        </div>
+      </div>
+      <div class="col-4">
+        <label>Input with <code>autofocus</code> attribute</label>
+        <input type="text" class="form-control" placeholder="Should be in focus" autofocus>
       </div>
     </div>
   </div>
@@ -47,57 +123,229 @@
     <div class="col-12">
       <div id="card-1" class="anchor-offset"></div>
       <div class="card">
-        <h5 class="card-header text-bg-primary">getContext()</h5>
+        <h5 class="card-header text-bg-primary">getContext</h5>
+        <div class="card-body">
+          The <code>getContext</code> function is a handy little function to parse the location object and get the server context.
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">JavaScript</span>
+          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+
         <div class="card-body">
           <pre><code data-code-target="#template1" data-code-type="javascript"></code></pre>
-          <script id="template1" type="module">
-            import { getContext } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Utils.js";
+          <template id="template1">
+            import { getContext } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@latest/js/Utils.js";
 
             console.log(getContext());
             // Expected output: /CDN
-          </script>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Modal Autofocus</h5>
+        <div class="card-body">
+          <a href="#modalAutofocus1" class="btn btn-outline-primary" data-bs-toggle="modal">Show Modal</a>
+
+          <div id="modalAutofocus1" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Test Modal</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <label>Input with <code>autofocus</code> attribute</label>
+                  <input type="text" class="form-control" placeholder="Should be in focus" autofocus>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+
+        <div class="card-body">
+          <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
+          <template id="template2">
+            <!-- modal header -->
+
+            <div class="modal-body">
+              <!-- modal body content -->
+
+              <input type="text" class="form-control" autofocus>
+
+              <!-- modal body content -->
+            </div>
+
+            <!-- modal footer -->
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Collapse Autofocus</h5>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-8 py-3">
+              <a href="#collapseAutofocus1" class="btn btn-outline-primary" data-bs-toggle="collapse">Show Collapse</a>
+            </div>
+            <div class="col-4">
+              <div id="collapseAutofocus1" class="collapse">
+                <label>Input with <code>autofocus</code> attribute</label>
+                <input type="text" class="form-control" autofocus>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+
+        <div class="card-body">
+          <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
+          <template id="template3">
+            <div class="collapse">
+              <input type="text" class="form-control" autofocus>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-4" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Modal Show on Error</h5>
+        <div class="card-body">
+          <a href="javascript:void(showModalsWithErrors());" class="btn btn-outline-primary">Mock Page Load</a>
+
+          <div id="errorModal1" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Test Modal</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto; max-height: 10rem;">
+                  <div class="alert alert-danger mb-0" role="alert" style="margin-top: 30rem;">initModalShowOnError Test Success!!!</div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="errorModal2" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Test Modal</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto; max-height: 10rem;">
+                  <input type="text" class="form-control is-invalid" style="margin-top: 30rem;" placeholder="initModalShowOnError Test Success!!!">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+
+        <div class="card-body">
+          <pre><code data-code-target="#template4" data-code-type="xml"></code></pre>
+          <template id="template4">
+            <!-- modal header -->
+
+            <div class="modal-body">
+              <div class="alert alert-danger" role="alert">
+                <!-- errors -->
+              </div>
+
+              <!-- or -->
+
+              <input type="text" class="form-control is-invalid">
+            </div>
+
+            <!-- modal footer -->
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-5" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">dirtyCheck</h5>
+        <div class="card-body">
+          The <code>dirtyCheck</code> function initializes a collection of event listeners based on the <code>beforeunload</code> event to prevent users from leaving the page.
+          While it is considered unreliable (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#usage_notes" target="_blank">see usage notes</a>), it works for our needs.
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">JavaScript</span>
+          <a href="#" data-clipboard="#template5" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+
+        <div class="card-body">
+          <pre><code data-code-target="#template5" data-code-type="javascript"></code></pre>
+          <template id="template5">
+            import { dirtyCheck } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@latest/js/Utils.js";
+
+            dirtyCheck();
+          </template>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5">Test Modal</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body pt-5" style="overflow-x: auto; max-height: 20rem;">
-        <div class="p-5 m-5"></div>
-        <div class="p-5 m-5"></div>
-        <div class="p-5 m-5"></div>
-        <div class="p-5 m-5"></div>
-        <div class="p-5 m-5"></div>
-        <div class="p-5 m-5"></div>
-        <div class="alert alert-danger" role="alert">initModalShowOnError Test Success!!!</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="module" src="https://cdn.jsdelivr.net/npm/highlight.js@11.11/+esm"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  // import { initModalShowOnError } from "../js/Utils.js";
+  import { initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck } from "../js/Utils.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
+  import { tests } from "../tests/utils-tests.js";
 
   (function main() {
+    doubleInit();
     initExamples();
+    initTestRunner(tests);
   })();
 
-  // (function initModalShowOnErrorTest() {
-  //   initModalShowOnError();
-  // })();
+  function doubleInit() {
+    initModalAutofocus();
+    initCollapseAutoFocus();
+    dirtyCheck();
+
+    initModalAutofocus();
+    initCollapseAutoFocus();
+    dirtyCheck();
+  }
+
+  window.showModalsWithErrors = function() {
+    initModalShowOnError();
+  }
 </script>
 </body>
 </html>
