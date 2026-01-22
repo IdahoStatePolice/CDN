@@ -1,9 +1,55 @@
+/**
+ * Must be one of the following:
+ * - audio
+ * - rings
+ * - grid
+ * - hearts
+ * - oval
+ * - threeDots
+ * - spinningCircles
+ * - puff
+ * - circles
+ * - tailSpin
+ * - bars
+ * - ballTriangle
+ *
+ * @typedef {'audio' | 'rings' | 'grid' | 'hearts' | 'oval' | 'threeDots' | 'spinningCircles' | 'puff' | 'circles' | 'tailSpin' | 'bars' | 'ballTriangle'} SpinnerType
+ */
+
+/**
+ * Spinner settings object.
+ *
+ * ```
+ * defaults = {
+ *   type: undefined,
+ *   position: 'beforeend',
+ *   styles: undefined,
+ *   classes: undefined,
+ * }
+ * ```
+ *
+ * @typedef {Object} SpinnerSettings
+ * @prop {SpinnerType} type - Type of spinner to show. (see {@link SpinnerType})
+ * @prop {InsertPosition} [position] - A string representing the position relative to the element.
+ * @prop {string} [styles] - Styling for the SVG. Format the same way you would on a `style` attribute of any element.
+ * @prop {string} [classes] - Classes for the SVG. Format the same way you would on a `class` attribute of any element.
+ */
+
+/**
+ * Class to initialize and control svg spinners.
+ *
+ * @see {@link https://idahostatepolice.github.io/CDN/site/spinner.html|Spinner Docs}
+ * @see {@link https://github.com/SamHerbert/SVG-Loaders|Download Originals}
+ * @see {@link https://samherbert.net/svg-loaders/|Preview}
+ */
 class Spinner {
-  //download svgs at https://github.com/SamHerbert/SVG-Loaders
-  //preview svgs at https://samherbert.net/svg-loaders/
+  /**
+   * String templates for all the different {@link SpinnerType}s.
+   * @type {{audio: string, rings: string, grid: string, hearts: string, oval: string, threeDots: string, spinningCircles: string, puff: string, circles: string, tailSpin: string, bars: string, ballTriangle: string}}
+   */
   static #templates = {
     audio: `
-      <svg class="spinner" viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg">
         <g transform="matrix(1 0 0 -1 0 80)">
           <rect width="10" height="20" rx="3" fill="currentColor">
             <animate attributeName="height" begin="0s" dur="4.3s" values="20;45;57;80;64;32;66;45;64;23;66;13;64;56;34;34;2;23;76;79;20" calcMode="linear" repeatCount="indefinite"/>
@@ -20,7 +66,7 @@ class Spinner {
         </g>
       </svg>`,
     rings: `
-      <svg class="spinner" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" fill-rule="evenodd" transform="translate(1 1)" stroke-width="2">
           <circle cx="22" cy="22" r="6" stroke-opacity="0" stroke="currentColor">
             <animate attributeName="r" begin="1.5s" dur="3s" values="6;22" calcMode="linear" repeatCount="indefinite"/>
@@ -38,7 +84,7 @@ class Spinner {
         </g>
       </svg>`,
     grid: `
-      <svg class="spinner" viewBox="0 0 105 105" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 105 105" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12.5" cy="12.5" r="12.5" fill="currentColor">
           <animate attributeName="fill-opacity" begin="0s" dur="1s" values="1;.2;1" calcMode="linear" repeatCount="indefinite"/>
         </circle>
@@ -68,7 +114,7 @@ class Spinner {
         </circle>
       </svg>`,
     hearts: `
-      <svg class="spinner" viewBox="0 0 140 64" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 140 64" xmlns="http://www.w3.org/2000/svg">
         <path d="M30.262 57.02L7.195 40.723c-5.84-3.976-7.56-12.06-3.842-18.063 3.715-6 11.467-7.65 17.306-3.68l4.52 3.76 2.6-5.274c3.717-6.002 11.47-7.65 17.305-3.68 5.84 3.97 7.56 12.054 3.842 18.062L34.49 56.118c-.897 1.512-2.793 1.915-4.228.9z" fill-opacity=".5" fill="currentColor">
           <animate attributeName="fill-opacity" begin="0s" dur="1.4s" values="0.5;1;0.5" calcMode="linear" repeatCount="indefinite"/>
         </path>
@@ -78,7 +124,7 @@ class Spinner {
         <path d="M67.408 57.834l-23.01-24.98c-5.864-6.15-5.864-16.108 0-22.248 5.86-6.14 15.37-6.14 21.234 0L70 16.168l4.368-5.562c5.863-6.14 15.375-6.14 21.235 0 5.863 6.14 5.863 16.098 0 22.247l-23.007 24.98c-1.43 1.556-3.757 1.556-5.188 0z" fill="currentColor"/>
       </svg>`,
     oval: `
-      <svg class="spinner" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" fill-rule="evenodd">
           <g transform="translate(1 1)" stroke-width="2">
             <circle stroke-opacity=".5" cx="18" cy="18" r="18" stroke="currentColor"/>
@@ -89,7 +135,7 @@ class Spinner {
         </g>
       </svg>`,
     threeDots: `
-      <svg class="spinner" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
         <circle cx="15" cy="15" r="15" fill="currentColor">
           <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite" />
           <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite" />
@@ -104,7 +150,7 @@ class Spinner {
         </circle>
       </svg>`,
     spinningCircles: `
-      <svg class="spinner" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" fill-rule="evenodd">
           <g transform="translate(2 1)" stroke="currentColor" stroke-width="1.5">
             <circle cx="42.601" cy="11.462" r="5" fill-opacity="1" fill="currentColor">
@@ -135,7 +181,7 @@ class Spinner {
         </g>
       </svg>`,
     puff: `
-      <svg class="spinner" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" fill-rule="evenodd" stroke-width="2">
           <circle cx="22" cy="22" r="1" stroke="currentColor">
             <animate attributeName="r" begin="0s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1" keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite"/>
@@ -148,7 +194,7 @@ class Spinner {
         </g>
       </svg>`,
     circles: `
-      <svg class="spinner" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg">
         <path d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z" fill="currentColor">
           <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s" repeatCount="indefinite"/>
         </path>
@@ -157,7 +203,7 @@ class Spinner {
         </path>
       </svg>`,
     tailSpin: `
-      <svg class="spinner" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="gradient">
             <stop stop-color="currentColor" stop-opacity="0" offset="0%"/>
@@ -177,7 +223,7 @@ class Spinner {
         </g>
       </svg>`,
     bars: `
-      <svg class="spinner" viewBox="0 0 137 140" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 137 140" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="10" width="15" height="120" rx="6" fill="currentColor">
           <animate attributeName="height" begin="0.5s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite" />
           <animate attributeName="y" begin="0.5s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite" />
@@ -200,7 +246,7 @@ class Spinner {
         </rect>
       </svg>`,
     ballTriangle: `
-      <svg class="spinner" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" fill-rule="evenodd">
           <g transform="translate(1 1)" stroke-width="2">
             <circle cx="5" cy="50" r="5" stroke="currentColor">
@@ -218,57 +264,123 @@ class Spinner {
           </g>
         </g>
       </svg>`
-  }
+  };
 
+  /**
+   * The default settings for a Spinner.
+   * @type {SpinnerSettings}
+   */
   static #defaultSettings = {
-    styles: null,
-    classes: null
-  }
+    type: undefined,
+    position: 'beforeend',
+    styles: undefined,
+    classes: undefined,
+  };
 
-  constructor(templateName, options) {
-    const template = Spinner.#templates[templateName];
+  /**
+   * All the initialized HTMLElements and their Spinner objects.
+   * @type {Map<HTMLElement, Spinner>}
+   */
+  static #initializedEls = new Map();
+
+  /**
+   * The root HTML element associated with this spinner.
+   * @type {HTMLElement}
+   */
+  #el;
+
+  /**
+   * The SVG element created by this spinner.
+   * @type {SVGElement}
+   */
+  #svgEl;
+
+  /**
+   * Constructs a new Spinner object.
+   *
+   * @param {string | HTMLElement} el - A string selector or a DOM element.
+   * @param {SpinnerSettings} [options] - A SpinnerSettings object.
+   *
+   * @see {@link https://idahostatepolice.github.io/CDN/site/spinner.html|Spinner Docs}
+   */
+  constructor(el, options) {
+    // noinspection JSUnusedGlobalSymbols
+    const getSvg = {
+      beforebegin: el => el.previousElementSibling,
+      afterbegin: el => el.firstElementChild,
+      beforeend: el => el.lastElementChild,
+      afterend: el => el.nextElementSibling
+    };
+
+    this.#el = typeof el === 'string' ? document.querySelector(el) : el;
+
+    if (Spinner.#initializedEls.has(this.#el)) {
+      Spinner.#initializedEls.get(this.#el).destroy();
+    }
+
+    const settings = Object.assign({}, Spinner.#defaultSettings, this.#el.dataset, options);
+    const template = Spinner.#templates[settings.type];
 
     if (!template) {
       const list = Object.keys(Spinner.#templates).join(', ');
-      throw new Error(`Template name ${templateName} is invalid, must be one of the following: ${list}.`);
+      throw new Error(`Type '${settings.type}' is invalid, must be one of the following: ${list}.`);
     }
 
-    document.body.insertAdjacentHTML('afterend', `<div style="display: none;">${template}</div>`);
-    this.svgEl = document.body.nextElementSibling.firstElementChild;
-    this.settings = Object.assign({}, Spinner.#defaultSettings, options);
+    this.#el.insertAdjacentHTML(settings.position, template);
+    this.#svgEl = getSvg[settings.position](this.#el);
 
-    if (typeof this.settings.styles === 'string') {
-      this.svgEl.setAttribute('style', this.settings.styles);
+    if (typeof settings.styles === 'string') {
+      this.#svgEl.setAttribute('style', settings.styles);
     }
-    if (typeof this.settings.classes === 'string') {
-      this.svgEl.setAttribute('class', this.settings.classes);
+    if (typeof settings.classes === 'string') {
+      this.#svgEl.setAttribute('class', settings.classes);
     }
 
-    const parent = this.svgEl.parentElement;
-    const observer = new MutationObserver(onRemove);
-    observer.observe(parent, {subtree: true, childList: true});
-
-    function onRemove(records) {
-      const nodes = [...records].flatMap(r => [...r.removedNodes]);
-      const els = nodes.filter(n => n instanceof Element);
-
-      for (const el of els) {
-        parent.remove();
-        observer.disconnect();
-      }
-    }
+    Spinner.#initializedEls.set(this.#el, this);
   }
 
+  /**
+   * Destroys all events and resets DOM elements for this instance of Spinner.
+   */
   destroy() {
-    this.svgEl.remove();
+    this.#svgEl.remove();
+    Spinner.#initializedEls.delete(this.#el);
   }
 
+  /**
+   * Sets visibility to 'visible' on the SVG element created by this object.
+   */
   show() {
-    this.svgEl.style.visibility = 'visible';
+    this.#svgEl.style.visibility = 'visible';
   }
 
+  /**
+   * Sets visibility to 'hidden' on the SVG element created by this object.
+   */
   hide() {
-    this.svgEl.style.visibility = 'hidden';
+    this.#svgEl.style.visibility = 'hidden';
+  }
+
+  /**
+   * Toggles visibility on the SVG element created by this object.
+   */
+  toggle() {
+    this.#svgEl.style.visibility === 'hidden' ? this.show() : this.hide();
+  }
+
+  /**
+   * A shortcut to do a mass initialization of any element that needs to be initialized.
+   *
+   * @param {string} [selector = '[data-isp-toggle="spinner"]'] - Selector used to find all elements to initialize.
+   * @param {SpinnerSettings} [options] - SpinnerSettings object to use with each initialization.
+   *
+   * @returns {Spinner[]} - The array of RowClick objects that were initialized.
+   *
+   * @see {@link https://idahostatepolice.github.io/CDN/site/spinner.html|Spinner Docs}
+   */
+  static initAll(selector = '[data-isp-toggle="spinner"]', options) {
+    const els = document.querySelectorAll(selector);
+    return [...els].map(el => new Spinner(el, options));
   }
 }
 

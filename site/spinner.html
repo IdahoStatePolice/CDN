@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spinner.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#card-1" class="dropdown-item">Preview of Spinners</a>
+          <a href="#card-2" class="dropdown-item">Spinner Position</a>
+          <a href="#card-3" class="dropdown-item">Spinner Visibility Toggle</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-3">
+  <h1>Spinner.js</h1>
+
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#template0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
+          <template id="template0">
+            import { Spinner } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Spinner.js";
+
+            Spinner.initAll();
+            // or
+            const el = document.querySelector('#id');
+            const confirmation = new Spinner(el);
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-1" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Preview of Spinners</h5>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col" data-isp-toggle="spinner" data-type="audio"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="rings"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="grid"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="hearts"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="oval"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="threeDots"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="spinningCircles"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="puff"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="circles"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="tailSpin"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="bars"></div>
+            <div class="col" data-isp-toggle="spinner" data-type="ballTriangle"></div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
+          <template id="template1">
+            <div data-isp-toggle="spinner" data-type="audio"></div>
+            <div data-isp-toggle="spinner" data-type="rings"></div>
+            <div data-isp-toggle="spinner" data-type="grid"></div>
+            <div data-isp-toggle="spinner" data-type="hearts"></div>
+            <div data-isp-toggle="spinner" data-type="oval"></div>
+            <div data-isp-toggle="spinner" data-type="threeDots"></div>
+            <div data-isp-toggle="spinner" data-type="spinningCircles"></div>
+            <div data-isp-toggle="spinner" data-type="puff"></div>
+            <div data-isp-toggle="spinner" data-type="circles"></div>
+            <div data-isp-toggle="spinner" data-type="tailSpin"></div>
+            <div data-isp-toggle="spinner" data-type="bars"></div>
+            <div data-isp-toggle="spinner" data-type="ballTriangle"></div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Spinner Position</h5>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-3">
+              <div class="border border-primary p-1 my-1" data-isp-toggle="spinner" data-type="rings" data-position="beforebegin" data-classes="border border-success w-50">beforebegin</div>
+            </div>
+            <div class="col-3">
+              <div class="border border-primary p-1 my-1" data-isp-toggle="spinner" data-type="oval" data-position="afterbegin" data-classes="border border-success w-50">afterbegin</div>
+            </div>
+            <div class="col-3">
+              <div class="border border-primary p-1 my-1" data-isp-toggle="spinner" data-type="puff" data-position="beforeend" data-classes="border border-success w-50">beforeend</div>
+            </div>
+            <div class="col-3">
+              <div class="border border-primary p-1 my-1" data-isp-toggle="spinner" data-type="tailSpin" data-position="afterend" data-classes="border border-success w-50">afterend</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
+          <template id="template2">
+            <div data-isp-toggle="spinner" data-type="rings" data-position="beforebegin">beforebegin</div>
+            <div data-isp-toggle="spinner" data-type="oval" data-position="afterbegin">afterbegin</div>
+            <div data-isp-toggle="spinner" data-type="puff" data-position="beforeend">beforeend</div>
+            <div data-isp-toggle="spinner" data-type="tailSpin" data-position="afterend">afterend</div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Spinner Visibility Toggle</h5>
+        <div class="card-body">
+          <div class="d-flex justify-content-evenly align-items-center">
+            <button id="exampleToggleBtn" type="button" class="btn btn-outline-primary">Toggle Visibility</button>
+            <div id="exampleSvgDiv" style="height: 2rem; width: 8rem;"></div>
+          </div>
+          <script type="module">
+            import { Spinner } from "../js/Spinner.js";
+
+            const toggleBtn = document.querySelector('#exampleToggleBtn');
+            const el = document.querySelector('#exampleSvgDiv');
+            const spinner = new Spinner(el, { type: 'threeDots' });
+
+            toggleBtn.addEventListener('click', () => spinner.toggle());
+          </script>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">JavaScript</span>
+          <a href="#" data-clipboard="#template3-1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3-1" data-code-type="javascript"></code></pre>
+          <template id="template3-1">
+            import { Spinner } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Spinner.js";
+
+            const toggleBtn = document.querySelector('#toggleBtn');
+            const el = document.querySelector('#svgDiv');
+            const spinner = new Spinner(el, { type: 'threeDots' });
+
+            toggleBtn.addEventListener('click', () => spinner.toggle());
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3-2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3-2" data-code-type="xml"></code></pre>
+          <template id="template3-2">
+            <div class="d-flex justify-content-evenly align-items-center">
+              <button id="toggleBtn" type="button" class="btn btn-outline-primary">Toggle Visibility</button>
+              <div id="svgDiv" style="height: 2rem; width: 8rem;"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
+<script type="module">
+  import { Spinner } from "../js/Spinner.js";
+  import { initExamples } from "./assets/modules.js";
+
+  (function main() {
+    doubleInit();
+    initExamples();
+  })();
+
+  function doubleInit() {
+    Spinner.initAll();
+    Spinner.initAll();
+  }
+</script>
+</body>
+</html>
