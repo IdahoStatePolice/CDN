@@ -23,9 +23,10 @@
           <a href="#card-4" class="dropdown-item">Fill other inputs with values when item is selected</a>
         </div>
       </li>
-      <li class="nav-item">
-        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>
-      </li>
+      <!--      todo: I can't think of how to test this at the moment-->
+      <!--      <li class="nav-item">-->
+      <!--        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>-->
+      <!--      </li>-->
     </ul>
   </div>
 </nav>
@@ -265,14 +266,11 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  // import { Suggest } from "../js/Suggest.js";
-  import { initExamples, initTestRunner } from "./assets/modules.js";
-  // import { tests } from "../tests/row-click-tests.js";
+  import { initExamples } from "./assets/modules.js";
   import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
   (function main() {
     initExamples();
-    // initTestRunner(tests);
 
     const els = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     [...els].forEach(el => new Tooltip(el));
