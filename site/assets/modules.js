@@ -6,11 +6,18 @@ function initExamples() {
   initCopyCodeBtns();
 
   function initCodeHighlights() {
+
     for (const el of document.querySelectorAll('[data-code-target]')) {
       const template = getTemplateText(el.dataset.codeTarget);
-      // noinspection JSUnresolvedReference
-      const html = hljs.highlight(template, { language: el.dataset.codeType }).value;
-      el.innerHTML = html.replaceAll('=<span class="hljs-string">', '<span class="hljs-string">=');
+
+      if (el.dataset.codeType) {
+        // noinspection JSUnresolvedReference
+        const html = hljs.highlight(template, { language: el.dataset.codeType }).value;
+        el.innerHTML = html.replaceAll('=<span class="hljs-string">', '<span class="hljs-string">=');
+      }
+      else {
+        el.innerHTML = template;
+      }
     }
   }
 
@@ -33,7 +40,9 @@ function initExamples() {
       if (clipboardEl) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        const template = getTemplateText(clipboardEl.dataset.clipboard);
+        let template = getTemplateText(clipboardEl.dataset.clipboard);
+        template = template.replaceAll('&lt;', '<');
+        template = template.replaceAll('&gt;', '>');
         await navigator.clipboard.writeText(template);
         toast.show();
       }

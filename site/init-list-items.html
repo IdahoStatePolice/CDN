@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InitListItems.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#card-1" class="dropdown-item">Embeddable Collection Example</a>
+          <a href="#card-2" class="dropdown-item">Standard Collection Example</a>
+          <a href="#card-3" class="dropdown-item">Showing Counts</a>
+          <a href="#card-4" class="dropdown-item">Changing the index token</a>
+        </div>
+      </li>
+      <!--      <li class="nav-item">-->
+      <!--        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>-->
+      <!--      </li>-->
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-3">
+  <h1>InitListItems.js</h1>
+
+  <div id="tests" class="collapse" data-toggle="tests">
+    <div class="card mb-3">
+      <h5 class="card-header text-bg-primary">Test Results</h5>
+      <div class="card-body">
+        <div class="row g-2">
+          <!--          <div class="col-6">test name: <span id="result1" class="text-warning">Running</span></div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header text-bg-primary d-flex align-items-center">
+          <h5 class="flex-fill mb-0">Import Module</h5>
+          <a href="#" data-clipboard="#template0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
+          <template id="template0">
+            import { initListItems } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/InitListItems.js";
+
+            initListItems();
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <h5 class="card-header text-bg-primary">HTML Parts</h5>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Add Button</h5>
+            <p class="card-text">Adds a new list item to a list using a template.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-1" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-1" data-code-type="xml"></code></pre>
+          <template id="template0-1">
+            <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="{templateSelector}" data-list="{listSelector}">
+              <i class="fa-solid fa-plus"></i>
+            </a>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Remove Button</h5>
+            <p class="card-text">Removed or hides a list item in a list.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-2" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-2" data-code-type="xml"></code></pre>
+          <template id="template0-2">
+            <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent="{closestListItemSelector}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Delete Input (optional)</h5>
+            <p class="card-text">When present in a list item, will cause the list item to be hidden instead of deleted. The input value is set to true as well.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-3" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-3" data-code-type="xml"></code></pre>
+          <template id="template0-3">
+            <input type="hidden" name="{deletedParamName}" value="false" data-delete-input>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Count Element (optional)</h5>
+            <p class="card-text">When present in a list item, will have the inner HTML replaced with the item count.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-4" data-code-type="xml"></code></pre>
+          <template id="template0-4">
+            <span class="badge text-bg-secondary" data-item-count></span>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Template</h5>
+            <p class="card-text">An element containing one list item template. Only index is replaced as a token and the default is '{index}'.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-5" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-5" data-code-type="xml"></code></pre>
+          <template id="template0-5">
+            <template data-index-var="{optionalNewTokenName}">
+              <!-- HTML template -->
+            </template>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">List</h5>
+            <p class="card-text">An element containing list item children. While the example is a list-group, it can be any element with children.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-6" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-6" data-code-type="xml"></code></pre>
+          <template id="template0-6">
+            <div class="list-group" data-index="{optionalNextIndex}" data-total-target="{optionalTotalCountSelector}">
+              <!-- list-group-item's -->
+            </div>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">List Item (JSP tag)</h5>
+            <p class="card-text">
+              While it is not required, it is recommended to put the list item in a JSP tag file.
+              This way it can be used in both the template and the list and be updated together.
+            </p>
+          </div>
+          <a href="#" data-clipboard="#template0-7" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-7"></code></pre>
+
+          <template id="template0-7">
+            &lt;%@attribute name="index" required="false" type="java.lang.Integer" %&gt;
+            &lt;%@attribute name="value" required="false" type="java.lang.Object" %&gt;
+
+            &lt;c:set var="index" value="${empty index ? '{index}' : index}"/&gt;
+
+            &lt;div class="list-group-item"&gt;
+              &lt;c:if test="${not empty value}"&gt;
+                &lt;input type="hidden" name="paramName[${index}].deleted" value="false" data-delete-input&gt;
+              &lt;/c:if&gt;
+
+              &lt;div class="d-flex"&gt;
+                &lt;input type="text" class="form-control me-2" name="paramName[${index}].text" value="${value.text}"&gt;
+                &lt;input type="text" class="form-control me-2" name="paramName[${index}].tag" value="${value.tag}"&gt;
+
+                &lt;button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item"&gt;
+                  &lt;i class="fa-solid fa-trash" title="Delete Item"&gt;&lt;/i&gt;
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-1" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Embeddable Collection Example</h5>
+        <div class="card-body">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+              <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#test1Template" data-list="#test1List">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+
+              <template id="test1Template">
+                <div class="list-group-item d-flex">
+                  <input type="tel" class="form-control me-2" name="numbers" placeholder="(208) 999-9999">
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </template>
+            </div>
+
+            <div id="test1List" class="list-group list-group-flush">
+              <div class="list-group-item d-flex">
+                <input type="tel" class="form-control me-2" name="numbers" placeholder="(208) 999-9999">
+                <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template1" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
+          <template id="template1">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+                <!--Add Button-->
+                <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#example1Template" data-list="#example1List">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+
+                <!--Template-->
+                <template id="example1Template">
+                  <div class="list-group-item d-flex">
+                    <input type="tel" class="form-control me-2" name="numbers">
+
+                    <!--Delete Button-->
+                    <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!--List Items-->
+              <div id="example1List" class="list-group list-group-flush">
+                <div class="list-group-item d-flex">
+                  <input type="tel" class="form-control me-2" name="numbers">
+
+                  <!--Delete Button-->
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-2" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Standard Collection Example</h5>
+        <div class="card-body">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+              <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#test2Template" data-list="#test2List">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+
+              <template id="test2Template">
+                <div class="list-group-item d-flex">
+                  <input type="tel" class="form-control me-2" name="numbers[{index}].number" placeholder="number for index {index}">
+                  <input type="text" class="form-control me-2" name="numbers[{index}].type" placeholder="type for index {index}">
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </template>
+            </div>
+
+            <div id="test2List" class="list-group list-group-flush">
+              <div class="list-group-item d-flex">
+                <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+                <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template2" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info" role="alert">
+            Note: Notice how the input with the <code>data-delete-input</code> attribute is not in the template. This is done on purpose.
+            There is no point in sending those values to the server just to have the server remember to remove it from the list.
+          </div>
+          <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
+          <template id="template2">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+                <!--Add Button-->
+                <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#example2Template" data-list="#example2List">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+
+                <!--Template-->
+                <template id="example2Template">
+                  <div class="list-group-item d-flex">
+                    <input type="tel" class="form-control me-2" name="numbers[{index}].number" placeholder="number for index {index}">
+                    <input type="text" class="form-control me-2" name="numbers[{index}].type" placeholder="type for index {index}">
+
+                    <!--Delete Button-->
+                    <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!--List Items-->
+              <div id="example2List" class="list-group list-group-flush">
+                <div class="list-group-item d-flex">
+                  <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                  <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                  <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+
+                  <!--Delete Button-->
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-3" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Showing Counts</h5>
+        <div class="card-body">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h6 class="flex-fill mb-0">Phone Numbers <span id="test3Count">1</span></h6>
+
+              <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#test3Template" data-list="#test3List">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+
+              <template id="test3Template">
+                <div class="list-group-item">
+                  <div>Phone Number <span data-item-count></span></div>
+
+                  <div class="d-flex">
+                    <input type="tel" class="form-control me-2" name="numbers[{index}].number" placeholder="number for index {index}">
+                    <input type="text" class="form-control me-2" name="numbers[{index}].type" placeholder="type for index {index}">
+                    <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+            <div id="test3List" class="list-group list-group-flush" data-total-target="#test3Count">
+              <div class="list-group-item">
+                <div>Phone Number <span data-item-count>1</span></div>
+
+                <div class="d-flex">
+                  <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                  <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                  <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template3" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
+          <template id="template3">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Phone Numbers <span id="example3Count">1</span></h6>
+
+                <!--Add Button-->
+                <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#example3Template" data-list="#example3List">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+
+                <!--Template-->
+                <template id="example3Template">
+                  <div class="list-group-item">
+                    <div>Phone Number <span data-item-count></span></div>
+
+                    <div class="d-flex">
+                      <input type="tel" class="form-control me-2" name="numbers[{index}].number" placeholder="number for index {index}">
+                      <input type="text" class="form-control me-2" name="numbers[{index}].type" placeholder="type for index {index}">
+
+                      <!--Delete Button-->
+                      <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <!--List Items-->
+              <div id="example3List" class="list-group list-group-flush" data-total-target="#example3Count">
+
+                <div class="list-group-item">
+                  <div>Phone Number <span data-item-count></span></div>
+
+                  <div class="d-flex">
+                    <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                    <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                    <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+
+                    <!--Delete Button-->
+                    <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="card-4" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Changing the index token</h5>
+        <div class="card-body">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+              <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#test4Template" data-list="#test4List">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+
+              <template id="test4Template" data-index-var="{number-index}">
+                <div class="list-group-item d-flex">
+                  <input type="tel" class="form-control me-2" name="numbers[{number-index}].number" placeholder="number for index {number-index}">
+                  <input type="text" class="form-control me-2" name="numbers[{number-index}].type" placeholder="type for index {number-index}">
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </template>
+            </div>
+
+            <div id="test4List" class="list-group list-group-flush">
+              <div class="list-group-item d-flex">
+                <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+                <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template4" data-code-type="xml"></code></pre>
+          <template id="template4">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Phone Numbers</h6>
+
+                <!--Add Button-->
+                <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#example4Template" data-list="#example4List">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+
+                <!--Template-->
+                <template id="example4Template" data-index-var="{number-index}">
+                  <div class="list-group-item d-flex">
+                    <input type="tel" class="form-control me-2" name="numbers[{number-index}].number" placeholder="number for index {number-index}">
+                    <input type="text" class="form-control me-2" name="numbers[{number-index}].type" placeholder="type for index {number-index}">
+
+                    <!--Delete Button-->
+                    <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!--List Items-->
+              <div id="example4List" class="list-group list-group-flush">
+                <div class="list-group-item d-flex">
+                  <input type="text" class="form-control me-2" name="numbers[0].deleted" placeholder="normally hidden input with value false" data-delete-input>
+                  <input type="tel" class="form-control me-2" name="numbers[0].number" placeholder="number for index 0">
+                  <input type="text" class="form-control me-2" name="numbers[0].type" placeholder="type for index 0">
+
+                  <!--Delete Button-->
+                  <button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
+<script type="module">
+  import { initListItems } from "../js/InitListItems.js";
+  import { initExamples, initTestRunner } from "./assets/modules.js";
+  // import { tests } from "../tests/init-list-items-tests.js";
+
+  (function main() {
+    doubleInit();
+    initExamples();
+    // initTestRunner(tests);
+  })();
+
+  function doubleInit() {
+    initListItems();
+    initListItems();
+  }
+</script>
+</body>
+</html>
