@@ -50,13 +50,33 @@
   <div class="row g-3">
     <div class="col-12">
       <div class="card">
-        <div class="card-header text-bg-primary d-flex align-items-center">
-          <h5 class="flex-fill mb-0">HTML<sup><a href="javascript:void(0);" class="link-light small" data-bs-toggle="tooltip" title="Note: Unlike the other modules, this module has a required function that you must provide. It also didn't make sense to have an initAll function. All uses of this module only target one input per page. Therefor, all HTML inputs on this page would look the same. Below is the HTML for the input in all examples except where otherwise noted."><i class="fa-solid fa-circle-exclamation"></i></a></sup></h5>
-          <a href="#" data-clipboard="#template0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        <h5 class="card-header text-bg-primary">Setup</h5>
+        <div class="card-body">
+          <div class="alert alert-info mb-0" role="alert">
+            Note: Unlike the other modules, this module has a required function that you must provide. It also didn't make sense
+            to have an <code>initAll</code> function. All uses of this module only target one input per page. Therefor, all HTML
+            inputs on this page would look the same. Below is the HTML for the input in all examples except where otherwise noted.
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">CSS</span>
+          <a href="#" data-clipboard="#template0-1" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
         </div>
         <div class="card-body">
-          <pre><code data-code-target="#template0" data-code-type="xml"></code></pre>
-          <template id="template0">
+          <pre><code data-code-target="#template0-1" data-code-type="xml"></code></pre>
+          <template id="template0-1">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/css/isp-suggest.css">
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template0-2" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-2" data-code-type="xml"></code></pre>
+          <template id="template0-2">
             <input id="suggest" type="text" class="form-control">
           </template>
         </div>
