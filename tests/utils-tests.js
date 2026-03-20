@@ -1,4 +1,4 @@
-import { getContext, initModalShowOnError } from "../js/Utils.js";
+import { getContext, initModalShowOnError } from "../js/utils.js";
 import { Collapse, Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
 function getContextTest(resolve, reject) {

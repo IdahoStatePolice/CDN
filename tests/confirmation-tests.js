@@ -106,7 +106,7 @@ function customBodyTest(resolve, reject) {
   let success = false;
   onConfirmationSimulateNoClick(e => {
     const el = e.target.querySelector('.modal-body');
-    success = (el.firstElementChild.innerText === 'custom body');
+    success = (el.innerText === 'custom body');
   });
   btnEl.click();
   setTimeout(() => success ? resolve(resultEl) : reject(resultEl), 500);

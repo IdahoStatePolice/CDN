@@ -1,5 +1,3 @@
-import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-
 /**
  * RowClick settings object.
  *
@@ -24,7 +22,7 @@ import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
  */
 
 /**
- * Class to initialize elements that are not anchor or button elements with click events. Specifically table rows.
+ * Class to initialize elements that are not anchor or button elements with click events.
  *
  * @see {@link https://idahostatepolice.github.io/CDN/site/row-click.html|Row Click Docs}
  */
@@ -54,6 +52,12 @@ class RowClick {
   #rowEl;
 
   /**
+   * The Bootstrap Modal class to use for opening modals.
+   * @type {typeof import('bootstrap').Modal | undefined}
+   */
+  #modalClass;
+
+  /**
    * The list of children elements selected using the childSelector from settings.
    * @type {Array.<HTMLElement>}
    */
@@ -75,12 +79,14 @@ class RowClick {
    * Constructs a new RowClick object.
    *
    * @param {string | HTMLElement} el - A string selector or a DOM element.
+   * @param [ModalClass] - Bootstrap Modal class to use for opening modals.
    * @param {RowClickSettings} [options] - A RowClickSettings object.
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/row-click.html|Row Click Docs}
    */
-  constructor(el, options) {
+  constructor(el, ModalClass = undefined, options) {
     this.#rowEl = typeof el === 'string' ? document.querySelector(el) : el;
+    this.#modalClass = ModalClass;
 
     if (RowClick.#initializedEls.has(this.#rowEl)) {
       RowClick.#initializedEls.get(this.#rowEl).destroy();
@@ -133,7 +139,7 @@ class RowClick {
     const modalEl = document.querySelector(this.#settings.modalTarget);
 
     if (modalEl.matches('.modal')) {
-      Modal.getOrCreateInstance(modalEl).show(this.#rowEl);
+      this.#modalClass.getOrCreateInstance(modalEl).show(this.#rowEl);
     }
     else {
       throw new Error('RowClick modal target is not a modal.');
@@ -157,6 +163,7 @@ class RowClick {
   /**
    * A shortcut to do a mass initialization of any element that needs to be initialized.
    *
+   * @param {typeof import('bootstrap').Modal} [ModalClass] - Optional Bootstrap Modal constructor used when click targets a modal.
    * @param {string} [selector = '[data-isp-toggle="row-click"]'] - Selector used to find all elements to initialize.
    * @param {RowClickSettings} [options] - RowClickSettings object to use with each initialization.
    *
@@ -164,9 +171,9 @@ class RowClick {
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/row-click.html|Row Click Docs}
    */
-  static initAll(selector = '[data-isp-toggle="row-click"]', options) {
+  static initAll(ModalClass = undefined, selector = '[data-isp-toggle="row-click"]', options) {
     const els = document.querySelectorAll(selector);
-    return [...els].map(el => new RowClick(el, options));
+    return [...els].map(el => new RowClick(el, ModalClass, options));
   }
 }
 

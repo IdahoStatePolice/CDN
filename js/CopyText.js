@@ -1,5 +1,3 @@
-import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-
 /**
  * CopyText settings object to configure a new CopyText object.
  *
@@ -61,6 +59,12 @@ class CopyText {
   #settings;
 
   /**
+   * The Bootstrap Toast class used to display success messages.
+   * @type {typeof import('bootstrap').Toast | undefined}
+   */
+  #toastClass;
+
+  /**
    * Event handler reference used to deregister event listener on destroy.
    * @type {function}
    */
@@ -69,12 +73,14 @@ class CopyText {
   /**
    * Constructs a new CopyText object.
    *
+   * @param ToastClass - Bootstrap 5 Toast class.
    * @param {string | HTMLElement} el - A string selector or a DOM element.
    * @param {CopyTextSettings} [options] - A CopyTextSettings object.
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
    */
-  constructor(el, options) {
+  constructor(ToastClass, el, options) {
+    this.#toastClass = ToastClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
     if (CopyText.#initializedEls.has(this.#el)) {
@@ -99,6 +105,7 @@ class CopyText {
   /**
    * A shortcut to do a mass initialization of any element that needs to be initialized.
    *
+   * @param ToastClass - Bootstrap 5 Toast class.
    * @param {string} [selector = '[data-isp-toggle="copy-text"]'] - Selector used to find all elements to initialize.
    * @param {CopyTextSettings} [options] - CopyTextSettings object to use with each initialization.
    *
@@ -106,28 +113,29 @@ class CopyText {
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
    */
-  static initAll(selector = '[data-isp-toggle="copy-text"]', options) {
+  static initAll(ToastClass, selector = '[data-isp-toggle="copy-text"]', options) {
     const els = document.querySelectorAll(selector);
-    return [...els].map(el => new CopyText(el, options));
+    return [...els].map(el => new CopyText(ToastClass, el, options));
   }
 
   async #doCopy() {
     let textToCopy = this.#settings.copyText;
 
     if (this.#settings.copyTarget) {
-      textToCopy = CopyText.#extractText(this.#settings.copyTarget, this.#settings.copyElProperty);
+      textToCopy = this.#extractText(this.#settings.copyTarget, this.#settings.copyElProperty);
     }
 
     if (textToCopy) {
       await navigator.clipboard.writeText(textToCopy);
-      CopyText.#showToast(this.#settings.copyToast, this.#settings.copyToastText);
+      this.#showToast();
     }
   }
 
-  static #extractText(selector, elProperty) {
-    const targets = document.querySelectorAll(selector);
+  #extractText() {
+    const { copyTarget, copyElProperty } = this.#settings;
+    const targets = document.querySelectorAll(copyTarget);
     if (targets.length === 0) {
-      console.warn(`No elements found for selector: ${selector}`);
+      console.warn(`No elements found for selector: ${copyTarget}`);
       return null;
     }
 
@@ -137,26 +145,27 @@ class CopyText {
       }
 
       let text = '';
-      if (elProperty in el) {
-        text = el[elProperty];
+      if (copyElProperty in el) {
+        text = el[copyElProperty];
       }
       else {
-        console.warn(`Unknown element property: ${elProperty}`);
+        console.warn(`Unknown element property: ${copyElProperty}`);
       }
 
       return (text ?? '').replace(/\s+/g, ' ').trim();
     }).join(' ');
 
     if (!extractedText) {
-      console.warn(`No text found in copy target(s): ${selector}`);
+      console.warn(`No text found in copy target(s): ${copyTarget}`);
       return null;
     }
 
     return extractedText;
   }
 
-  static #showToast(toastSelector, defaultToastText) {
-    let toastEl = document.querySelector(toastSelector);
+  #showToast() {
+    const { copyToast, copyToastText } = this.#settings;
+    let toastEl = document.querySelector(copyToast);
     let temporary = false;
 
     if (!toastEl) {
@@ -164,7 +173,7 @@ class CopyText {
       const toastMarkup = `
         <div class="toast-container position-fixed bottom-0 end-0 p-3" data-temp-toast>
           <div class="toast border-success text-success-emphasis bg-success-subtle" role="alert">
-            <div class="toast-body">${defaultToastText}</div>
+            <div class="toast-body">${copyToastText}</div>
           </div>
         </div>`;
       document.body.insertAdjacentHTML('beforeend', toastMarkup);
@@ -175,7 +184,7 @@ class CopyText {
       toastEl = toastEl.querySelector('.toast');
     }
 
-    const toast = new Toast(toastEl, { delay: 2000 });
+    const toast = new this.#toastClass(toastEl, { delay: 2000 });
     toast.show();
 
     if (temporary) {

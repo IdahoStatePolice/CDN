@@ -162,6 +162,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
+  import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
   import { CopyText } from "../js/CopyText.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "../tests/copy-text-tests.js";
@@ -173,8 +174,8 @@
   })();
 
   function doubleInit() {
-    CopyText.initAll();
-    CopyText.initAll();
+    CopyText.initAll(Toast);
+    CopyText.initAll(Toast);
   }
 </script>
 </body>
