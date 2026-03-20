@@ -1,5 +1,3 @@
-import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-
 const modalListener = (e) => {
   const els = e.target.querySelectorAll('[autofocus]');
   [...els].filter(el => el.checkVisibility())?.[0]?.focus();
@@ -31,6 +29,15 @@ function getContext() {
 }
 
 /**
+ * Calls the initializer callback for each element matching the CSS selector.
+ * @param {string} selector - CSS selector identifying target elements.
+ * @param {Function} initializer - Function to run on each matched element.
+ */
+function initAll(selector, initializer) {
+  document.querySelectorAll(selector).forEach(el => initializer(el));
+}
+
+/**
  * Finds the first visible element with the autofocus attribute in the modal and puts focus on it when shown.
  */
 function initModalAutofocus() {
@@ -51,15 +58,16 @@ function initCollapseAutoFocus() {
  * and then look for the existence of elements inside that modal based on the
  * `errorSelector`. If there are matching elements, then the modal is shown.
  *
+ * @param ModalClass - Bootstrap 5 Modal class.
  * @param {string} [modalSelector = '.modal'] - The selector used to decide which modals to search.
  * @param {string} [errorSelector = '.is-invalid, .alert.alert-danger'] - The selector used to check if an error exists inside the modal.
  */
-function initModalShowOnError(modalSelector = '.modal', errorSelector = '.is-invalid, .alert.alert-danger') {
+function initModalShowOnError(ModalClass, modalSelector = '.modal', errorSelector = '.is-invalid, .alert.alert-danger') {
   for (const modalEl of document.querySelectorAll(modalSelector)) {
     const invalidEl = modalEl.querySelector(errorSelector);
 
     if (invalidEl && modalEl.parentElement.checkVisibility()) {
-      Modal.getOrCreateInstance(modalEl).show();
+      ModalClass.getOrCreateInstance(modalEl).show();
       setTimeout(() => invalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 355);
     }
   }
@@ -77,4 +85,4 @@ function dirtyCheck() {
   document.addEventListener('submit', dirtySubmitListener);
 }
 
-export { getContext, initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck };
+export { getContext, initAll, initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck };

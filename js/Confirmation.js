@@ -1,5 +1,3 @@
-import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-
 /**
  * Confirmation settings object to configure a new Confirmation object.
  *
@@ -66,6 +64,11 @@ class Confirmation {
   static #initializedEls = new Map();
 
   /**
+   * Bootstrap 5 Modal class to use for the confirmation modal.
+   */
+  #modalClass;
+
+  /**
    * The root HTML element associated with this confirmation.
    * @type {HTMLFormElement | HTMLButtonElement | HTMLInputElement | HTMLAnchorElement | HTMLElement}
    */
@@ -98,12 +101,14 @@ class Confirmation {
   /**
    * Constructs a new Confirmation object.
    *
+   * @param ModalClass - Bootstrap 5 Modal class to use for the confirmation modal.
    * @param {string | HTMLElement} el - A string selector or a DOM element.
    * @param {ConfirmationSettings} [options] - A ConfirmationSettings object.
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
    */
-  constructor(el, options) {
+  constructor(ModalClass, el, options) {
+    this.#modalClass = ModalClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
     if (Confirmation.#initializedEls.has(this.#el)) {
@@ -147,6 +152,7 @@ class Confirmation {
   /**
    * A shortcut to do a mass initialization of any element that needs to be initialized.
    *
+   * @param ModalClass - Bootstrap 5 Modal class to use for the confirmation modal.
    * @param {string} [selector = '[data-isp-toggle="confirmation"]'] - Selector used to find all elements to initialize.
    * @param {ConfirmationSettings} [options] - ConfirmationSettings object to use with each initialization.
    *
@@ -154,15 +160,15 @@ class Confirmation {
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
    */
-  static initAll(selector = '[data-isp-toggle="confirmation"]', options) {
+  static initAll(ModalClass, selector = '[data-isp-toggle="confirmation"]', options) {
     const els = document.querySelectorAll(selector);
-    return [...els].map(el => new Confirmation(el, options));
+    return [...els].map(el => new Confirmation(ModalClass, el, options));
   }
 
   #showConfirmation() {
     document.body.insertAdjacentHTML('beforeend', Confirmation.#modalHtml(this.#settings));
     const modalEl = document.body.lastElementChild;
-    const modal = new Modal(modalEl);
+    const modal = new this.#modalClass(modalEl);
 
     modalEl.querySelector('[data-confirm-yes]').addEventListener('click', () => this.#yesClickHandler(modal));
     modalEl.querySelector('[data-confirm-no]').addEventListener('click', () => this.#noClickHandler(modal));
