@@ -6,12 +6,6 @@ import { Spinner } from "./Spinner.js";
  */
 
 /**
- * Takes a URI encoded query string and returns a complete URL for a fetch query.
- *
- * @typedef {(uriEncodedQuery: string) => string} URLFactory
- */
-
-/**
  * Takes a URL `string` and returns a `Promise` that resolved into and `Array` of any `Object`.
  *
  * @typedef {(query: string) => Promise<Array<any>>} SearchFunction
@@ -488,14 +482,15 @@ class Suggest {
  * This object contains higher-order functions ({@link https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function#returning_a_function|see MDN})
  * that build functions for the required `searchFn` option of a Suggest.
  *
- * @type {{ajax: AjaxSearchFactoryFunction}}
+ * @property {Function} ajax - A factory function that returns a 'searchFn' for a Suggest object.
  */
 const search = {
   /**
-   * Factory function to build a `searchFn` using the {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API|fetch API}.
+   * A factory function to build a `searchFn` using the {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API|fetch API}.
    * Handles the most common errors when talking to a SpringBoot endpoint.
    *
-   * @typedef {(buildUrlFn: URLFactory, loginUrlEndsWith: string) => SearchFunction} AjaxSearchFactoryFunction
+   * @param {(query: string) => string} buildUrlFn - Takes a URI encoded query string and returns a complete URL for a fetch query.
+   * @param {string} [loginUrlEndsWith] - (Optional) If the result redirects to a URL that ends with this string, will throw an error that you have been logged out.
    */
   ajax: function(buildUrlFn, loginUrlEndsWith = '/login') {
     return async function(query) {
