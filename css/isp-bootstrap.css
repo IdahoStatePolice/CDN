@@ -100,7 +100,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   white-space: pre-wrap;
 }
 
-.c-pointer {
+.c-pointer, .cursor-pointer {
   cursor: pointer;
 }
 
