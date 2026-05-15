@@ -26,10 +26,10 @@
  * @prop {boolean} [hideX] - If `true` will hide the x button in the upper right side of the confirmation modal.
  * @prop {boolean} [static] - If `true` will add the attributes `data-bs-backdrop="static"` and  `data-bs-keyboard="false"`
  * to the confirmation modal preventing it from being closed for any other reason that clicking on one of the buttons in the modal.
- * @prop {(el: HTMLElement, modal: Modal) => void} [yesCallback] - A callback function to execute if the user selects the 'yes' option.
+ * @prop {(el: HTMLElement, modal: import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal) => void} [yesCallback] - A callback function to execute if the user selects the 'yes' option.
  * The first parameter is the HTML element that triggered this confirmation.
  * The second parameter is the Bootstrap `Modal` object that represents this confirmation dialog.
- * @prop {(el: HTMLElement, modal: Modal) => void} [noCallback] - A callback function to execute if the user selects the 'no' option.
+ * @prop {(el: HTMLElement, modal: import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal) => void} [noCallback] - A callback function to execute if the user selects the 'no' option.
  * The first parameter is the HTML element that triggered this confirmation.
  * The second parameter is the Bootstrap `Modal` object that represents this confirmation dialog.
  */
@@ -101,14 +101,14 @@ class Confirmation {
   /**
    * Constructs a new Confirmation object.
    *
-   * @param ModalClass - Bootstrap 5 Modal class to use for the confirmation modal.
+   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal} modalClass - Bootstrap 5 Modal class to use for the confirmation modal.
    * @param {string | HTMLElement} el - A string selector or a DOM element.
    * @param {ConfirmationSettings} [options] - A ConfirmationSettings object.
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
    */
-  constructor(ModalClass, el, options) {
-    this.#modalClass = ModalClass;
+  constructor(modalClass, el, options) {
+    this.#modalClass = modalClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
     if (Confirmation.#initializedEls.has(this.#el)) {
@@ -152,7 +152,7 @@ class Confirmation {
   /**
    * A shortcut to do a mass initialization of any element that needs to be initialized.
    *
-   * @param ModalClass - Bootstrap 5 Modal class to use for the confirmation modal.
+   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal} modalClass - Bootstrap 5 Modal class to use for the confirmation modal.
    * @param {string} [selector = '[data-isp-toggle="confirmation"]'] - Selector used to find all elements to initialize.
    * @param {ConfirmationSettings} [options] - ConfirmationSettings object to use with each initialization.
    *
@@ -160,9 +160,9 @@ class Confirmation {
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
    */
-  static initAll(ModalClass, selector = '[data-isp-toggle="confirmation"]', options) {
+  static initAll(modalClass, selector = '[data-isp-toggle="confirmation"]', options) {
     const els = document.querySelectorAll(selector);
-    return [...els].map(el => new Confirmation(ModalClass, el, options));
+    return [...els].map(el => new Confirmation(modalClass, el, options));
   }
 
   #showConfirmation() {

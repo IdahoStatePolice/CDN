@@ -58,12 +58,17 @@
         <div class="card-body">
           <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
           <template id="template0">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
             import { RowClick } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/RowClick.js";
 
             RowClick.initAll();
+            // or if you want to show a modal
+            RowClick.initAll(Modal);
             // or
             const el = document.querySelector('#id');
             const confirmation = new RowClick(el);
+            // or if you want to show a modal
+            const confirmation = new RowClick(el, Modal);
           </template>
         </div>
       </div>
@@ -355,10 +360,10 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
+  import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
   import { RowClick } from "../js/RowClick.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/row-click-tests.js";
-  import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
   (function main() {
     doubleInit();

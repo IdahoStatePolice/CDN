@@ -60,12 +60,13 @@
         <div class="card-body">
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
+            import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
             import { CopyText } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CopyText.js";
 
-            CopyText.initAll();
+            CopyText.initAll(Toast);
             // or
             const el = document.querySelector('#id');
-            const copyText = new CopyText(el);
+            const copyText = new CopyText(Toast, el);
           </template>
         </div>
       </div>

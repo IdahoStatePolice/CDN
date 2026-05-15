@@ -73,12 +73,13 @@
         <div class="card-body">
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
             import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Confirmation.js";
 
-            Confirmation.initAll();
+            Confirmation.initAll(Modal);
             // or
             const el = document.querySelector('#id');
-            const confirmation = new Confirmation(el);
+            const confirmation = new Confirmation(Modal, el);
           </template>
         </div>
       </div>

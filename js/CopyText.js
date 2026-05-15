@@ -73,14 +73,14 @@ class CopyText {
   /**
    * Constructs a new CopyText object.
    *
-   * @param ToastClass - Bootstrap 5 Toast class.
+   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Toast} toastClass - Bootstrap 5 Toast class.
    * @param {string | HTMLElement} el - A string selector or a DOM element.
    * @param {CopyTextSettings} [options] - A CopyTextSettings object.
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
    */
-  constructor(ToastClass, el, options) {
-    this.#toastClass = ToastClass;
+  constructor(toastClass, el, options) {
+    this.#toastClass = toastClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
     if (CopyText.#initializedEls.has(this.#el)) {
@@ -105,7 +105,7 @@ class CopyText {
   /**
    * A shortcut to do a mass initialization of any element that needs to be initialized.
    *
-   * @param ToastClass - Bootstrap 5 Toast class.
+   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Toast} toastClass - Bootstrap 5 Toast class.
    * @param {string} [selector = '[data-isp-toggle="copy-text"]'] - Selector used to find all elements to initialize.
    * @param {CopyTextSettings} [options] - CopyTextSettings object to use with each initialization.
    *
@@ -113,9 +113,9 @@ class CopyText {
    *
    * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
    */
-  static initAll(ToastClass, selector = '[data-isp-toggle="copy-text"]', options) {
+  static initAll(toastClass, selector = '[data-isp-toggle="copy-text"]', options) {
     const els = document.querySelectorAll(selector);
-    return [...els].map(el => new CopyText(ToastClass, el, options));
+    return [...els].map(el => new CopyText(toastClass, el, options));
   }
 
   async #doCopy() {

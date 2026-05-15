@@ -1,16 +1,15 @@
-import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-
 const context = new Map();
 
 /**
  * Initializes `input` event listeners listening for radio button changes to
  * control Bootstrap collapses based on `data-target` and `data-action` attributes.
  *
+ * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm').Collapse} collapseClass - Bootstrap 5 Collapse class to use.
  * @param {string} [selector = '[data-isp-toggle="radio-collapse"]'] - The selector used to initialize radio buttons.
  *
  * @see {@link https://idahostatepolice.github.io/CDN/site/collapse-utils.html#card-1|Radio Collapse Docs}
  */
-function initRadioCollapse(selector = '[data-isp-toggle="radio-collapse"]') {
+function initRadioCollapse(collapseClass, selector = '[data-isp-toggle="radio-collapse"]') {
   if (!context.has('radioCollapseListener')) {
     context.set('radioCollapseListener', listener);
   }
@@ -22,7 +21,7 @@ function initRadioCollapse(selector = '[data-isp-toggle="radio-collapse"]') {
     const labelEl = e.target.closest(selector);
     if (labelEl) {
       const collapseEls = document.querySelectorAll(labelEl.dataset.target);
-      const collapses = [...collapseEls].map(el => Collapse.getOrCreateInstance(el, { toggle: false }));
+      const collapses = [...collapseEls].map(el => collapseClass.getOrCreateInstance(el, { toggle: false }));
       collapses.forEach(collapse => collapse[labelEl.dataset.action]());
     }
   }
@@ -35,10 +34,11 @@ function initRadioCollapse(selector = '[data-isp-toggle="radio-collapse"]') {
  * If multiple checkboxes are targeting the same collapse and any are checked, then the action
  * will be performed. If no checkboxes are checked, then the opposite action will be performed.
  *
+ * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Collapse} collapseClass - Bootstrap 5 Collapse class to use.
  * @param {string} [selector = '[data-isp-toggle="checkbox-collapse"]'] - The selector used to initialize checkboxes.
  * @see {@link https://idahostatepolice.github.io/CDN/site/collapse-utils.html#card-3|Checkbox Collapse Docs}
  */
-function initCheckboxCollapse(selector = '[data-isp-toggle="checkbox-collapse"]') {
+function initCheckboxCollapse(collapseClass, selector = '[data-isp-toggle="checkbox-collapse"]') {
   if (!context.has('checkboxCollapseListener')) {
     context.set('checkboxCollapseListener', listener);
   }
@@ -51,7 +51,7 @@ function initCheckboxCollapse(selector = '[data-isp-toggle="checkbox-collapse"]'
     if (labelEl) {
       const checked = areAnyCheckedForThisTarget(labelEl);
       const collapseEls = document.querySelectorAll(labelEl.dataset.target);
-      const collapses = [...collapseEls].map(el => Collapse.getOrCreateInstance(el, { toggle: false }));
+      const collapses = [...collapseEls].map(el => collapseClass.getOrCreateInstance(el, { toggle: false }));
 
       if (labelEl.dataset.action === 'show') {
         collapses.forEach(collapse => collapse[checked ? 'show' : 'hide']());
@@ -102,10 +102,11 @@ function initCheckboxCollapse(selector = '[data-isp-toggle="checkbox-collapse"]'
  * In the above example, male-stuff will be shown when 'Male' is selected and hidden
  * when the other options are selected.
  *
+ * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Collapse} collapseClass - Bootstrap 5 Collapse class to use.
  * @param {string} [selector = '[data-isp-toggle="select-collapse"]'] - The selector used to initialize selects.
  * @see {@link https://idahostatepolice.github.io/CDN/site/collapse-utils.html#card-7|Select Collapse Docs}
  */
-function initSelectCollapse(selector = '[data-isp-toggle="select-collapse"]') {
+function initSelectCollapse(collapseClass, selector = '[data-isp-toggle="select-collapse"]') {
   if (!context.has('selectCollapseListener')) {
     context.set('selectCollapseListener', listener);
   }
@@ -117,25 +118,25 @@ function initSelectCollapse(selector = '[data-isp-toggle="select-collapse"]') {
     const selectEl = e.target.closest(selector);
     if (selectEl) {
       if (!selectEl.dataset.action) {
-        applySelectedActionToTarget(selectEl);
+        applySelectedActionToTarget(collapseClass, selectEl);
       }
       if (!selectEl.dataset.target) {
-        applyActionToSelectedTarget(selectEl);
+        applyActionToSelectedTarget(collapseClass, selectEl);
       }
     }
   }
 
-  function applySelectedActionToTarget(selectEl) {
+  function applySelectedActionToTarget(collapseClass, selectEl) {
     const action = selectEl.options[selectEl.selectedIndex].dataset.action;
 
     if (action) {
       const collapseEls = document.querySelectorAll(selectEl.dataset.target);
-      const collapses = [...collapseEls].map(el => Collapse.getOrCreateInstance(el, { toggle: false }));
+      const collapses = [...collapseEls].map(el => collapseClass.getOrCreateInstance(el, { toggle: false }));
       collapses.forEach(collapse => collapse[action === 'show' ? 'show' : 'hide']());
     }
   }
 
-  function applyActionToSelectedTarget(selectEl) {
+  function applyActionToSelectedTarget(collapseClass, selectEl) {
     const selectedIndex = selectEl.selectedIndex;
     const selectedOption = selectEl.options[selectedIndex];
     const selectedTarget = selectedOption.dataset.target;
@@ -146,14 +147,14 @@ function initSelectCollapse(selector = '[data-isp-toggle="select-collapse"]') {
     //toggleSelectedCollapses
     if (selectedTarget) {
       const collapseEls = document.querySelectorAll(selectedTarget);
-      const collapses = [...collapseEls].map(el => Collapse.getOrCreateInstance(el, { toggle: false }));
+      const collapses = [...collapseEls].map(el => collapseClass.getOrCreateInstance(el, { toggle: false }));
       collapses.forEach(collapse => collapse[action === 'show' ? 'show' : 'hide']());
     }
 
     function toggleOtherCollapses(option) {
       if (option.dataset.target && option.dataset.target !== selectedTarget) {
         const collapseEls = document.querySelectorAll(option.dataset.target);
-        const collapses = [...collapseEls].map(el => Collapse.getOrCreateInstance(el, { toggle: false }));
+        const collapses = [...collapseEls].map(el => collapseClass.getOrCreateInstance(el, { toggle: false }));
         collapses.forEach(collapse => collapse[action === 'show' ? 'hide' : 'show']());
       }
     }

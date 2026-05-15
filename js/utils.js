@@ -58,16 +58,16 @@ function initCollapseAutoFocus() {
  * and then look for the existence of elements inside that modal based on the
  * `errorSelector`. If there are matching elements, then the modal is shown.
  *
- * @param ModalClass - Bootstrap 5 Modal class.
+ * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal} modalClass - Bootstrap 5 Modal class.
  * @param {string} [modalSelector = '.modal'] - The selector used to decide which modals to search.
  * @param {string} [errorSelector = '.is-invalid, .alert.alert-danger'] - The selector used to check if an error exists inside the modal.
  */
-function initModalShowOnError(ModalClass, modalSelector = '.modal', errorSelector = '.is-invalid, .alert.alert-danger') {
+function initModalShowOnError(modalClass, modalSelector = '.modal', errorSelector = '.is-invalid, .alert.alert-danger') {
   for (const modalEl of document.querySelectorAll(modalSelector)) {
     const invalidEl = modalEl.querySelector(errorSelector);
 
     if (invalidEl && modalEl.parentElement.checkVisibility()) {
-      ModalClass.getOrCreateInstance(modalEl).show();
+      modalClass.getOrCreateInstance(modalEl).show();
       setTimeout(() => invalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 355);
     }
   }

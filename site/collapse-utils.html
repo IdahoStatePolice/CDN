@@ -121,11 +121,12 @@
         <div class="card-body">
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
+            import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
             import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/collapse-utils.js";
 
-            initCheckboxCollapse();
-            initRadioCollapse();
-            initSelectCollapse();
+            initCheckboxCollapse(Collapse);
+            initRadioCollapse(Collapse);
+            initSelectCollapse(Collapse);
           </template>
         </div>
       </div>
@@ -648,6 +649,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
+  import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
   import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "../js/collapse-utils.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/collapse-utils-tests.js";
@@ -659,13 +661,13 @@
   })();
 
   function doubleInit() {
-    initRadioCollapse();
-    initCheckboxCollapse();
-    initSelectCollapse();
+    initRadioCollapse(Collapse);
+    initCheckboxCollapse(Collapse);
+    initSelectCollapse(Collapse);
 
-    initRadioCollapse();
-    initCheckboxCollapse();
-    initSelectCollapse();
+    initRadioCollapse(Collapse);
+    initCheckboxCollapse(Collapse);
+    initSelectCollapse(Collapse);
   }
 </script>
 </body>
