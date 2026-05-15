@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <a class="navbar-brand" href="index.html">ISP CDN (Version 0.0)</a>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
@@ -22,26 +22,12 @@
           <a href="#card-4" class="dropdown-item">Changing the index token</a>
         </div>
       </li>
-      <!--      <li class="nav-item">-->
-      <!--        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>-->
-      <!--      </li>-->
     </ul>
   </div>
 </nav>
 
 <div class="container p-3">
-  <h1>init-list-items.js</h1>
-
-  <div id="tests" class="collapse" data-toggle="tests">
-    <div class="card mb-3">
-      <h5 class="card-header text-bg-primary">Test Results</h5>
-      <div class="card-body">
-        <div class="row g-2">
-          <!--          <div class="col-6">test name: <span id="result1" class="text-warning">Running</span></div>-->
-        </div>
-      </div>
-    </div>
-  </div>
+  <h1>InitListItems.js</h1>
 
   <div class="row g-3">
     <div class="col-12">
@@ -53,7 +39,7 @@
         <div class="card-body">
           <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
           <template id="template0">
-            import { initListItems } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/init-list-items.js";
+            import { initListItems } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/InitListItems.js";
 
             initListItems();
           </template>
@@ -558,14 +544,12 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  import { initListItems } from "../js/init-list-items.js";
-  import { initExamples, initTestRunner } from "./assets/modules.js";
-  // import { tests } from "./tests/init-list-items-tests.js";
+  import { initListItems } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/InitListItems.js";
+  import { initExamples } from "./assets/modules.js";
 
   (function main() {
     doubleInit();
     initExamples();
-    // initTestRunner(tests);
   })();
 
   function doubleInit() {

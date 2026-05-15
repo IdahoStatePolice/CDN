@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <a class="navbar-brand" href="index.html">ISP CDN (Version 0.0)</a>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
@@ -136,7 +136,7 @@
         <div class="card-body">
           <pre><code data-code-target="#template1" data-code-type="javascript"></code></pre>
           <template id="template1">
-            import { getContext } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/utils.js";
+            import { getContext } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Utils.js";
 
             console.log(getContext());
             // Expected output: /CDN
@@ -311,7 +311,7 @@
         <div class="card-body">
           <pre><code data-code-target="#template5" data-code-type="javascript"></code></pre>
           <template id="template5">
-            import { dirtyCheck } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/utils.js";
+            import { dirtyCheck } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Utils.js";
 
             dirtyCheck();
           </template>
@@ -324,7 +324,7 @@
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
   import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-  import { initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck } from "../js/utils.js";
+  import { initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Utils.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/utils-tests.js";
 

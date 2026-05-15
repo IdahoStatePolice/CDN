@@ -1,0 +1,36 @@
+pre {
+  margin-bottom: 0;
+}
+pre code {
+  color: #BCBEC4FF;
+}
+
+.hljs-tag, .hljs-name {
+  color: #D5B778FF;
+}
+.hljs-attr {
+  color: #BABABAFF;
+}
+.hljs-string {
+  color: #6AAB73FF;
+}
+.hljs-comment {
+  color: #7A7E85FF;
+}
+.hljs-keyword {
+  color: #CF8E6DFF;
+}
+.hljs-variable {
+  color: #C77DBBFF;
+}
+.hljs-title.function_ {
+  color: #56A8F5FF;
+}
+.hljs-title.class_ {
+  color: #BCBEC4FF;
+}
+
+.anchor-offset {
+  margin-top: calc(-1rem - 56px);
+  margin-bottom: calc(1rem + 56px);
+}

@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <a class="navbar-brand" href="index.html">ISP CDN (Version 0.0)</a>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
@@ -162,8 +162,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-  import { CopyText } from "../js/CopyText.js";
+  import { CopyText } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CopyText.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/copy-text-tests.js";
 
@@ -174,8 +173,8 @@
   })();
 
   function doubleInit() {
-    CopyText.initAll(Toast);
-    CopyText.initAll(Toast);
+    CopyText.initAll();
+    CopyText.initAll();
   }
 </script>
 </body>

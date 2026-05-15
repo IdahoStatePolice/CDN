@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+    <a class="navbar-brand" href="index.html">ISP CDN (Version 0.0)</a>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
@@ -36,7 +36,7 @@
 </nav>
 
 <div class="container p-3">
-  <h1>collapse-utils.js</h1>
+  <h1>CollapseUtils.js</h1>
 
   <div id="tests" class="collapse" data-toggle="tests">
     <div class="card mb-3">
@@ -121,7 +121,7 @@
         <div class="card-body">
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
-            import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/collapse-utils.js";
+            import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CollapseUtils.js";
 
             initCheckboxCollapse();
             initRadioCollapse();
@@ -583,8 +583,8 @@
             <div class="col-4 py-3">
               <select id="selectCollapse56Trigger1" class="form-select" data-isp-toggle="select-collapse" data-action="hide">
                 <option></option>
-                <option value="1st" data-target="#selectCollapse5">Show 1st</option>
-                <option value="2nd" data-target="#selectCollapse6">Show 2nd</option>
+                <option value="1st" data-target="#selectCollapse5">Hide 1st</option>
+                <option value="2nd" data-target="#selectCollapse6">Hide 2nd</option>
               </select>
             </div>
             <div class="col-4">
@@ -648,7 +648,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "../js/collapse-utils.js";
+  import { initCheckboxCollapse, initRadioCollapse, initSelectCollapse } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CollapseUtils.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/collapse-utils-tests.js";
 
