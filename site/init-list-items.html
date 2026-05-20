@@ -600,10 +600,10 @@
                   <div class="col-5 col-lg-3">
                     <div class="row g-2">
                       <div class="col-6">
-                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first"maxlength="255">
+                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first" maxlength="255">
                       </div>
                       <div class="col-6">
-                        <input type="text" class="form-control" placeholder="Last Name" name="interactions[${index}].last"maxlength="255">
+                        <input type="text" class="form-control" placeholder="Last Name" name="interactions[${index}].last" maxlength="255">
                       </div>
                       <div class="col-12">
                         <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${index}].dateTime">
@@ -628,7 +628,7 @@
                   <div class="col-5 col-lg-3">
                     <div class="row g-2">
                       <div class="col-6">
-                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first"maxlength="255">
+                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first" maxlength="255">
                       </div>
                       <div class="col-6">
                         <input type="text" class="form-control" placeholder="Last Name" name="interactions[${index}].last" maxlength="255">
@@ -703,13 +703,13 @@
                 <div class="col-5 col-lg-3">
                   <div class="row g-2">
                     <div class="col-6">
-                      <input type="text" class="form-control" placeholder="First Name" name="interactions[${indexVal}].first" value="${interaction != null ? interaction.getFirst() : ""}" maxlength="255">
+                      <input type="text" class="form-control" placeholder="First Name" name="interactions[${indexVal}].first" value="${interaction != null ? interaction.getFirst() : ''}" maxlength="255">
                     </div>
                     <div class="col-6">
-                      <input type="text" class="form-control" placeholder="Last Name" name="interactions[${indexVal}].last" value="${interaction != null ? interaction.getLast() : ""}" maxlength="255">
+                      <input type="text" class="form-control" placeholder="Last Name" name="interactions[${indexVal}].last" value="${interaction != null ? interaction.getLast() : ''}" maxlength="255">
                     </div>
                     <div class="col-12">
-                      <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${indexVal}].dateTime" value="${interaction != null ? Ui.isoDateTime(interaction.getDateTime()) : ""}">
+                      <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${indexVal}].dateTime" value="${interaction != null ? Ui.isoDateTime(interaction.getDateTime()) : ''}">
                     </div>
                   </div>
                 </div>
