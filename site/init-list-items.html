@@ -127,14 +127,30 @@
 
         <div class="card-header border-top d-flex">
           <div class="flex-fill">
-            <h5 class="card-title">Template</h5>
-            <p class="card-text">An element containing one list item template. Only index is replaced as a token and the default is '{index}'.</p>
+            <h5 class="card-title">Add Location</h5>
+            <p class="card-text">Where the new entry will be added in the list. Default is add to bottom. To add at the top, add <span class="text-info">data-insert-location="top"</span> to the template.</p>
           </div>
           <a href="#" data-clipboard="#template0-5" title="copy"><i class="fa-solid fa-copy"></i></a>
         </div>
         <div class="card-body">
           <pre><code data-code-target="#template0-5" data-code-type="xml"></code></pre>
           <template id="template0-5">
+            <template data-insert-location="top">
+              <!-- HTML template -->
+            </template>
+          </template>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <div class="flex-fill">
+            <h5 class="card-title">Template</h5>
+            <p class="card-text">An element containing one list item template. Only index is replaced as a token and the default is '{index}'.</p>
+          </div>
+          <a href="#" data-clipboard="#template0-6" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template0-6" data-code-type="xml"></code></pre>
+          <template id="template0-6">
             <template data-index-var="{optionalNewTokenName}">
               <!-- HTML template -->
             </template>
@@ -146,11 +162,11 @@
             <h5 class="card-title">List</h5>
             <p class="card-text">An element containing list item children. While the example is a list-group, it can be any element with children.</p>
           </div>
-          <a href="#" data-clipboard="#template0-6" title="copy"><i class="fa-solid fa-copy"></i></a>
+          <a href="#" data-clipboard="#template0-7" title="copy"><i class="fa-solid fa-copy"></i></a>
         </div>
         <div class="card-body">
-          <pre><code data-code-target="#template0-6" data-code-type="xml"></code></pre>
-          <template id="template0-6">
+          <pre><code data-code-target="#template0-7" data-code-type="xml"></code></pre>
+          <template id="template0-7">
             <div class="list-group" data-index="{optionalNextIndex}" data-total-target="{optionalTotalCountSelector}">
               <!-- list-group-item's -->
             </div>
@@ -165,30 +181,30 @@
               This way it can be used in both the template and the list and be updated together.
             </p>
           </div>
-          <a href="#" data-clipboard="#template0-7" title="copy"><i class="fa-solid fa-copy"></i></a>
+          <a href="#" data-clipboard="#template0-8" title="copy"><i class="fa-solid fa-copy"></i></a>
         </div>
         <div class="card-body">
-          <pre><code data-code-target="#template0-7"></code></pre>
+          <pre><code data-code-target="#template0-8"></code></pre>
 
-          <template id="template0-7">
+          <template id="template0-8">
             &lt;%@attribute name="index" required="false" type="java.lang.Integer" %&gt;
             &lt;%@attribute name="value" required="false" type="java.lang.Object" %&gt;
 
             &lt;c:set var="index" value="${empty index ? '{index}' : index}"/&gt;
 
             &lt;div class="list-group-item"&gt;
-              &lt;c:if test="${not empty value}"&gt;
-                &lt;input type="hidden" name="paramName[${index}].deleted" value="false" data-delete-input&gt;
-              &lt;/c:if&gt;
+            &lt;c:if test="${not empty value}"&gt;
+            &lt;input type="hidden" name="paramName[${index}].deleted" value="false" data-delete-input&gt;
+            &lt;/c:if&gt;
 
-              &lt;div class="d-flex"&gt;
-                &lt;input type="text" class="form-control me-2" name="paramName[${index}].text" value="${value.text}"&gt;
-                &lt;input type="text" class="form-control me-2" name="paramName[${index}].tag" value="${value.tag}"&gt;
+            &lt;div class="d-flex"&gt;
+            &lt;input type="text" class="form-control me-2" name="paramName[${index}].text" value="${value.text}"&gt;
+            &lt;input type="text" class="form-control me-2" name="paramName[${index}].tag" value="${value.tag}"&gt;
 
-                &lt;button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item"&gt;
-                  &lt;i class="fa-solid fa-trash" title="Delete Item"&gt;&lt;/i&gt;
-                &lt;/button&gt;
-              &lt;/div&gt;
+            &lt;button type="button" class="btn btn-outline-danger" data-isp-toggle="remove-item" data-parent=".list-group-item"&gt;
+            &lt;i class="fa-solid fa-trash" title="Delete Item"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;/div&gt;
             &lt;/div&gt;
           </template>
         </div>
@@ -553,6 +569,164 @@
         </div>
       </div>
     </div>
+
+    <div class="col-12">
+      <div id="card-5" class="anchor-offset"></div>
+      <div class="card">
+
+        <h5 class="card-header text-bg-primary">JTE Example</h5>
+
+        <div class="card-body">
+          <p>This example was taken from SAKI Safe and is sorted by date, newest first. (The sorting is done server side.) There is a single object <span class="text-info">CaseFile</span> that has <span class="text-info">List&lt;Interaction&gt; interactions;</span> on it.</p>
+          <p>The template is configured to add the next entry at the top ( data-insert-location<span class="text-success">="top"</span> ).</p>
+          <p><span class="text-danger">**Note:</span> In the example HTML code below <span class="text-warning">Ctx&lt;UserAccount&gt;</span> is changed to <span class="text-warning">Ctx*UserAccount*</span>. You will need to change it back to <span class="text-warning">Ctx&lt;UserAccount&gt;</span> in your pasted code after copying this. (It weirded out the code below if left alone)</p>
+
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h5 class="flex-fill mb-0">Interactions
+                <span id="test5Count" class="badge text-bg-secondary">1</span>
+              </h5>
+              <!--Add Button-->
+              <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#test5Template" data-list="#test5List">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+            </div>
+
+            <!--Template-->
+            <template id="test5Template" data-insert-location="top">
+              <div class="list-group-item p-3 bg-body-tertiary">
+                <input type="hidden" class="form-control me-2" name="interactions[${index}].deleted" value="false" data-delete-input>
+                <div class="row g-2">
+                  <div class="col-5 col-lg-3">
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first" maxlength="255">
+                      </div>
+                      <div class="col-6">
+                        <input type="text" class="form-control" placeholder="Last Name" name="interactions[${index}].last" maxlength="255">
+                      </div>
+                      <div class="col-12">
+                        <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${index}].dateTime">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-7 col-lg-9 d-flex justify-content-between">
+                    <textarea class="form-control w-100" name="interactions[${index}].notes" placeholder="Notes" maxlength="4000" data-isp-toggle="countdown"></textarea>
+                    <button type="button" class="btn btn-outline-danger px-1 pt-1" style="height: 2.3em;" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!--List Items-->
+            <div id="test5List" class="list-group" data-total-target="#test5Count">
+              <div class="list-group-item p-3 bg-body-tertiary">
+                <input type="hidden" class="form-control me-2" name="interactions[${index}].deleted" value="false" data-delete-input>
+                <div class="row g-2">
+                  <div class="col-5 col-lg-3">
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <input type="text" class="form-control" placeholder="First Name" name="interactions[${index}].first" maxlength="255">
+                      </div>
+                      <div class="col-6">
+                        <input type="text" class="form-control" placeholder="Last Name" name="interactions[${index}].last" maxlength="255">
+                      </div>
+                      <div class="col-12">
+                        <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${index}].dateTime">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-7 col-lg-9 d-flex justify-content-between">
+                    <textarea class="form-control w-100" name="interactions[${index}].notes" placeholder="Notes" maxlength="4000" data-isp-toggle="countdown"></textarea>
+                    <button type="button" class="btn btn-outline-danger px-1 pt-1" style="height: 2.3em;" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">JTE/HTML</span>
+          <a href="#" data-clipboard="#template5" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template5" data-code-type="xml"></code></pre>
+          <template id="template5">
+
+            <div class="card mt-3">
+              <div class="card-header d-flex align-items-center">
+                <h5 class="flex-fill mb-0">Interactions
+                  <span id="interactionCount" class="badge text-bg-secondary">${caseFile.getInteractions().size()}</span>
+                </h5>
+                <!--Add Button-->
+                <a href="javascript:void(0);" data-isp-toggle="add-item" data-template="#interactionTemplate" data-list="#interactionList">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+
+                <!--Template-->
+                <template id="interactionTemplate" data-insert-location="top">
+                  @template.tags.interaction-form(ctx = ctx, interaction = null, index = null)
+                </template>
+              </div>
+
+              <!--List Items-->
+              <div id="interactionList" class="list-group" data-total-target="#interactionCount">
+                !{Integer intCount = 0;}
+                @for (Interaction interaction : caseFile.getInteractions())
+                @template.tags.interaction-form(ctx = ctx, interaction = interaction, index = intCount)
+                !{intCount = intCount + 1;}
+                @endfor
+              </div>
+            </div>
+
+            <!-----================='Tag' template 'interaction-form.jte' in the 'tags' folder ================----->
+            @import java.lang.String
+            @import gov.idaho.isp.saki.safe.domain.Interaction
+            @import gov.idaho.isp.saki.safe.domain.user.UserAccount
+            @import gov.idaho.isp.saki.safe.jte.Ctx
+            @import gov.idaho.isp.saki.safe.jte.Ui
+
+            @param Ctx*UserAccount* ctx
+            @param Interaction interaction
+            @param Integer index
+
+            !{String indexVal = index == null ? "{index}" : index.toString();}
+            <div class="list-group-item p-3 bg-body-tertiary">
+              <input type="hidden" class="form-control me-2" name="interactions[0].deleted" value="false" data-delete-input>
+              <div class="row g-2">
+                <div class="col-5 col-lg-3">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <input type="text" class="form-control" placeholder="First Name" name="interactions[${indexVal}].first" value="${interaction != null ? interaction.getFirst() : ''}" maxlength="255">
+                    </div>
+                    <div class="col-6">
+                      <input type="text" class="form-control" placeholder="Last Name" name="interactions[${indexVal}].last" value="${interaction != null ? interaction.getLast() : ''}" maxlength="255">
+                    </div>
+                    <div class="col-12">
+                      <input type="datetime-local" class="form-control" placeholder="Date/Time" name="interactions[${indexVal}].dateTime" value="${interaction != null ? Ui.isoDateTime(interaction.getDateTime()) : ''}">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-7 col-lg-9 d-flex justify-content-between">
+                  <textarea class="form-control w-100" name="interactions[${indexVal}].notes" placeholder="Notes" maxlength="4000" data-isp-toggle="countdown">${interaction != null ? interaction.getNotes() : ""}</textarea>
+                  <button type="button" class="btn btn-outline-danger px-1 pt-1" style="height: 2.3em;" data-isp-toggle="remove-item" data-parent=".list-group-item">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
 

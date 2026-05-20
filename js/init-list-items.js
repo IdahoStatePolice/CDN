@@ -107,6 +107,7 @@ function addItem(addBtn) {
     const templateEl = document.querySelector(addBtn.dataset.template);
     const listEl = document.querySelector(addBtn.dataset.list);
     const indexVar = templateEl.dataset.indexVar || '{index}';
+    const insertLocation = templateEl.dataset.insertLocation || 'bottom';
 
     addIndexIfNeeded(listEl);
     const index = listEl.dataset.index;
@@ -116,9 +117,15 @@ function addItem(addBtn) {
     const template = templateEl.innerHTML.replaceAll(new RegExp(indexVar, 'g'), index);
     const wrappedTemplate = `<div class="transitioning" style="height: 0; opacity: 0;">${template}</div>`;
 
-    listEl.insertAdjacentHTML('beforeend', wrappedTemplate);
-    const wrappedItemEl = listEl.lastElementChild;
-
+    let wrappedItemEl;
+    if (insertLocation === 'top') {
+      listEl.insertAdjacentHTML('afterbegin', wrappedTemplate);
+      wrappedItemEl = listEl.firstElementChild;
+    }
+    else if (insertLocation === 'bottom') {
+      listEl.insertAdjacentHTML('beforeend', wrappedTemplate);
+      wrappedItemEl = listEl.lastElementChild;
+    }
     for (const scriptEl of wrappedItemEl.querySelectorAll('script')) {
       const newScriptEl = document.createElement('script');
       newScriptEl.textContent = scriptEl.innerText;
@@ -136,7 +143,7 @@ function addItem(addBtn) {
       const itemEl = wrappedItemEl.firstElementChild;
       wrappedItemEl.replaceWith(itemEl);
       removeTempStyle(itemEl);
-      listEl.dispatchEvent(new Event('change', { bubbles: true }));
+      listEl.dispatchEvent(new Event('change', {bubbles: true}));
     });
   }
 }
@@ -172,7 +179,7 @@ function removeItem(removeBtn) {
         }
 
         updateCount(listEl);
-        listEl.dispatchEvent(new Event('change', { bubbles: true }));
+        listEl.dispatchEvent(new Event('change', {bubbles: true}));
       });
     }, 5);
   }
