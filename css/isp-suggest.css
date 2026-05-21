@@ -6,6 +6,10 @@
   z-index: 0;
 }
 
+.suggest mark, .suggest .mark {
+  padding: 0;
+}
+
 .suggest-menu {
   position: absolute;
   z-index: 1000;

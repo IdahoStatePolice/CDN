@@ -17,64 +17,80 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
         <div class="dropdown-menu dropdown-menu-end">
-          <a href="#card-1" class="dropdown-item">Server returns a list of strings</a>
-          <a href="#card-2" class="dropdown-item">Server returns a list of user objects</a>
-          <a href="#card-3" class="dropdown-item">Mark what matches in list</a>
-          <a href="#card-4" class="dropdown-item">Fill other inputs with values when item is selected</a>
+          <a href="#how-it-works" class="dropdown-item">How it works</a>
+          <a href="#examples" class="dropdown-item">Examples</a>
+          <a href="#min-setup" class="dropdown-item" style="padding-left: 2rem;">Minimum setup</a>
+          <a href="#search-functions" class="dropdown-item" style="padding-left: 3rem;">Pre-made search functions</a>
+          <a href="#placeholder" class="dropdown-item" style="padding-left: 2rem;">Placeholder</a>
+          <a href="#handling-objects" class="dropdown-item" style="padding-left: 2rem;">Handling an array of objects</a>
+          <a href="#highlighting" class="dropdown-item" style="padding-left: 2rem;">Highlighting labels</a>
+          <a href="#mark-functions" class="dropdown-item" style="padding-left: 3rem;">Pre-made mark functions</a>
+          <a href="#custom-content" class="dropdown-item" style="padding-left: 3rem;">Custom content</a>
+          <a href="#select-clear-functions" class="dropdown-item" style="padding-left: 2rem;">On select and on clear functions</a>
+          <a href="#css-and-templates" class="dropdown-item">CSS and templates</a>
+          <a href="#options" class="dropdown-item">Options</a>
+          <a href="#methods" class="dropdown-item">Methods</a>
         </div>
       </li>
-      <!--      <li class="nav-item">-->
-      <!--        <button type="button" class="nav-link" data-bs-toggle="collapse" data-bs-target="#tests">Toggle Tests</button>-->
-      <!--      </li>-->
     </ul>
   </div>
 </nav>
 
 <div class="container p-3">
-  <h1>Suggest.js</h1>
-
-  <div id="tests" class="collapse" data-toggle="tests">
-    <div class="card mb-3">
-      <h5 class="card-header text-bg-primary">Test Results</h5>
-      <div class="card-body">
-        <div class="row g-2">
-          <div class="col-6">
-            <div>test: <span id="result1" class="text-warning">Running</span></div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="row g-3">
     <div class="col-12">
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Setup</h5>
-        <div class="card-body">
-          <div class="alert alert-info mb-0" role="alert">
-            Note: Unlike the other modules, this module has a required function that you must provide. It also didn't make sense
-            to have an <code>initAll</code> function. All uses of this module only target one input per page. Therefore, all HTML
-            inputs on this page would look the same. Below is the HTML for the input in all examples unless otherwise noted.
-          </div>
-        </div>
+      <h1>Suggest.js</h1>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">CSS</span>
-          <a href="#" data-clipboard="#template0-1" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="alert alert-info">
+        There are a lot of examples throughout Training Matrix, Fusion Events, Ilets Conference Registration, ISP Web
+        Forms, and Applicant Processing. Just do a 'Find in Files' search in the WEB-INF folder for the term 'new Suggest'.
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="how-it-works" class="anchor-offset"></div>
+      <h2>How it works</h2>
+      <p>
+        Unlike how other suggests or typeahead works, this suggest doesn’t do any sorting or filtering. It only takes the list you provide
+        it and presents it to the user. If you need to do filtering or sorting, do that in the search function that you are required to provide.
+      </p>
+      <p>
+        The list of options is presented under the text input using Bootstraps dropdown menu classes and also supports keyboard navigation.
+        The text of the item selected will be placed in the input, and you can provide a function to do other things on selected.
+      </p>
+      <p>
+        Any error thrown during the search function will be caught and the message will be displayed to the end user as an error message below the
+        text input. You can use this to (for example) detect if the user has been logged out and display an error letting the user know to log back in.
+      </p>
+      <p class="text-center"><img src="assets/images/suggest/error-example.png" alt="error"/></p>
+      <p>
+        To position the menu and the spinner, <code>position: absolute;</code> is used. During the initialization process,
+        we check to see if the parent element has <code>position: relative;</code> and if not we wrap the input in a div
+        with the <code>wrapperClass</code> (defaulted to Bootstraps <code>position-relative</code> class).
+      </p>
+    </div>
+
+    <div class="col-12">
+      <div id="examples" class="anchor-offset"></div>
+      <h2>Examples</h2>
+
+      <p>Start by adding the style sheet to your page.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <a href="#" data-clipboard="#template0-1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template0-1" data-code-type="xml"></code></pre>
           <template id="template0-1">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/css/isp-suggest.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/css/isp-suggest.css">
           </template>
         </div>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template0-2" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <p>It is assumed that you will be targeting one text input at a time. All examples will target the following text element.</p>
+
+      <div class="card bg-body-tertiary">
         <div class="card-body">
+          <a href="#" data-clipboard="#template0-2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template0-2" data-code-type="xml"></code></pre>
           <template id="template0-2">
             <input id="suggest" type="text" class="form-control">
@@ -84,9 +100,20 @@
     </div>
 
     <div class="col-12">
-      <div id="card-1" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Server returns a list of strings</h5>
+      <div id="min-setup" class="anchor-offset"></div>
+      <h3>Minimum setup</h3>
+
+      <p>
+        The most basic setup expects an array of strings returned from the search function. Almost all
+        of our suggests rely on an ajax request where we do the filtering and sorting server side.
+      </p>
+
+      <div class="alert alert-info mb-3">
+        The search function expects a return type that is an iterable object. You can find more info on that here:
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_iterable_protocol" target="_blank">MDN: Iteration protocol</a>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <div class="row">
             <div class="col-4">
@@ -94,6 +121,7 @@
             </div>
           </div>
         </div>
+
         <script type="module">
           import { Suggest, search } from "../js/Suggest.js";
 
@@ -104,15 +132,42 @@
           new Suggest('#example1', { searchFn: mockSearchFn });
           new Suggest('#example1', { searchFn: mockSearchFn });
         </script>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">JavaScript</span>
-          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary">
         <div class="card-body">
+          <a href="#" data-clipboard="#template1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template1" data-code-type="javascript"></code></pre>
           <template id="template1">
-            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Suggest.js";
+            import { Suggest } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
+
+            new Suggest('#suggest', {
+              searchFn: async function(query) {
+                const results = await fetch('/context/ajax/user/nameContains?query=' + query);
+                return await results.json();
+              }
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="search-functions" class="anchor-offset"></div>
+      <h4>Pre-made search functions</h4>
+
+      <p>
+        The above function does not do any error checking and there is a lot that can go wrong in an ajax
+        request. To handle some of these errors, we created a reusable object to provide common search functions.
+        You can import the <code>search</code> object from the Suggest module to get access to those functions.
+      </p>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template2" data-code-type="javascript"></code></pre>
+          <template id="template2">
+            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
 
             new Suggest('#suggest', {
               searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query)
@@ -123,39 +178,52 @@
     </div>
 
     <div class="col-12">
-      <div id="card-2" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Server returns a list of user objects</h5>
+      <div id="placeholder" class="anchor-offset"></div>
+      <h3>Placeholder</h3>
+
+      <p>As a convenience, you can define a placeholder for the input as an option.</p>
+      <p class="text-center"><img src="assets/images/suggest/placeholder.png" alt="placeholder"></p>
+
+      <div class="card bg-body-tertiary">
         <div class="card-body">
-          <div class="row">
-            <div class="col-4">
-              <input id="example2" type="text" class="form-control">
-            </div>
-          </div>
-        </div>
-        <script type="module">
-          import { Suggest, search } from "../js/Suggest.js";
-
-          const orgSearchFn = search.ajax(() => 'https://jsonplaceholder.typicode.com/users');
-          const mockSearchFn = async query => (await orgSearchFn()).filter(u => u.name.includes(query));
-
-          // Testing double initialization
-          new Suggest('#example2', {
-            searchFn: mockSearchFn,
-            labelFn: item => item.name
-          });
-        </script>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">JavaScript</span>
-          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#template2" data-code-type="javascript"></code></pre>
-          <template id="template2">
-            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Suggest.js";
+          <a href="#" data-clipboard="#template3" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template3" data-code-type="javascript"></code></pre>
+          <template id="template3">
+            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
 
             new Suggest('#suggest', {
+              placeholder: 'search by last name',
+              searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query)
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="handling-objects" class="anchor-offset"></div>
+      <h3>Handling an array of objects</h3>
+
+      <p>
+        More times than not, we return a list of objects instead of strings from the server. That
+        will give you a menu of <code>[object Object]</code> to select from. You need to tell the
+        suggest how to make a human-readable label using the label function.
+      </p>
+
+      <div class="alert alert-info">
+        The label function expects a return type of <code>string</code>. It is used as the title for
+        each item in the menu as well as fill in the text input when you select an item from the menu.
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template4" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template4" data-code-type="javascript"></code></pre>
+          <template id="template4">
+            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
+
+            new Suggest('#suggest', {
+              placeholder: 'search by last name',
               searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query),
               labelFn: item => item.name
             });
@@ -165,9 +233,15 @@
     </div>
 
     <div class="col-12">
-      <div id="card-3" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Mark what matches in list</h5>
+      <div id="highlighting" class="anchor-offset"></div>
+      <h3>Highlighting labels</h3>
+
+      <p>
+        If your search query is simple, you may want to highlight the part of the
+        label that put it in the results. You can do that using the mark function.
+      </p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <div class="row">
             <div class="col-4">
@@ -181,22 +255,49 @@
           const orgSearchFn = search.ajax(() => 'https://jsonplaceholder.typicode.com/users');
           const mockSearchFn = async query => (await orgSearchFn()).filter(u => u.name.includes(query));
 
-          // Testing double initialization
           new Suggest('#example3', {
             searchFn: mockSearchFn,
             labelFn: item => item.name,
             markFn: mark.contains
           });
         </script>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">JavaScript</span>
-          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary">
         <div class="card-body">
-          <pre><code data-code-target="#template3" data-code-type="javascript"></code></pre>
-          <template id="template3">
-            import { Suggest, search, mark } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Suggest.js";
+          <a href="#" data-clipboard="#template5" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template5" data-code-type="javascript"></code></pre>
+          <template id="template5">
+            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
+
+            new Suggest('#suggest', {
+              searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query),
+              labelFn: item => item.name,
+              markFn: function(query, label) {
+                const index = label.toLowerCase().indexOf(query.toLowerCase()) + query.length;
+                return `<mark>${label.slice(0, index)}</mark>${label.slice(index)}`;
+              }
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="mark-functions" class="anchor-offset"></div>
+      <h4>Pre-made mark functions</h4>
+
+      <p>
+        Like the search function, there are some pre-made mark functions you can use. Import the <code>mark</code>
+        object from Suggest.js and use one like below. (The example above is a copy of <code>startsWith</code>).
+      </p>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template6" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template6" data-code-type="javascript"></code></pre>
+          <template id="template6">
+            import { Suggest, search, mark } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
 
             new Suggest('#suggest', {
               searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query),
@@ -209,16 +310,21 @@
     </div>
 
     <div class="col-12">
-      <div id="card-4" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Fill other inputs with values when item is selected</h5>
+      <div id="custom-content" class="anchor-offset"></div>
+      <h4>Custom content</h4>
+
+      <p>
+        Since the mark function returns a string that will be rendered as HTML, you can
+        also take this opportunity to add custom HTML content to each item in the menu.
+      </p>
+
+      <div class="alert alert-warning">Since this will render HTML, it can be vulnerable to XSS attacks.</div>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <div class="row">
             <div class="col-4">
               <input id="example4" type="text" class="form-control">
-            </div>
-            <div class="col-4">
-              <input id="userId4" type="text" class="form-control">
             </div>
           </div>
         </div>
@@ -227,71 +333,296 @@
 
           const orgSearchFn = search.ajax(() => 'https://jsonplaceholder.typicode.com/users');
           const mockSearchFn = async query => (await orgSearchFn()).filter(u => u.name.includes(query));
-          const userIdEl = document.querySelector('#userId4');
 
-          // Testing double initialization
           new Suggest('#example4', {
             searchFn: mockSearchFn,
             labelFn: item => item.name,
-            markFn: mark.contains,
-            selectFn: item => userIdEl.value = item.id,
-            clearFn: () => userIdEl.value = ''
+            markFn: function(query, label, item) {
+              const markedName = '<div>' + mark.contains(query, label) + '</div>';
+              const email = '<div class="text-muted small">' + item.email + '</div>';
+              return markedName + '\n' + email;
+            }
           });
         </script>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template4-1" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary">
         <div class="card-body">
-          <pre><code data-code-target="#template4-1" data-code-type="xml"></code></pre>
-          <template id="template4-1">
-            <div class="row">
-              <div class="col-4">
-                <input id="suggest-4" type="text" class="form-control">
-              </div>
-              <div class="col-4">
-                <input id="userId-4" type="text" class="form-control">
-              </div>
-            </div>
-          </template>
-        </div>
+          <a href="#" data-clipboard="#template7" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template7" data-code-type="javascript"></code></pre>
+          <template id="template7">
+            import { Suggest, search, mark } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">JavaScript</span>
-          <a href="#" data-clipboard="#template4-2" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#template4-2" data-code-type="javascript"></code></pre>
-          <template id="template4-2">
-            import { Suggest, search, mark } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Suggest.js";
-
-            const userIdEl = document.querySelector('#userId-4');
-
-            new Suggest('#suggest-4', {
+            new Suggest('#suggest', {
               searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query),
               labelFn: item => item.name,
-              markFn: mark.contains,
-              selectFn: item => userIdEl.value = item.id,
-              clearFn: () => userIdEl.value = ''
+              markFn: function(query, label, item) {
+                const markedName = '<div>' + mark.contains(query, label) + '</div>';
+                const email = '<div class="text-muted small">' + item.email + '</div>';
+                return markedName + '\n' + email;
+              }
             });
           </template>
         </div>
       </div>
     </div>
 
+    <div class="col-12">
+      <div id="select-clear-functions" class="anchor-offset"></div>
+      <h3>On select and on clear functions</h3>
+
+      <p>
+        By default, the suggest only takes what the label function returns and puts it in the
+        text input. You can do more by implementing a select function. You may want to also
+        implement the clear function to undo what the select function has done.
+      </p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <div class="input-group">
+                <input id="example5" type="text" class="form-control">
+                <span class="input-group-text">username -></span>
+                <input id="example5-username" type="text" class="form-control" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="module">
+          import { Suggest, search } from "../js/Suggest.js";
+
+          const orgSearchFn = search.ajax(() => 'https://jsonplaceholder.typicode.com/users');
+          const mockSearchFn = async query => (await orgSearchFn()).filter(u => u.name.includes(query));
+          const exampleUsernameEl = document.querySelector('#example5-username');
+
+          new Suggest('#example5', {
+            searchFn: mockSearchFn,
+            labelFn: item => item.name,
+            selectFn: item => exampleUsernameEl.value = item.username,
+            clearFn: () => exampleUsernameEl.value = ''
+          });
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template8" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template8" data-code-type="javascript"></code></pre>
+          <template id="template8">
+            import { Suggest, search } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Suggest.js";
+
+            const usernameEl = document.querySelector('#username');
+
+            new Suggest('#suggest', {
+              searchFn: search.ajax(query => '/context/ajax/user/nameContains?query=' + query),
+              labelFn: item => item.name,
+              selectFn: item => usernameEl.value = item.username,
+              clearFn: () => usernameEl.value = ''
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="css-and-templates" class="anchor-offset"></div>
+      <h2>CSS and templates</h2>
+
+      <p>
+        I originally tried to stick with Bootstrap's dropdown classes to handle the styling for the suggest, but
+        with keyboard shortcuts, spinner placement, and validation coloring it got too complicated. It was actually
+        easier to copy those classes as a starter and move on from there. I tried as much as possible to tie into
+        Bootstrap's CSS variables so theme colors will work as expected.
+      </p>
+
+      <p>
+        With that said, sometimes things need to be customized. The <code>template</code> object has three properties
+        you can use to customize how the menu, item, and error elements look.
+      </p>
+
+      <div class="alert alert-info">
+        I expect templates to be one empty element styled. Nesting elements in the template is not supported.
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template9" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template9" data-code-type="javascript"></code></pre>
+          <template id="template9">
+            template: {
+              menuEl: '<div class="suggest-menu"></div>',
+              itemEl: '<button type="button" class="suggest-item"></button>',
+              errorEl: '<div class="suggest-error"></div>'
+            }
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="options" class="anchor-offset"></div>
+      <h2>Options</h2>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>placeholder</code></td>
+          <td>string</td>
+          <td><code>''</code></td>
+          <td>A convenience option to fill in the placeholder attribute on the text input.</td>
+        </tr>
+        <tr>
+          <td><code>template.menuEl</code></td>
+          <td>string</td>
+          <td><code>'&lt;div class="suggest-menu"&gt;&lt;/div&gt;'</code></td>
+          <td>The HTML templates used when creating the menu element of the suggest.</td>
+        </tr>
+        <tr>
+          <td><code>template.itemEl</code></td>
+          <td>string</td>
+          <td><code>'&lt;button type="button" class="suggest-item"&gt;&lt;/div&gt;'</code></td>
+          <td>The HTML templates used when creating the item element of the suggest.</td>
+        </tr>
+        <tr>
+          <td><code>template.errorEl</code></td>
+          <td>string</td>
+          <td><code>'&lt;div class="suggest-error"&gt;&lt;/div&gt;'</code></td>
+          <td>The HTML templates used when creating the error element of the suggest.</td>
+        </tr>
+        <tr>
+          <td><code>minLength</code></td>
+          <td>number</td>
+          <td><code>1</code></td>
+          <td>The number of characters before executing the search function.</td>
+        </tr>
+        <tr>
+          <td><code>debounce</code></td>
+          <td>number</td>
+          <td><code>250</code></td>
+          <td>
+            The number of milliseconds after the input event fired to wait before refreshing the list. A new input event will cancel the last event. A good
+            explanation can be found here: <a href="https://stackoverflow.com/a/44755058/8316986" target="_blank">Stack Overflow: How long should you debounce text input</a>.
+          </td>
+        </tr>
+        <tr>
+          <td><code>spinner</code></td>
+          <td>string</td>
+          <td><code>'oval'</code></td>
+          <td>
+            A name from the Spinner.js module to use as a thinking indicator on the right side of the text input. Can be one of the following
+            values: <code>audio</code>, <code>rings</code>, <code>grid</code>, <code>hearts</code>, <code>oval</code>, <code>threeDots</code>,
+            <code>spinningCircles</code>, <code>puff</code>, <code>circles</code>, <code>tailSpin</code>, <code>bars</code>, or <code>ballTriangle</code>.
+            You can preview them <a href="spinner.html" target="_blank">here</a>.
+          </td>
+        </tr>
+        <tr>
+          <td><code>searchFn</code> (required)</td>
+          <td>(query: string) =&gt; ArrayLike&lt;T&gt;</td>
+          <td><code>undefined</code></td>
+          <td>
+            The only required option. A function that takes the query string and needs to return a collection after filtering and
+            sorting. Usually sends the request to the server to process, but you could do it client side in this method if you want.
+          </td>
+        </tr>
+        <tr>
+          <td><code>labelFn</code></td>
+          <td>(item: T) =&gt; string</td>
+          <td><code>item =&gt; item</code></td>
+          <td>
+            A function that takes one item from the collection acquired from the search function and needs to return a string. This string
+            is used as a title for the item element, is passed to the mark function and is set as the value of the text box if selected.
+          </td>
+        </tr>
+        <tr>
+          <td><code>markFn</code></td>
+          <td>(query: string, label: string, item: T) =&gt; string</td>
+          <td><code>(query, label) =&gt; label</code></td>
+          <td>
+            <p>
+              A function that takes the query string, the label from the label function and the item used to make that label and return
+              a string that can be rendered as HTML. You can use this to ‘mark’ or highlight the label. This string is inserted into the
+              item element template and rendered so you could also customize each item in the list provided to the end user.
+            </p>
+
+            <div class="alert alert-warning mb-0">Since this function will render HTML, it can be vulnerable to XSS attacks.</div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>selectFn</code></td>
+          <td>(item: T, itemEl: HTMLElement) =&gt; void</td>
+          <td><code>() =&gt; {}</code></td>
+          <td>A function that takes the selected item and its element and does not need to return anything. It is for you to do work when an item is selected from the dropdown list.</td>
+        </tr>
+        <tr>
+          <td><code>clearFn</code></td>
+          <td>() =&gt; void</td>
+          <td><code>() =&gt; {}</code></td>
+          <td>A function that takes no arguments and does not need to return anything. It is called when the input box is cleared and usually used to clean up anything done during the select function.</td>
+        </tr>
+        <tr>
+          <td><code>enterFn</code></td>
+          <td>(item: T, itemEl: HTMLElement) =&gt; void</td>
+          <td><code>undefined</code></td>
+          <td>A function that takes the selected item and its element and does not need to return anything. This allows you to customize what happens when you hit enter when an item has focus.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="methods" class="anchor-offset"></div>
+      <h2>Methods</h2>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>destroy</code></td>
+          <td>Removes all elements and event listeners created during initialization from the DOM.</td>
+        </tr>
+        <tr>
+          <td><code>show</code></td>
+          <td>Reveals the menu of items that are suggested.</td>
+        </tr>
+        <tr>
+          <td><code>hide</code></td>
+          <td>Hides the menu of items that are suggested.</td>
+        </tr>
+        <tr>
+          <td><code>clear</code></td>
+          <td>Clears the text input, hides the menu, and execute the clear function if one is provided.</td>
+        </tr>
+        <tr>
+          <td><code>refresh</code></td>
+          <td>Refreshes the menu based on what is currently in the text input.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
-  import { initExamples, initTestRunner } from "./assets/modules.js";
-  // import { tests } from "./tests/suggest-tests.js";
+  import { initExamples } from "./assets/modules.js";
   import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
   (function main() {
     initExamples();
-    // initTestRunner(tests);
 
     const els = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     [...els].forEach(el => new Tooltip(el));

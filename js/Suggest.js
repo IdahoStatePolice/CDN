@@ -40,7 +40,7 @@ import { Spinner } from "./Spinner.js";
  * default = {
  *   placeholder: '',
  *   template: {
- *     listEl: '<div class="suggest-menu"></div>',
+ *     menuEl: '<div class="suggest-menu"></div>',
  *     itemEl: '<button type="button" class="suggest-item"></button>',
  *     errorEl: '<div class="suggest-error"></div>'
  *   },
@@ -58,7 +58,7 @@ import { Spinner } from "./Spinner.js";
  *
  * @typedef {Object} SuggestSettings
  * @prop {string} [placeholder] - Placeholder to set on the input.
- * @prop {string} [template.listEl] - HTML template for the list.
+ * @prop {string} [template.menuEl] - HTML template for the menu container.
  * @prop {string} [template.itemEl] - HTML template for list items.
  * @prop {string} [template.errorEl] - HTML template for errors.
  * @prop {number} [minLength] - Minimum length of the query before executing a search.
@@ -85,7 +85,7 @@ class Suggest {
   static #defaultSettings = {
     placeholder: '',
     template: {
-      listEl: '<div class="suggest-menu"></div>',
+      menuEl: '<div class="suggest-menu"></div>',
       itemEl: '<button type="button" class="suggest-item"></button>',
       errorEl: '<div class="suggest-error"></div>'
     },
@@ -121,10 +121,10 @@ class Suggest {
   #wrapperEl;
 
   /**
-   * The list element created by this suggest.
+   * The menu element created by this suggest.
    * @type {HTMLElement}
    */
-  #listEl;
+  #menuEl;
 
   /**
    * The spinner object created by this suggest.
@@ -173,7 +173,7 @@ class Suggest {
     }
 
     this.#wrapperEl = Suggest.#wrapInputEl(this);
-    this.#listEl = Suggest.#buildListEl(this);
+    this.#menuEl = Suggest.#buildMenuEl(this);
     this.#spinner = Suggest.#buildSpinner(this);
 
     this.#originalAttributes = {
@@ -225,21 +225,21 @@ class Suggest {
    * Shows the list if there are currently any items to show.
    */
   show() {
-    if (this.#listEl.children.length === 0) {
+    if (this.#menuEl.children.length === 0) {
       return;
     }
 
-    this.#listEl.style.top = this.#inputEl.offsetTop + this.#inputEl.offsetHeight + 'px';
-    this.#listEl.style.left = this.#inputEl.offsetLeft + 'px';
-    this.#listEl.style.width = this.#inputEl.offsetWidth + 'px';
-    this.#listEl.classList.add('show');
+    this.#menuEl.style.top = this.#inputEl.offsetTop + this.#inputEl.offsetHeight + 'px';
+    this.#menuEl.style.left = this.#inputEl.offsetLeft + 'px';
+    this.#menuEl.style.width = this.#inputEl.offsetWidth + 'px';
+    this.#menuEl.classList.add('show');
   }
 
   /**
    * Hides the list.
    */
   hide() {
-    this.#listEl.classList.remove('show');
+    this.#menuEl.classList.remove('show');
   }
 
   /**
@@ -248,7 +248,7 @@ class Suggest {
   clear() {
     this.hide();
     this.#inputEl.value = '';
-    this.#listEl.innerHTML = '';
+    this.#menuEl.innerHTML = '';
     this.#settings.clearFn.call(this);
   }
 
@@ -297,12 +297,12 @@ class Suggest {
       }
 
       if (fragment.children.length > 0) {
-        suggest.#listEl.replaceChildren(fragment);
+        suggest.#menuEl.replaceChildren(fragment);
         suggest.show();
       }
       else {
         suggest.hide();
-        suggest.#listEl.innerHTML = '';
+        suggest.#menuEl.innerHTML = '';
       }
 
       function newElement() {
@@ -312,7 +312,7 @@ class Suggest {
       }
 
       function onMouseenter(e) {
-        const childList = [...suggest.#listEl.children];
+        const childList = [...suggest.#menuEl.children];
         const childEl = childList.filter(el => el.contains(e.target))[0];
         childList.forEach(el => el.classList.remove('hover'));
         childEl.classList.add('hover');
@@ -321,9 +321,9 @@ class Suggest {
 
     function showError(suggest, error) {
       suggest.hide();
-      suggest.#listEl.innerHTML = '';
-      suggest.#listEl.insertAdjacentHTML('beforeend', suggest.#settings.template.errorEl);
-      suggest.#listEl.lastElementChild.append(document.createTextNode(error.message));
+      suggest.#menuEl.innerHTML = '';
+      suggest.#menuEl.insertAdjacentHTML('beforeend', suggest.#settings.template.errorEl);
+      suggest.#menuEl.lastElementChild.append(document.createTextNode(error.message));
       suggest.show();
       console.error(error, suggest.#inputEl);
     }
@@ -352,7 +352,7 @@ class Suggest {
    * @param {KeyboardEvent} e - A KeyboardEvent event from the onKeydown listener.
    */
   #handleKeyEvent(e) {
-    if (!this.#listEl.classList.contains('show')) {
+    if (!this.#menuEl.classList.contains('show')) {
       if (['ArrowDown', 'ArrowUp'].includes(e.key)) {
         this.show();
       }
@@ -382,15 +382,15 @@ class Suggest {
     e.preventDefault();
     e.stopPropagation();
 
-    const focusedEl = this.#listEl.querySelector('.hover');
-    const activeEl = this.#listEl.querySelector('.active');
+    const focusedEl = this.#menuEl.querySelector('.hover');
+    const activeEl = this.#menuEl.querySelector('.active');
     const currentEl = focusedEl || activeEl;
 
     if (e.key === 'Enter' && this.#settings.enterFn) {
       this.#settings.enterFn.call(this, currentEl?.suggestItem, currentEl);
     }
     else {
-      this.#select(currentEl || this.#listEl.firstElementChild);
+      this.#select(currentEl || this.#menuEl.firstElementChild);
     }
   }
 
@@ -406,15 +406,15 @@ class Suggest {
     event.stopPropagation();
     event.preventDefault();
 
-    const focusedEl = this.#listEl.querySelector('.hover');
-    const activeEl = this.#listEl.querySelector('.active');
+    const focusedEl = this.#menuEl.querySelector('.hover');
+    const activeEl = this.#menuEl.querySelector('.active');
     const currentEl = focusedEl || activeEl;
-    const nextEl = currentEl ? currentEl[currentProp] || this.#listEl[listProp] : this.#listEl[listProp];
+    const nextEl = currentEl ? currentEl[currentProp] || this.#menuEl[listProp] : this.#menuEl[listProp];
 
     currentEl?.classList.remove('hover');
     nextEl.classList.add('hover');
 
-    const listRect = this.#listEl.getBoundingClientRect();
+    const listRect = this.#menuEl.getBoundingClientRect();
     const selectedRect = nextEl.getBoundingClientRect();
 
     if (listRect.bottom < selectedRect.bottom) {
@@ -431,9 +431,9 @@ class Suggest {
    * @param {HTMLListItem} [itemEl] - One item from the list.
    */
   #select(itemEl) {
-    if (itemEl && itemEl !== this.#listEl) {
+    if (itemEl && itemEl !== this.#menuEl) {
       this.#inputEl.value = this.#settings.labelFn.call(this, itemEl.suggestItem);
-      [...this.#listEl.children].forEach(el => el.classList.remove('active', 'hover'));
+      [...this.#menuEl.children].forEach(el => el.classList.remove('active', 'hover'));
       itemEl.classList.add('active');
       this.hide();
       this.#settings.selectFn.call(this, itemEl.suggestItem, itemEl);
@@ -451,8 +451,8 @@ class Suggest {
     return suggest.#inputEl.parentElement;
   }
 
-  static #buildListEl(suggest) {
-    suggest.#inputEl.insertAdjacentHTML('afterend', suggest.#settings.template.listEl);
+  static #buildMenuEl(suggest) {
+    suggest.#inputEl.insertAdjacentHTML('afterend', suggest.#settings.template.menuEl);
     suggest.#inputEl.nextElementSibling.addEventListener('click', e => {
       e.stopPropagation();
       suggest.#select(e.target);
@@ -470,8 +470,8 @@ class Suggest {
 
   static #documentOnClick(e) {
     for (const suggest of Suggest.#initializedEls.values()) {
-      if (!suggest.#inputEl.contains(e.target) && !suggest.#listEl.contains(e.target)) {
-        [...suggest.#listEl.children].forEach(el => el.classList.remove('hover'));
+      if (!suggest.#inputEl.contains(e.target) && !suggest.#menuEl.contains(e.target)) {
+        [...suggest.#menuEl.children].forEach(el => el.classList.remove('hover'));
         suggest.hide();
       }
     }

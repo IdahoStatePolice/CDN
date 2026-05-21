@@ -12,7 +12,8 @@ function initExamples() {
 
       if (el.dataset.codeType) {
         // noinspection JSUnresolvedReference
-        const html = hljs.highlight(template, { language: el.dataset.codeType }).value;
+        let html = hljs.highlight(template, { language: el.dataset.codeType }).value;
+        html = html.replaceAll('=&amp;gt;', '=>');
         el.innerHTML = html.replaceAll('=<span class="hljs-string">', '<span class="hljs-string">=');
       }
       else {
