@@ -37,16 +37,13 @@
 </nav>
 
 <div class="container p-3">
-  <div class="row g-3">
-    <div class="col-12">
-      <h1>Suggest.js</h1>
+  <h1>Suggest.js</h1>
+  <p class="lead">
+    Use this JavaScript to suggest items to end users when they start typing. You can get suggestions from
+    the server with ajax requests, and customize what to do when a user selects one of the suggestions.
+  </p>
 
-      <div class="alert alert-info">
-        There are a lot of examples throughout Training Matrix, Fusion Events, Ilets Conference Registration, ISP Web
-        Forms, and Applicant Processing. Just do a 'Find in Files' search in the WEB-INF folder for the term 'new Suggest'.
-      </div>
-    </div>
-
+  <div class="row g-5">
     <div class="col-12">
       <div id="how-it-works" class="anchor-offset"></div>
       <h2>How it works</h2>
@@ -63,7 +60,7 @@
         text input. You can use this to (for example) detect if the user has been logged out and display an error letting the user know to log back in.
       </p>
       <p class="text-center"><img src="assets/images/suggest/error-example.png" alt="error"/></p>
-      <p>
+      <p class="mb-0">
         To position the menu and the spinner, <code>position: absolute;</code> is used. During the initialization process,
         we check to see if the parent element has <code>position: relative;</code> and if not we wrap the input in a div
         with the <code>wrapperClass</code> (defaulted to Bootstraps <code>position-relative</code> class).
