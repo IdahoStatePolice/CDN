@@ -99,6 +99,12 @@ class Confirmation {
   #inProgress = false;
 
   /**
+   * If this is targeting a form, this will be the element that triggered the submit event.
+   * @type {HTMLButtonElement | HTMLInputElement}
+   */
+  #submitterEl;
+
+  /**
    * Constructs a new Confirmation object.
    *
    * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal} modalClass - Bootstrap 5 Modal class to use for the confirmation modal.
@@ -115,12 +121,7 @@ class Confirmation {
       Confirmation.#initializedEls.get(this.#el).destroy();
     }
 
-    this.#settings = {
-      ...Confirmation.#defaultSettings,
-      ...options,
-      ...this.#el.dataset
-    };
-
+    this.#settings = { ...Confirmation.#defaultSettings, ...options, ...this.#el.dataset };
     this.#eventType = this.#el instanceof HTMLFormElement ? 'submit' : 'click';
 
     this.#eventHandler = e => {
@@ -130,8 +131,12 @@ class Confirmation {
 
       e.preventDefault();
 
-      if (Confirmation.#isAnchorOrBtn(this.#el) || Confirmation.#isForm(this.#el)) {
+      if (Confirmation.#isAnchorOrBtn(this.#el)) {
         e.stopImmediatePropagation();
+      }
+      if (Confirmation.#isForm(this.#el)) {
+        e.stopImmediatePropagation();
+        this.#submitterEl = e.submitter;
       }
 
       this.#showConfirmation();
@@ -147,22 +152,6 @@ class Confirmation {
   destroy() {
     this.#el.removeEventListener(this.#eventType, this.#eventHandler);
     Confirmation.#initializedEls.delete(this.#el);
-  }
-
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Modal} modalClass - Bootstrap 5 Modal class to use for the confirmation modal.
-   * @param {string} [selector = '[data-isp-toggle="confirmation"]'] - Selector used to find all elements to initialize.
-   * @param {ConfirmationSettings} [options] - ConfirmationSettings object to use with each initialization.
-   *
-   * @returns {Confirmation[]} - The array of Confirmation objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
-   */
-  static initAll(modalClass, selector = '[data-isp-toggle="confirmation"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new Confirmation(modalClass, el, options));
   }
 
   #showConfirmation() {
@@ -196,7 +185,7 @@ class Confirmation {
         this.#el.click();
       }
       if (Confirmation.#isForm(this.#el)) {
-        this.#el.requestSubmit();
+        this.#el.requestSubmit(this.#submitterEl);
       }
       if (Confirmation.#isSubmitBtnOrInput(this.#el)) {
         (this.#el.form || this.#el.closest('form')).requestSubmit(this.#el);

@@ -17,13 +17,16 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
         <div class="dropdown-menu dropdown-menu-end">
-          <a href="#card-1" class="dropdown-item">Simplest Setup</a>
-          <a href="#card-2" class="dropdown-item">External Submit Button</a>
-          <a href="#card-3" class="dropdown-item">Submit Button with Name and Value</a>
-          <a href="#card-4" class="dropdown-item">Customizing title, body, and button labels</a>
-          <a href="#card-5" class="dropdown-item">Link (Anchor tag)</a>
-          <a href="#card-6" class="dropdown-item">Button (type="button")</a>
-          <a href="#card-7" class="dropdown-item">Form</a>
+          <a href="#how-it-works" class="dropdown-item">How it works</a>
+          <a href="#examples" class="dropdown-item">Examples</a>
+          <a href="#simplest-setup" class="dropdown-item" style="padding-left: 2rem;">Simplest Setup</a>
+          <a href="#customizing-text" class="dropdown-item" style="padding-left: 2rem;">Customizing text</a>
+          <a href="#navigation-links" class="dropdown-item" style="padding-left: 2rem;">Navigation Links</a>
+          <a href="#yes-no-callbacks" class="dropdown-item">Yes and No Callbacks</a>
+          <a href="#event-handling" class="dropdown-item">Event Handling</a>
+          <a href="#options" class="dropdown-item">Options</a>
+          <a href="#methods" class="dropdown-item">Methods</a>
+          <a href="#events" class="dropdown-item">Events</a>
         </div>
       </li>
       <li class="nav-item">
@@ -35,6 +38,10 @@
 
 <div class="container p-3">
   <h1>Confirmation.js</h1>
+  <p class="lead">
+    Use this JavaScrpt to add a confirmation dialog quickly to a button, anchor, or form element. It is used
+    to display a bootstrap modal presenting an affirmative (by default Yes) and negative (by default No) response.
+  </p>
 
   <div id="tests" class="collapse" data-toggle="tests">
     <div class="card mb-3">
@@ -44,6 +51,7 @@
           <div class="col-4">
             <div>'No' Click Test: <span id="basicConfirmResult1" class="text-warning">Running</span></div>
             <div>'Yes' Click Test: <span id="basicConfirmResult2" class="text-warning">Running</span></div>
+            <div>Form Confirmation Test: <span id="formConfirmResult1" class="text-warning">Running</span></div>
             <div>Button not in Form Test: <span id="btnNotInFormResult1" class="text-warning">Running</span></div>
             <div>Value Submitted Test: <span id="btnValueSubmittedResult1" class="text-warning">Running</span></div>
           </div>
@@ -55,28 +63,48 @@
           </div>
           <div class="col-4">
             <div>Link Confirmation Test: <span id="linkConfirmationResult1" class="text-warning">Running</span></div>
-            <div>Link Confirmation Test: <span id="btnConfirmationResult1" class="text-warning">Running</span></div>
-            <div>Form Confirmation Test: <span id="formConfirmResult1" class="text-warning">Running</span></div>
+            <div>Yes Callback Test: <span id="yesCallbackConfirmationResult1" class="text-warning">Running</span></div>
+            <div>No Callback Test: <span id="noCallbackConfirmationResult1" class="text-warning">Running</span></div>
+            <div>Event Dispatched Test: <span id="eventDispatchedConfirmationResult1" class="text-warning">Running</span></div>
+            <div>Event Prevented Test: <span id="eventPreventedConfirmationResult1" class="text-warning">Running</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row g-3">
+  <div class="row g-5">
     <div class="col-12">
-      <div class="card">
-        <div class="card-header text-bg-primary d-flex align-items-center">
-          <h5 class="flex-fill mb-0">Import Module</h5>
-          <a href="#" data-clipboard="#radioTemplate0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
-          <template id="radioTemplate0">
-            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-            import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Confirmation.js";
+      <div id="how-it-works" class="anchor-offset"></div>
+      <h2>How it works</h2>
 
-            Confirmation.initAll(Modal);
+      <p>
+        When the target is clicked or submitted, the event is caught and stopped. Then a Bootstrap modal is added to the
+        DOM and shown with the configured settings. If you click the affirmative response, either the configured callback
+        will be executed or the event that was interrupted will be fired again. This time the confirmation dialog will be
+        skipped to allow the event to propagate to completion. If you click the negative response and you have a callback
+        configured, the callback will be executed. Otherwise the modal is hidden and nothing else happens.
+      </p>
+
+      <p class="mb-0 text-center"><img src="assets/images/confirmation/default-confirmation.png" alt="default confirmation"></p>
+    </div>
+
+    <div class="col-12">
+      <div id="examples" class="anchor-offset"></div>
+      <h2>Examples</h2>
+
+      <p>Start by adding the initialization JavaScript to your page.</p>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate0" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate0" data-code-type="javascript"></code></pre>
+          <template id="confirmationTemplate0">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+            import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Confirmation.js";
+
+            // single initialization
+            const confirmation = new Confirmation(Modal, '#id');
             // or
             const el = document.querySelector('#id');
             const confirmation = new Confirmation(Modal, el);
@@ -86,70 +114,90 @@
     </div>
 
     <div class="col-12">
-      <div id="card-1" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Simplest Setup</h5>
+      <div id="simplest-setup" class="anchor-offset"></div>
+      <h3>Simplest Setup</h3>
+
+      <p>Toggle a working confirmation demo by clicking the submit button below. You can click 'Yes' if you want.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <form id="basicConfirmForm">
             <button id="basicConfirmBtn" type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation">Submit</button>
           </form>
         </div>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate1" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#confirmationTemplate1" data-code-type="xml"></code></pre>
           <template id="confirmationTemplate1">
             <form>
+              <!-- form inputs -->
               <button type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation">Submit</button>
             </form>
           </template>
         </div>
       </div>
-    </div>
 
-    <div class="col-12">
-      <div id="card-2" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">External Submit Button</h5>
+      <p>You can target the form instead if you want.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <form id="formConfirmForm" data-isp-toggle="confirmation">
+            <button id="formConfirmBtn" type="submit" class="btn btn-outline-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate2" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate2">
+            <form data-isp-toggle="confirmation">
+              <!-- form inputs -->
+              <button type="submit" class="btn btn-outline-primary">Submit</button>
+            </form>
+          </template>
+        </div>
+      </div>
+
+      <p>You can also put the submit button outside the form if needed. It will work just as you would expect.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <form id="btnNotInFormForm"></form>
           <button id="btnNotInFormBtn" type="submit" form="btnNotInFormForm" class="btn btn-outline-primary" data-isp-toggle="confirmation">Submit</button>
         </div>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate2" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
-          <pre><code data-code-target="#confirmationTemplate2" data-code-type="xml"></code></pre>
-          <template id="confirmationTemplate2">
+          <a href="#" data-clipboard="#confirmationTemplate3" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate3" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate3">
             <form id="noSubmitBtnForm"></form>
             <button type="submit" form="noSubmitBtnForm" class="btn btn-outline-primary" data-isp-toggle="confirmation">Submit</button>
           </template>
         </div>
       </div>
-    </div>
 
-    <div class="col-12">
-      <div id="card-3" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Submit Button with Name and Value</h5>
+      <p>Using the name and value attributes to submit values is supported.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <form id="btnValueSubmittedForm">
             <button id="btnValueSubmittedBtn" type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" name="name" value="value">Submit</button>
           </form>
         </div>
+      </div>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate3" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div class="card bg-body-tertiary">
         <div class="card-body">
-          <pre><code data-code-target="#confirmationTemplate3" data-code-type="xml"></code></pre>
-          <template id="confirmationTemplate3">
+          <a href="#" data-clipboard="#confirmationTemplate4" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate4" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate4">
             <form>
               <button type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" name="name" value="value">Submit</button>
             </form>
@@ -159,101 +207,345 @@
     </div>
 
     <div class="col-12">
-      <div id="card-4" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Customizing title, body, and button labels</h5>
+      <div id="customizing-text" class="anchor-offset"></div>
+      <h3>Customizing text</h3>
+
+      <p>You can customize the text in the title and body of the modal.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <form>
-            <button id="customTextBtn" type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-title="custom title" data-body="custom body" data-yes-label="custom yes label" data-no-label="custom no label">Submit</button>
+            <button id="customTextBtn" type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-title="custom title" data-body="custom body">Submit</button>
           </form>
         </div>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate4" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#confirmationTemplate4" data-code-type="xml"></code></pre>
-          <template id="confirmationTemplate4">
-            <form>
-              <button type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-title="title" data-body="body" data-yes-label="yesLabel" data-no-label="noLabel">Submit</button>
-            </form>
-          </template>
-        </div>
       </div>
-    </div>
 
-    <div class="col-12">
-      <div id="card-5" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Link (Anchor tag)</h5>
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
-          <a id="linkConfirmationLink" href="javascript:void(0)" data-isp-toggle="confirmation">Link Confirmation</a>
-          <a href="javascript:void(0)" data-bs-toggle="tooltip" title="You must initialize the confirmation before the click handler or define a 'yesCallback' for a link, otherwise it won't work.">
-            <sup><i class="fa-solid fa-circle-question text-warning"></i></sup>
-          </a>
-        </div>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate5" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate5" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#confirmationTemplate5" data-code-type="xml"></code></pre>
           <template id="confirmationTemplate5">
-            <a href="javascript:void(0)" data-isp-toggle="confirmation">Link Text</a>
-          </template>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div id="card-6" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Button (type="button")</h5>
-        <div class="card-body">
-          <button id="btnConfirmationBtn" type="button" class="btn btn-outline-primary" data-isp-toggle="confirmation">Button Confirmation</button>
-          <a href="javascript:void(0)" data-bs-toggle="tooltip" title="You must initialize the confirmation before the click handler or define a 'yesCallback' for a button, otherwise it won't work.">
-            <sup><i class="fa-solid fa-circle-question text-warning"></i></sup>
-          </a>
-        </div>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate6" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#confirmationTemplate6" data-code-type="xml"></code></pre>
-          <template id="confirmationTemplate6">
-            <button type="button" class="btn btn-outline-primary" data-isp-toggle="confirmation">Button Text</button>
-          </template>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div id="card-7" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Form</h5>
-        <div class="card-body">
-          <form id="formConfirmForm" data-isp-toggle="confirmation">
-            <button id="formConfirmBtn" type="submit" class="btn btn-outline-primary">Form Confirmation</button>
-          </form>
-        </div>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#confirmationTemplate7" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-        <div class="card-body">
-          <pre><code data-code-target="#confirmationTemplate7" data-code-type="xml"></code></pre>
-          <template id="confirmationTemplate7">
-            <form data-isp-toggle="confirmation">
-              <button type="submit" class="btn btn-outline-primary">Form Confirmation</button>
+            <form>
+              <button type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-title="title" data-body="body">Submit</button>
             </form>
           </template>
         </div>
       </div>
+
+      <p>You can also customize the button text.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <form>
+            <button id="customBtnBtn" type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-yes-label="custom yes" data-no-label="custom no">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate6" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate6" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate6">
+            <form>
+              <button type="submit" class="btn btn-outline-primary" data-isp-toggle="confirmation" data-yes-label="custom yes" data-no-label="custom no">Submit</button>
+            </form>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="navigation-links" class="anchor-offset"></div>
+      <h3>Navigation Links</h3>
+
+      <p>You can add a confirmation to a link as well to confirm that the user wants to navigate away from this page.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <a id="navLink" href="https://www.google.com" target="_blank" data-isp-toggle="confirmation">Navigation Confirmation</a>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate7" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate7" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate7">
+            <a href="https://www.google.com" target="_blank" data-isp-toggle="confirmation">Navigation Confirmation</a>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="yes-no-callbacks" class="anchor-offset"></div>
+      <h3>Yes and No Callbacks</h3>
+
+      <p>Sometimes you may want to add custom JavaScript functionality to the possitive or negative response of the confirmation. You can do this by adding a callback in the options.</p>
+
+      <div class="alert alert-info mb-3">When adding a yes callback, all default actions are canceled. So if you want to submit a form, you will have to do that your self as part of the callback including closing the modal.</div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <button id="callbackDemoBtn" type="button" class="btn btn-outline-primary">Submit</button>
+          <script type="module">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+            import { Confirmation } from "../js/Confirmation.js";
+
+            new Confirmation(Modal, '#callbackDemoBtn', {
+              yesCallback: (el, modal) => {
+                alert('yes clicked');
+                modal.hide();
+              },
+              noCallback: (el, modal) => {
+                alert('no clicked');
+                modal.hide();
+              }
+            });
+          </script>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate8" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate8" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate8">
+            <button id="callbackBtn" type="button" class="btn btn-outline-primary">Submit</button>
+          </template>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate9" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate9" data-code-type="javascript"></code></pre>
+          <template id="confirmationTemplate9">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+            import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Confirmation.js";
+
+            new Confirmation(Modal, '#callbackBtn', {
+              yesCallback: (el, modal) => {
+                alert('yes clicked');
+                modal.hide();
+              },
+              noCallback: (el, modal) => {
+                alert('no clicked');
+                modal.hide();
+              }
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="event-handling" class="anchor-offset"></div>
+      <h3>Event Handling</h3>
+
+      <p>
+        It is possible to add an event listener after the confirmation, effectively making it a confirmation for that
+        event listener. To do this, you have to initialize the confirmation first, then add your event listener.
+      </p>
+      <p>
+        This works because events are executed in the order they are added to an element and the confirmation JavaScript
+        attempts to continue the normal operations of a click (or submit) on a positive response from the user.
+      </p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <button id="eventDemoBtn" type="button" class="btn btn-outline-primary">Do Ajax Stuff</button>
+          <script type="module">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+            import { Confirmation } from "../js/Confirmation.js";
+
+            const btnEl = document.querySelector('#eventDemoBtn');
+            new Confirmation(Modal, btnEl);
+            btnEl.addEventListener('click', () => {
+              alert('doing ajax stuff');
+            });
+          </script>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate10" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate10" data-code-type="xml"></code></pre>
+          <template id="confirmationTemplate10">
+            <button id="eventBtn" type="button" class="btn btn-outline-primary">Do Ajax Stuff</button>
+          </template>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#confirmationTemplate11" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#confirmationTemplate11" data-code-type="javascript"></code></pre>
+          <template id="confirmationTemplate11">
+            import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+            import { Confirmation } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Confirmation.js";
+
+            const btnEl = document.querySelector('#eventDemoBtn');
+
+            // initialize the confirmation first
+            new Confirmation(Modal, btnEl);
+
+            // then add the listener
+            btnEl.addEventListener('click', () => {
+              alert('doing ajax stuff');
+            });
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="options" class="anchor-offset"></div>
+      <h3>Options</h3>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td>string</td>
+          <td><code>'Are you sure?'</code></td>
+          <td>The title of the confirmation modal.</td>
+        </tr>
+        <tr>
+          <td><code>body</code></td>
+          <td>string</td>
+          <td><code>'This action may be irreversible.&lt;br&gt;&lt;br&gt;&lt;b&gt;Are you sure you would like to continue?&lt;/b&gt;'</code></td>
+          <td>The body of the confirmation modal.</td>
+        </tr>
+        <tr>
+          <td><code>yesLabel</code></td>
+          <td>string</td>
+          <td><code>'Yes'</code></td>
+          <td>The label on the positive response button.</td>
+        </tr>
+        <tr>
+          <td><code>yesClass</code></td>
+          <td>string</td>
+          <td><code>'btn-primary'</code></td>
+          <td>The CSS class of the positive response button.</td>
+        </tr>
+        <tr>
+          <td><code>noLabel</code></td>
+          <td>string</td>
+          <td><code>'No'</code></td>
+          <td>The label on the negative response button.</td>
+        </tr>
+        <tr>
+          <td><code>noClass</code></td>
+          <td>string</td>
+          <td><code>'btn-secondary'</code></td>
+          <td>The CSS class of the negative response button.</td>
+        </tr>
+        <tr>
+          <td><code>hideX</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>Hides the 'x' in the upper right side of the modal. Use with static <code>true</code> to force users to pick 'Yes' or 'No'.</td>
+        </tr>
+        <tr>
+          <td><code>static</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>
+            Has Bootstrap create a <a href="https://getbootstrap.com/docs/5.3/components/modal/#options">static backdrop</a>.
+            Use with hideX <code>true</code> to force users to pick 'Yes' or 'No'.
+          </td>
+        </tr>
+        <tr>
+          <td><code>yesCallback</code></td>
+          <td>(target: HTMLElement, modal: Modal) =&gt; void</td>
+          <td><code>undefined</code></td>
+          <td>
+            Override a positive response click with a custom callback. The first parameter of the function is the
+            HTML element that was targeted by the confirmation. The second parameter is an instance of Bootstrap's
+            Modal object that represents the confirmation dialog (so you can hide it when your ready).
+          </td>
+        </tr>
+        <tr>
+          <td><code>noCallback</code></td>
+          <td>(target: HTMLElement, modal: Modal) =&gt; void</td>
+          <td><code>undefined</code></td>
+          <td>
+            Override a negate response click with a custom callback. The first parameter of the function is the
+            HTML element that was targeted by the confirmation. The second parameter is an instance of Bootstrap's
+            Modal object that represents the confirmation dialog (so you can hide it when your ready).
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="methods" class="anchor-offset"></div>
+      <h3>Methods</h3>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>destroy</code></td>
+          <td>Removes all elements and event listeners created during initialization from the DOM.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="events" class="anchor-offset"></div>
+      <h3>Events</h3>
+
+      <div class="alert alert-info">All events are fired from the targeted element.</div>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Event</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>isp.confirmation:show</code></td>
+          <td>This event fires immediately when the confirmation has been triggered to show.</td>
+        </tr>
+        <tr>
+          <td><code>isp.confirmation:shown</code></td>
+          <td>This event is fired when the confirmation has been made visible to the user (will wait for CSS transitions to complete).</td>
+        </tr>
+        <tr>
+          <td><code>isp.confirmation:hide</code></td>
+          <td>This event is fired immediately when the confirmation has been triggered to hide.</td>
+        </tr>
+        <tr>
+          <td><code>isp.confirmation:hidden</code></td>
+          <td>This event is fired when the confirmation has finished being hidden from the user (will wait for CSS transitions to complete).</td>
+        </tr>
+        <tr>
+          <td><code>isp.confirmation:hidePrevented</code></td>
+          <td>This event is fired when the confirmation is shown, its backdrop is static and a click outside of the confirmation is performed.</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -261,10 +553,11 @@
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
   import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+  import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+  import { initAll } from "../js/utils.js";
   import { Confirmation } from "../js/Confirmation.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/confirmation-tests.js";
-  import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
 
   (function main() {
     doubleInit();
@@ -277,8 +570,8 @@
   })();
 
   function doubleInit() {
-    Confirmation.initAll(Modal);
-    Confirmation.initAll(Modal);
+    initAll('[data-isp-toggle="confirmation"]', el => new Confirmation(Modal, el));
+    initAll('[data-isp-toggle="confirmation"]', el => new Confirmation(Modal, el));
   }
 
   function simulateSubmit() {

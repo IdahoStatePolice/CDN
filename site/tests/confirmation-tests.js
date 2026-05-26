@@ -42,6 +42,32 @@ function basicConfirmTest(resolve, reject) {
   }, 500);
 }
 
+function formConfirmationTest(resolve, reject) {
+  const formEl = document.querySelector('#formConfirmForm');
+  const btnEl = document.querySelector('#formConfirmBtn');
+  const resultEl = document.querySelector('#formConfirmResult1');
+
+  let success1 = true;
+  let success2 = false;
+  const onSubmitFails = () => success1 = false;
+  const onSubmitSuccess = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    success2 = true;
+  };
+
+  formEl.addEventListener('submit', onSubmitFails);
+  btnEl.click();
+  formEl.removeEventListener('submit', onSubmitFails);
+
+  formEl.addEventListener('submit', onSubmitSuccess);
+  onConfirmationSimulateYesClick();
+  setTimeout(() => {
+    formEl.removeEventListener('submit', onSubmitSuccess);
+    success1 && success2 ? resolve(resultEl) : reject(resultEl);
+  }, 500);
+}
+
 function btnNotInFormTest(resolve, reject) {
   const formEl = document.querySelector('#btnNotInFormForm');
   const btnEl = document.querySelector('#btnNotInFormBtn');
@@ -113,85 +139,122 @@ function customBodyTest(resolve, reject) {
 }
 
 function customYesLabelTest(resolve, reject) {
-  const btnEl = document.querySelector('#customTextBtn');
+  const btnEl = document.querySelector('#customBtnBtn');
   const resultEl = document.querySelector('#customTextResult3');
 
   let success = false;
   onConfirmationSimulateNoClick(e => {
     const el = e.target.querySelector('[data-confirm-yes]')
-    success = (el.innerText === 'custom yes label');
+    success = (el.innerText === 'custom yes');
   });
   btnEl.click();
   setTimeout(() => success ? resolve(resultEl) : reject(resultEl), 500);
 }
 
 function customNoLabelTest(resolve, reject) {
-  const btnEl = document.querySelector('#customTextBtn');
+  const btnEl = document.querySelector('#customBtnBtn');
   const resultEl = document.querySelector('#customTextResult4');
 
   let success = false;
   onConfirmationSimulateNoClick(e => {
     const el = e.target.querySelector('[data-confirm-no]')
-    success = (el.innerText === 'custom no label');
+    success = (el.innerText === 'custom no');
   });
   btnEl.click();
   setTimeout(() => success ? resolve(resultEl) : reject(resultEl), 500);
 }
 
 function linkConfirmationTest(resolve, reject) {
-  const linkEl = document.querySelector('#linkConfirmationLink');
+  const linkEl = document.querySelector('#navLink');
   const resultEl = document.querySelector('#linkConfirmationResult1');
 
   let success1 = true;
   let success2 = false;
   const onClickFails = () => success1 = false;
-
-  linkEl.addEventListener('click', onClickFails);
-  linkEl.click();
-  linkEl.removeEventListener('click', onClickFails);
-  linkEl.addEventListener('click', () => success2 = true);
-  onConfirmationSimulateYesClick();
-  setTimeout(() => success1 && success2 ? resolve(resultEl) : reject(resultEl), 500);
-}
-
-function btnConfirmationTest(resolve, reject) {
-  const btnEl = document.querySelector('#btnConfirmationBtn');
-  const resultEl = document.querySelector('#btnConfirmationResult1');
-
-  let success1 = true;
-  let success2 = false;
-  const onClickFails = () => success1 = false;
-
-  btnEl.addEventListener('click', onClickFails);
-  btnEl.click();
-  btnEl.removeEventListener('click', onClickFails);
-  btnEl.addEventListener('click', () => success2 = true);
-  onConfirmationSimulateYesClick();
-  setTimeout(() => success1 && success2 ? resolve(resultEl) : reject(resultEl), 500);
-}
-
-function formConfirmationTest(resolve, reject) {
-  const formEl = document.querySelector('#formConfirmForm');
-  const btnEl = document.querySelector('#formConfirmBtn');
-  const resultEl = document.querySelector('#formConfirmResult1');
-
-  let success1 = true;
-  let success2 = false;
-  const onSubmitFails = () => success1 = false;
-  const onSubmitSuccess = e => {
+  const onClickSuccess = e => {
     e.preventDefault();
     e.stopPropagation();
     success2 = true;
   };
 
-  formEl.addEventListener('submit', onSubmitFails);
-  btnEl.click();
-  formEl.removeEventListener('submit', onSubmitFails);
-  formEl.addEventListener('submit', onSubmitSuccess);
+  linkEl.addEventListener('click', onClickFails);
+  linkEl.click();
+  linkEl.removeEventListener('click', onClickFails);
+
+  linkEl.addEventListener('click', onClickSuccess);
   onConfirmationSimulateYesClick();
+
   setTimeout(() => {
-    formEl.removeEventListener('submit', onSubmitSuccess);
+    linkEl.removeEventListener('click', onClickSuccess);
     success1 && success2 ? resolve(resultEl) : reject(resultEl);
+  }, 500);
+}
+
+function yesCallbackTest(resolve, reject) {
+  const defaultAlertFn = window.alert;
+  const btnEl = document.querySelector('#callbackDemoBtn');
+  const resultEl = document.querySelector('#yesCallbackConfirmationResult1');
+
+  let success = false;
+  window.alert = message => success = message === 'yes clicked';
+
+  btnEl.click();
+  onConfirmationSimulateYesClick();
+
+  setTimeout(() => {
+    window.alert = defaultAlertFn;
+    success ? resolve(resultEl) : reject(resultEl);
+  }, 500);
+}
+
+function noCallbackTest(resolve, reject) {
+  const defaultAlertFn = window.alert;
+  const btnEl = document.querySelector('#callbackDemoBtn');
+  const resultEl = document.querySelector('#noCallbackConfirmationResult1');
+
+  let success = false;
+  window.alert = message => success = message === 'no clicked';
+
+  btnEl.click();
+  onConfirmationSimulateNoClick();
+
+  setTimeout(() => {
+    window.alert = defaultAlertFn;
+    success ? resolve(resultEl) : reject(resultEl);
+  }, 500);
+}
+
+function eventDispatchedTest(resolve, reject) {
+  const defaultAlertFn = window.alert;
+  const btnEl = document.querySelector('#eventDemoBtn');
+  const resultEl = document.querySelector('#eventDispatchedConfirmationResult1');
+
+  let success = false;
+  window.alert = message => success = message === 'doing ajax stuff';
+
+  btnEl.click();
+  onConfirmationSimulateYesClick();
+
+  setTimeout(() => {
+    window.alert = defaultAlertFn;
+    success ? resolve(resultEl) : reject(resultEl);
+  }, 500);
+}
+
+function eventPreventedTest(resolve, reject) {
+  const defaultAlertFn = window.alert;
+  const btnEl = document.querySelector('#eventDemoBtn');
+  const resultEl = document.querySelector('#eventPreventedConfirmationResult1');
+
+  let success = true;
+  window.alert = () => success = false;
+
+  btnEl.click();
+  onConfirmationSimulateNoClick();
+
+  setTimeout(() => {
+    window.alert = defaultAlertFn;
+    success ? resolve(resultEl) : reject(resultEl);
   }, 500);
 }
 
@@ -222,6 +285,7 @@ function onConfirmationSimulateYesClick(beforeClickFn) {
 export const tests = [
   basicConfirmCancelTest,
   basicConfirmTest,
+  formConfirmationTest,
   btnNotInFormTest,
   btnValueSubmittedTest,
 
@@ -231,6 +295,9 @@ export const tests = [
   customNoLabelTest,
 
   linkConfirmationTest,
-  btnConfirmationTest,
-  formConfirmationTest
+
+  yesCallbackTest,
+  noCallbackTest,
+  eventDispatchedTest,
+  eventPreventedTest
 ];
