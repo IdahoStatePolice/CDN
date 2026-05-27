@@ -56,7 +56,8 @@ function initCheckboxCollapse(collapseClass, selector = '[data-isp-toggle="check
       if (labelEl.dataset.action === 'show') {
         collapses.forEach(collapse => collapse[checked ? 'show' : 'hide']());
       }
-      else {
+
+      if (labelEl.dataset.action === 'hide') {
         collapses.forEach(collapse => collapse[checked ? 'hide' : 'show']());
       }
     }
@@ -81,26 +82,26 @@ function initCheckboxCollapse(collapseClass, selector = '[data-isp-toggle="check
  * desired target.
  *
  * ```
- * <select data-app-toggle="select-collapse" data-target="#sometimes-div">
- *   <option data-action="show">One</option>
- *   <option data-action="hide">Two</option>
- *   <option data-action="show">Three</option>
+ * <select data-app-toggle="select-collapse" data-target="#other-div">
+ *   <option data-action="hide">Male</option>
+ *   <option data-action="hide">Female</option>
+ *   <option data-action="show">Other</option>
  * </select>
  * ```
  *
- * In the above example, sometimes-div will show when options 'One' and 'Three' are
- * picked and hide when option 'Two' is picked.
+ * In the above example, other-div will show when the
+ * 'Other' option is picked and hide with any other value.
  *
  * ```
  * <select data-app-toggle="select-collapse" data-action="show">
- *   <option data-target="#male-stuff">Male</option>
- *   <option data-target="#female-stuff">Female</option>
- *   <option data-target="#other-stuff">Other</option>
+ *   <option data-target="#one-stuff">One</option>
+ *   <option data-target="#two-stuff">Two</option>
+ *   <option data-target="#three-stuff">Three</option>
  * </select>
  * ```
  *
- * In the above example, male-stuff will be shown when 'Male' is selected and hidden
- * when the other options are selected.
+ * In the above example, one-stuff will be shown when 'One' is
+ * selected and hidden when the other options are selected.
  *
  * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Collapse} collapseClass - Bootstrap 5 Collapse class to use.
  * @param {string} [selector = '[data-isp-toggle="select-collapse"]'] - The selector used to initialize selects.
