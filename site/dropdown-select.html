@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DropdownSelect.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="../css/isp-suggest.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a href="https://github.com/IdahoStatePolice/CDN/blob/main/js/DropdownSelect.js" class="nav-link">Source</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#how-it-works" class="dropdown-item">How it works</a>
+          <a href="#examples" class="dropdown-item">Examples</a>
+          <a href="#default-setup" class="dropdown-item" style="padding-left: 2rem;">Default Setup</a>
+          <a href="#summarize" class="dropdown-item" style="padding-left: 2rem;">Summarize Multiple</a>
+          <a href="#clear-select-all" class="dropdown-item" style="padding-left: 2rem;">Clear / Select All</a>
+          <a href="#filter" class="dropdown-item" style="padding-left: 2rem;">Filter Options</a>
+          <a href="#custom-names" class="dropdown-item" style="padding-left: 2rem;">Custom Submission Names</a>
+          <a href="#options" class="dropdown-item">Options</a>
+          <a href="#methods" class="dropdown-item">Methods</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a href="https://github.com/IdahoStatePolice/CDN/" class="nav-link"><img src="assets/images/github.png" style="width: 25px; margin-top:-10px;" title="ISP CDN GitHub Repository" alt="ISP CDN GitHub Repository"/></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-3">
+  <h1>DropdownSelect.js</h1>
+  <p class="lead">
+    Use DropdownSelect.js to transform a standard HTML &lt;select&gt; element into a Bootstrap-styled dropdown with checkbox or radio-button options. The component preserves standard form behavior while providing a flexible and user-friendly selection interface.
+  </p>
+
+  <div class="row g-5">
+    <div class="col-12">
+      <div id="how-it-works" class="anchor-offset"></div>
+      <h2>How it works</h2>
+      <p>
+        When a standard HTML <code>&lt;select&gt;</code> element is decorated as a DropdownSelect, it is re-rendered as a Bootstrap dropdown button with the original options displayed as either radio inputs (for single-select elements) or checkboxes (for <code>multiple</code> selects).
+      </p>
+      <p>
+        Options may define a <code>data-submit-name</code> attribute to submit their values using distinct name/value pairs instead of the parent select's name.
+      </p>
+
+      <p class="text-center"><img src="assets/images/dropdown-select/dropdown-select.png" alt="A DropdownSelect in action"/></p>
+
+    </div>
+
+    <div class="col-12">
+      <div id="examples" class="anchor-offset"></div>
+      <h2>Examples</h2>
+
+      <p>Start by adding the initialization JavaScript on your page.</p>
+
+      <div class="card bg-body-tertiary mb-4">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template0" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
+          <template id="template0">
+            import { DropdownSelect } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/DropdownSelect.js";
+
+            const dropdownSelect = new DropdownSelect('#toppings');
+          </template>
+        </div>
+      </div>
+
+      <p>Or, more commonly, initialize all elements having a <code>data-isp-toggle="dropdown-select"</code> data attribute.</p>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template1" data-code-type="javascript"></code></pre>
+          <template id="template1">
+            import { initAll } from 'https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/utils.js';
+            import { DropdownSelect } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/DropdownSelect.js";
+
+            initiAll('[data-isp-toggle="dropdown-select"]', el => new DropdownSelect(el));
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="default-setup" class="anchor-offset"></div>
+      <h3>Default Setup</h3>
+
+      <p>Single select:</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example1" name="order" class="invisible form-select">
+                <option value="Chicken">Chicken</option>
+                <option value="Pork">Pork</option>
+                <option value="Beef">Beef</option>
+                <option value="Tofu">Tofu</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          // Testing double initialization
+          new DropdownSelect('#example1');
+          new DropdownSelect('#example1');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+
+          <pre><code data-code-target="#template1-html" data-code-type="html"></code></pre>
+          <template id="template1-html">
+            <select id="example1" name="order" class="invisible form-select">
+              <option value="Chicken">Chicken</option>
+              <option value="Pork">Pork</option>
+              <option value="Beef">Beef</option>
+              <option value="Tofu">Tofu</option>
+            </select>
+          </template>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary mb-4">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template1-js" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template1-js" data-code-type="javascript"></code></pre>
+          <template id="template1-js">
+            import { DropdownSelect } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/DropdownSelect.js";
+
+            const example1 = new DropdownSelect('#example1');
+          </template>
+        </div>
+      </div>
+
+      <p><code>multiple</code> select:</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example2" name="order" multiple class="invisible form-select" size="1">
+                <option value="Chicken">Chicken</option>
+                <option value="Pork">Pork</option>
+                <option value="Beef">Beef</option>
+                <option value="Tofu">Tofu</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#example2');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template2-html" data-code-type="html"></code></pre>
+          <template id="template2-html">
+            <select id="example2" name="order" multiple class="invisible form-select" size="1">
+              <option value="Chicken">Chicken</option>
+              <option value="Pork">Pork</option>
+              <option value="Beef">Beef</option>
+              <option value="Tofu">Tofu</option>
+            </select>
+          </template>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template2-js" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template2-js" data-code-type="javascript"></code></pre>
+          <template id="template2-js">
+            import { DropdownSelect } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/DropdownSelect.js";
+
+            const example2 = new DropdownSelect('#example2');
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="summarize" class="anchor-offset"></div>
+      <h3>Summarize Multiple</h3>
+      <p>By default, DropdownSelect will attempt to display selected option labels in the space containing the select (re-rendered as a dropdown button). If instead you would like to see a count summary (2 selected, 3 selected, etc.) after the first selection, set the <code>summarizeMultiple</code> option to <code>true</code> or use the data attribute <code>data-summarize-multiple="true"</code></p>
+      <p>Notice that clicking an option with a long label, even if the first one, may still result in the summarized label if the label does not fit.</p>
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example3" name="order" multiple class="invisible form-select" size="1" data-summarize-multiple="true">
+                <option value="Chicken">Chicken</option>
+                <option value="Pork">Pork</option>
+                <option value="Beef">Beef</option>
+                <option value="Tofu">Tofu</option>
+                <option value="Other">Some other option with a very long label</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#example3');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <pre><code data-code-target="#template3-html" data-code-type="html"></code></pre>
+          <template id="template3-html">
+            <select id="example3" name="order" multiple class="invisible form-select" size="1" data-summarize-multiple="true">
+              <option value="Chicken">Chicken</option>
+              <option value="Pork">Pork</option>
+              <option value="Beef">Beef</option>
+              <option value="Tofu">Tofu</option>
+              <option value="Other">Some other option with a very long label</option>
+            </select>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="clear-select-all" class="anchor-offset"></div>
+      <h3>Clear / Select All</h3>
+      <p>Use <code>showClear</code> or <code>data-show-clear="true"</code> to include a <em>clear</em> button to unselect all shown options.</p>
+      <p>Use <code>showSelectAll</code> or <code>data-show-select-all="true"</code> on <code>multiple</code> selects to include a <em>select all</em> button to select all shown options.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example4" name="order" multiple class="invisible form-select" size="1" data-show-clear="true" data-show-select-all="true">
+                <option value="chicken">Chicken</option>
+                <option value="port">Pork</option>
+                <option value="beef">Beef</option>
+                <option value="turkey">Turkey</option>
+                <option value="lamb">Lamb</option>
+                <option value="fish">Fish</option>
+                <option value="shrimp">Shrimp</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#example4');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template4-html" data-code-type="html"></code></pre>
+          <template id="template4-html">
+            <select id="example4" name="order" multiple class="invisible form-select" size="1" data-show-clear="true" data-show-select-all="true">
+              <option value="chicken">Chicken</option>
+              <option value="port">Pork</option>
+              <option value="beef">Beef</option>
+              <option value="turkey">Turkey</option>
+              <option value="lamb">Lamb</option>
+              <option value="fish">Fish</option>
+              <option value="shrimp">Shrimp</option>
+            </select>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="filter" class="anchor-offset"></div>
+      <h3>Filter Options</h3>
+      <p>To add a filter input, set the <code>showFilter</code> option to <code>true</code> or add <code>data-show-filter="true"</code></p>
+      <p>The default filter behavior will only hide options not matched by the filter, not unselect them. To unselected options excluded by the filter set the <code>filterBehavior</code> to <code>unselect-hidden</code> or <code>data-filter-behavior="unselect-hidden"</code>. The default <code>filterBehavior</code> value is <code>only-hidden</code>.</p>
+
+      <em><code>only-hidden</code> (default) filter behavior</em>
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example5" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true">
+                <option value="chicken">Chicken</option>
+                <option value="port">Pork</option>
+                <option value="beef">Beef</option>
+                <option value="turkey">Turkey</option>
+                <option value="lamb">Lamb</option>
+                <option value="fish">Fish</option>
+                <option value="shrimp">Shrimp</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#example5');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template5-html" data-code-type="html"></code></pre>
+          <template id="template5-html">
+            <select id="example5" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true">
+              <option value="chicken">Chicken</option>
+              <option value="port">Pork</option>
+              <option value="beef">Beef</option>
+              <option value="turkey">Turkey</option>
+              <option value="lamb">Lamb</option>
+              <option value="fish">Fish</option>
+              <option value="shrimp">Shrimp</option>
+            </select>
+          </template>
+        </div>
+      </div>
+
+      <em><code>unselect-hidden</code> filter behavior</em>
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example6" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true" data-filter-behavior="unselect-hidden">
+                <option value="chicken">Chicken</option>
+                <option value="port">Pork</option>
+                <option value="beef">Beef</option>
+                <option value="turkey">Turkey</option>
+                <option value="lamb">Lamb</option>
+                <option value="fish">Fish</option>
+                <option value="shrimp">Shrimp</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#example6');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template6-html" data-code-type="html"></code></pre>
+          <template id="template6-html">
+            <select id="example6" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true" data-filter-behavior="unselect-hidden">
+              <option value="chicken">Chicken</option>
+              <option value="port">Pork</option>
+              <option value="beef">Beef</option>
+              <option value="turkey">Turkey</option>
+              <option value="lamb">Lamb</option>
+              <option value="fish">Fish</option>
+              <option value="shrimp">Shrimp</option>
+            </select>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="custom-names" class="anchor-offset"></div>
+      <h3>Custom Submission Names</h3>
+      <p>To submit an option using a unique parameter name, specify <code>data-submit-name="newName"</code> on the option element. This allows DropdownSelect to submit multiple distinct name/value pairs instead of using only the parent select's name.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example7" name="order" multiple class="invisible form-select" size="1">
+                <option value="chicken">Chicken</option>
+                <option value="port">Pork</option>
+                <option value="beef">Beef</option>
+                <option value="turkey">Turkey</option>
+                <option value="lamb">Lamb</option>
+                <option value="fish">Fish</option>
+                <option value="shrimp">Shrimp</option>
+                <option value="true" data-submit-name="takeOut">Take Out Order</option>
+              </select>
+              <button id="show-example7-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+            </div>
+          </div>
+
+          <div id="example7-value"></div>
+
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          const example7 = new DropdownSelect('#example7');
+
+          document.getElementById('show-example7-value').addEventListener('click', () => {
+            document.getElementById('example7-value').innerHTML = JSON.stringify(example7.value(), null, 2);
+          });
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template7-html" data-code-type="html"></code></pre>
+          <template id="template7-html">
+            <select id="example7" name="order" multiple class="invisible form-select" size="1">
+              <option value="chicken">Chicken</option>
+              <option value="port">Pork</option>
+              <option value="beef">Beef</option>
+              <option value="turkey">Turkey</option>
+              <option value="lamb">Lamb</option>
+              <option value="fish">Fish</option>
+              <option value="shrimp">Shrimp</option>
+              <option value="true" data-submit-name="takeOut">Take Out Order</option>
+            </select>
+          </template>
+        </div>
+      </div>
+
+      <p>Notice how custom options always render as checkboxes:</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="example8" name="order" class="invisible form-select">
+                <option value="S">Small</option>
+                <option value="M">Medium</option>
+                <option value="L">Large</option>
+                <option value="true" data-submit-name="takeOut">Take Out Order</option>
+              </select>
+              <button id="show-example8-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+            </div>
+          </div>
+
+          <div id="example8-value"></div>
+
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          const example8 = new DropdownSelect('#example8');
+
+          document.getElementById('show-example8-value').addEventListener('click', () => {
+            document.getElementById('example8-value').innerHTML = JSON.stringify(example8.value(), null, 2);
+          });
+        </script>
+      </div>
+
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template8-html" data-code-type="html"></code></pre>
+          <template id="template8-html">
+            <select id="example8" name="order" class="invisible form-select">
+              <option value="S">Small</option>
+              <option value="M">Medium</option>
+              <option value="L">Large</option>
+              <option value="true" data-submit-name="takeOut">Take Out Order</option>
+            </select>
+          </template>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <div class="col-12">
+      <div id="options" class="anchor-offset"></div>
+      <h2>Options</h2>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>summarizeMultiple</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>If true, the label '# selected' is shown when multiple options are selected. Otherwise, the full option label (comma joined) will be shown if space permits.</td>
+        </tr>
+        <tr>
+          <td><code>showFilter</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>If true, includes a filter input.</td>
+        </tr>
+        <tr>
+          <td><code>filterBehavior</code></td>
+          <td>string</td>
+          <td><code>'only-hidden'</code></td>
+          <td>Two values: <code>only-hidden</code> (default) and <code>unselect-hidden</code>.</td>
+        </tr>
+        <tr>
+          <td><code>showClear</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>If true, includes a clear button.</td>
+        </tr>
+        <tr>
+          <td><code>showSelectAll</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>If true, includes a select all button.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="methods" class="anchor-offset"></div>
+      <h2>Methods</h2>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>syncFromSelect</code></td>
+          <td>
+            Allows external (programatic) changes to the DropdownSelect's source of true, the &lt;select&gt;, to resync item state based on the underlying &lt;select&gt; element.
+            For example, if a user clicks a reset button, the browser resets native form elements but knows nothing about our enhanced select (checkbox/radio inputs). This method (<code>syncFromSelect</code>) lets you hook into that.
+          </td>
+        </tr>
+        <tr>
+          <td><code>selectAll</code></td>
+          <td>Select all shown select options. This has no effect if the underlying &lt;select&gt; is not <code>multiple</code>.</td>
+        </tr>
+        <tr>
+          <td><code>clear</code></td>
+          <td>Unselects all shown select options.</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>Returns an object containing the names and values of all select options. Normally, if not adding extra options with <code>data-submit-name</code>, the object returned will have a single property, the name of the &lt;select&gt;, with an array of selectecd values.</td>
+        </tr>
+        <tr>
+          <td><code>destroy</code></td>
+          <td>Removes all elements and event listeners created during initialization from the DOM.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
+<script type="module">
+  import { initExamples } from "./assets/modules.js";
+  import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+
+  (function main() {
+    initExamples();
+
+    const els = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...els].forEach(el => new Tooltip(el));
+  })();
+</script>
+</body>
+</html>
