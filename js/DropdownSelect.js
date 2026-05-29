@@ -127,9 +127,7 @@ class DropdownSelect {
    */
   syncFromSelect() {
     for (const item of this.#items) {
-      if (item.option) {
-        item.input.checked = item.option.hasAttribute('selected')
-      }
+      item.input.checked = item.option.hasAttribute('selected');
     }
 
     this.#updateButtonText();
@@ -173,14 +171,14 @@ class DropdownSelect {
       return;
     }
 
-    this.#visibleItems().forEach(item => this.#setItemSelected(item, true));
+    this.#visibleItems().filter(item => !item.input.disabled).forEach(item => this.#setItemSelected(item, true));
 
     this.#updateButtonText();
     this.#dispatchChangeEvent();
   }
 
   clear() {
-    this.#visibleItems().forEach(item => this.#setItemSelected(item, false));
+    this.#visibleItems().filter(item => !item.input.disabled).forEach(item => this.#setItemSelected(item, false));
 
     if (!this.#select.multiple) {
       const emptyOption = [...this.#select.options].find(option => option.value === '');
@@ -198,7 +196,7 @@ class DropdownSelect {
    *
    * @returns {Object<string, string[]>}
    */
-  value() {
+  get value() {
     return this.#selectedItems().reduce((values, item) => {
       if (!values[item.submitName]) {
         values[item.submitName] = [];
@@ -207,6 +205,33 @@ class DropdownSelect {
       values[item.submitName].push(item.value);
       return values;
     }, {});
+  }
+
+  set value(value) {
+    const valueMap = this.#normalizeValueMap(value);
+    for (const item of this.#items) {
+      const valueSet = valueMap.get(item.submitName);
+      const shouldCheck = valueSet?.has(item.value) ?? false;
+      item.option.toggleAttribute('selected', shouldCheck);
+    }
+    this.syncFromSelect()
+  }
+
+  #normalizeValueMap(value) {
+    if (value == null) {
+      return new Map();
+    }
+
+    if (typeof value !== 'object') {
+      throw new TypeError(`DropdownSelect.value: expected object, got ${typeof value}`);
+    }
+
+    // Handles both forms: { order: ['beef', 'fish'] } and the convenience form { order: 'beef' }
+    return new Map(Object.entries(value).map(([name, val]) => {
+        const arr = Array.isArray(val) ? val : [val];
+        return [name, new Set(arr.map(String))];
+      })
+    );
   }
 
   /**
@@ -399,7 +424,7 @@ class DropdownSelect {
       const matches = item.label.toLowerCase().includes(query);
       item.element.classList.toggle('d-none', !matches);
 
-      if (!matches && this.#settings.filterBehavior === 'unselect-hidden') {
+      if (!matches && !item.input.disabled && this.#settings.filterBehavior === 'unselect-hidden') {
         this.#setItemSelected(item, false);
       }
     }

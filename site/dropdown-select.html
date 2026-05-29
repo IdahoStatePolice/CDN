@@ -30,6 +30,7 @@
           <a href="#filter" class="dropdown-item" style="padding-left: 2rem;">Filter Options</a>
           <a href="#custom-names" class="dropdown-item" style="padding-left: 2rem;">Custom Submission Names</a>
           <a href="#options" class="dropdown-item">Options</a>
+          <a href="#properties" class="dropdown-item">Properties</a>
           <a href="#methods" class="dropdown-item">Methods</a>
         </div>
       </li>
@@ -106,7 +107,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example1" name="order" class="invisible form-select">
+              <select id="ex1" name="order" class="invisible form-select">
                 <option value="Chicken">Chicken</option>
                 <option value="Pork">Pork</option>
                 <option value="Beef">Beef</option>
@@ -120,8 +121,8 @@
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
           // Testing double initialization
-          new DropdownSelect('#example1');
-          new DropdownSelect('#example1');
+          new DropdownSelect('#ex1');
+          new DropdownSelect('#ex1');
         </script>
       </div>
 
@@ -158,7 +159,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example2" name="order" multiple class="invisible form-select" size="1">
+              <select id="ex2" name="order" multiple class="invisible form-select" size="1">
                 <option value="Chicken">Chicken</option>
                 <option value="Pork">Pork</option>
                 <option value="Beef">Beef</option>
@@ -171,7 +172,7 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#example2');
+          new DropdownSelect('#ex2');
         </script>
       </div>
 
@@ -211,7 +212,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example3" name="order" multiple class="invisible form-select" size="1" data-summarize-multiple="true">
+              <select id="ex3" name="order" multiple class="invisible form-select" size="1" data-summarize-multiple="true">
                 <option value="Chicken">Chicken</option>
                 <option value="Pork">Pork</option>
                 <option value="Beef">Beef</option>
@@ -225,7 +226,7 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#example3');
+          new DropdownSelect('#ex3');
         </script>
       </div>
 
@@ -255,7 +256,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example4" name="order" multiple class="invisible form-select" size="1" data-show-clear="true" data-show-select-all="true">
+              <select id="ex4" name="order" multiple class="invisible form-select" size="1" data-show-clear="true" data-show-select-all="true">
                 <option value="chicken">Chicken</option>
                 <option value="port">Pork</option>
                 <option value="beef">Beef</option>
@@ -271,7 +272,7 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#example4');
+          new DropdownSelect('#ex4');
         </script>
       </div>
 
@@ -304,7 +305,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example5" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true">
+              <select id="ex5" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true">
                 <option value="chicken">Chicken</option>
                 <option value="port">Pork</option>
                 <option value="beef">Beef</option>
@@ -320,7 +321,7 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#example5');
+          new DropdownSelect('#ex5');
         </script>
       </div>
 
@@ -346,7 +347,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example6" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true" data-filter-behavior="unselect-hidden">
+              <select id="ex6" name="order" multiple class="invisible form-select" size="1" data-show-filter="true" data-show-clear="true" data-show-select-all="true" data-filter-behavior="unselect-hidden">
                 <option value="chicken">Chicken</option>
                 <option value="port">Pork</option>
                 <option value="beef">Beef</option>
@@ -362,7 +363,7 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#example6');
+          new DropdownSelect('#ex6');
         </script>
       </div>
 
@@ -393,31 +394,37 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example7" name="order" multiple class="invisible form-select" size="1">
-                <option value="chicken">Chicken</option>
-                <option value="port">Pork</option>
-                <option value="beef">Beef</option>
-                <option value="turkey">Turkey</option>
-                <option value="lamb">Lamb</option>
-                <option value="fish">Fish</option>
-                <option value="shrimp">Shrimp</option>
-                <option value="true" data-submit-name="takeOut">Take Out Order</option>
-              </select>
-              <button id="show-example7-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+              <form action="#custom-names" method="GET">
+                <select id="ex7" name="order" multiple class="invisible form-select" size="1">
+                  <option value="chicken">Chicken</option>
+                  <option value="pork">Pork</option>
+                  <option value="beef">Beef</option>
+                  <option value="turkey">Turkey</option>
+                  <option value="lamb">Lamb</option>
+                  <option value="fish">Fish</option>
+                  <option value="shrimp">Shrimp</option>
+                  <option value="true" data-submit-name="takeOut">Take Out Order</option>
+                </select>
+                <button id="show-ex7-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+              </form>
             </div>
           </div>
 
-          <div id="example7-value"></div>
+          <div id="ex7-value"></div>
 
         </div>
 
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          const example7 = new DropdownSelect('#example7');
+          const example7 = new DropdownSelect('#ex7');
 
-          document.getElementById('show-example7-value').addEventListener('click', () => {
-            document.getElementById('example7-value').innerHTML = JSON.stringify(example7.value(), null, 2);
+          const params = new URLSearchParams(window.location.search);
+          example7.value = {'order': params.getAll('order'), 'takeOut': params.get('takeOut')};
+
+          document.getElementById('show-ex7-value').addEventListener('click', () => {
+            document.getElementById('ex7-value').innerHTML = JSON.stringify(example7.value, null, 2);
           });
         </script>
       </div>
@@ -428,7 +435,7 @@
           <template id="template7-html">
             <select id="example7" name="order" multiple class="invisible form-select" size="1">
               <option value="chicken">Chicken</option>
-              <option value="port">Pork</option>
+              <option value="pork">Pork</option>
               <option value="beef">Beef</option>
               <option value="turkey">Turkey</option>
               <option value="lamb">Lamb</option>
@@ -446,49 +453,90 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <select id="example8" name="order" class="invisible form-select">
-                <option value="S">Small</option>
-                <option value="M">Medium</option>
-                <option value="L">Large</option>
-                <option value="true" data-submit-name="takeOut">Take Out Order</option>
-              </select>
-              <button id="show-example8-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+              <form action="#custom-names" method="GET">
+                <select id="ex8" name="order2" class="invisible form-select">
+                  <option value="S">Small</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Large</option>
+                  <option value="true" data-submit-name="takeOut2">Take Out Order</option>
+                </select>
+                <button id="show-ex8-value" type="button" class="btn btn-primary mt-2">Show Value</button>
+                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+              </form>
             </div>
           </div>
 
-          <div id="example8-value"></div>
+          <div id="ex8-value"></div>
 
         </div>
 
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          const example8 = new DropdownSelect('#example8');
+          const example8 = new DropdownSelect('#ex8');
 
-          document.getElementById('show-example8-value').addEventListener('click', () => {
-            document.getElementById('example8-value').innerHTML = JSON.stringify(example8.value(), null, 2);
+          const params = new URLSearchParams(window.location.search);
+          example8.value = {'order2': params.getAll('order2'), 'takeOut2': params.get('takeOut2')};
+
+          document.getElementById('show-ex8-value').addEventListener('click', () => {
+            document.getElementById('ex8-value').innerHTML = JSON.stringify(example8.value, null, 2);
           });
         </script>
       </div>
-
 
       <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <pre><code data-code-target="#template8-html" data-code-type="html"></code></pre>
           <template id="template8-html">
-            <select id="example8" name="order" class="invisible form-select">
+            <select id="example8" name="order2" class="invisible form-select">
               <option value="S">Small</option>
               <option value="M">Medium</option>
               <option value="L">Large</option>
-              <option value="true" data-submit-name="takeOut">Take Out Order</option>
+              <option value="true" data-submit-name="takeOut2">Take Out Order</option>
             </select>
           </template>
         </div>
       </div>
+    </div>
 
+    <div class="col-12">
+      <div id="disabled" class="anchor-offset"></div>
+      <h3>Disabled</h3>
 
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="ex9" name="order" multiple class="invisible form-select" size="1" disabled data-show-clear="true" data-show-select-all="true">
+                <option value="Chicken">Chicken</option>
+                <option value="Pork">Pork</option>
+                <option value="Beef">Beef</option>
+                <option value="Tofu">Tofu</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
 
+          new DropdownSelect('#ex9');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <pre><code data-code-target="#template3-html" data-code-type="html"></code></pre>
+          <template id="template3.5-html">
+            <select id="example9" name="order" multiple class="invisible form-select" size="1" disabled data-show-clear="true" data-show-select-all="true">
+              <option value="Chicken">Chicken</option>
+              <option value="Pork">Pork</option>
+              <option value="Beef">Beef</option>
+              <option value="Tofu">Tofu</option>
+            </select>
+          </template>
+        </div>
+      </div>
     </div>
 
     <div class="col-12">
@@ -540,6 +588,29 @@
     </div>
 
     <div class="col-12">
+      <div id="properties" class="anchor-offset"></div>
+      <h2>Properties</h2>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Property</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td>
+            <p>Contains the names and values of all selected items. Normally, if not adding extra options with <code>data-submit-name</code>, value is an object having a single property, the name of the &lt;select&gt;, with an array of selectecd items.<br><code>{ 'order': [ 'pork' ] }</code> or <code>{ 'order': [ 'pork', 'beef', 'fish' ] }</code></p>
+            <p>When setting the value, the same object form should be used or, when only a single item is selected, a convenience form can be used where the selected item is provided as a single string value.<br> <code>{ 'order': 'pork' }</code> or <code>{ 'order': [ 'pork' ] }</code> </p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
       <div id="methods" class="anchor-offset"></div>
       <h2>Methods</h2>
 
@@ -565,10 +636,6 @@
         <tr>
           <td><code>clear</code></td>
           <td>Unselects all shown select options.</td>
-        </tr>
-        <tr>
-          <td><code>value</code></td>
-          <td>Returns an object containing the names and values of all select options. Normally, if not adding extra options with <code>data-submit-name</code>, the object returned will have a single property, the name of the &lt;select&gt;, with an array of selectecd values.</td>
         </tr>
         <tr>
           <td><code>destroy</code></td>
