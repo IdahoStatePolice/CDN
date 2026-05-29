@@ -132,21 +132,6 @@ class RadioButton {
     }
   }
 
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {string} [selector = '[data-isp-toggle="radio-button"]'] - Selector used to find all elements to initialize.
-   * @param {RadioButtonSettings} [options] - A RadioButtonSettings object to use with each initialization.
-   *
-   * @returns {RadioButton[]} - The array of RadioButton objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/radio-button.html|Radio Button Docs}
-   */
-  static initAll(selector = '[data-isp-toggle="radio-button"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new RadioButton(el, options));
-  }
-
   static #createHiddenEl(groupEl) {
     groupEl.insertAdjacentHTML('afterend', `<input type="hidden" name="${groupEl.dataset.name}">`);
     return groupEl.nextElementSibling;

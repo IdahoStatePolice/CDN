@@ -118,6 +118,7 @@ function addItem(addBtn) {
     const wrappedTemplate = `<div class="transitioning" style="height: 0; opacity: 0;">${template}</div>`;
 
     let wrappedItemEl;
+
     if (insertLocation === 'top') {
       listEl.insertAdjacentHTML('afterbegin', wrappedTemplate);
       wrappedItemEl = listEl.firstElementChild;
@@ -126,6 +127,7 @@ function addItem(addBtn) {
       listEl.insertAdjacentHTML('beforeend', wrappedTemplate);
       wrappedItemEl = listEl.lastElementChild;
     }
+
     for (const scriptEl of wrappedItemEl.querySelectorAll('script')) {
       const newScriptEl = document.createElement('script');
       newScriptEl.textContent = scriptEl.innerText;

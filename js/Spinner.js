@@ -367,21 +367,6 @@ class Spinner {
   toggle() {
     this.#svgEl.style.visibility === 'hidden' ? this.show() : this.hide();
   }
-
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {string} [selector = '[data-isp-toggle="spinner"]'] - Selector used to find all elements to initialize.
-   * @param {SpinnerSettings} [options] - SpinnerSettings object to use with each initialization.
-   *
-   * @returns {Spinner[]} - The array of RowClick objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/spinner.html|Spinner Docs}
-   */
-  static initAll(selector = '[data-isp-toggle="spinner"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new Spinner(el, options));
-  }
 }
 
 export { Spinner };

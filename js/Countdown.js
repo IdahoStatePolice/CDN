@@ -136,21 +136,6 @@ class Countdown {
     }
   }
 
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {string} [selector = '[data-isp-toggle="countdown"]'] - Selector used to find all elements to initialize.
-   * @param {CountdownSettings} [options] - CountdownSettings object to use with each initialization.
-   *
-   * @returns {Countdown[]} - The array of Countdown objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/countdown.html|Countdown Docs}
-   */
-  static initAll(selector = '[data-isp-toggle="countdown"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new Countdown(el, options));
-  }
-
   static #getSettings(el, options) {
     const elOptions = {};
     if (el.maxLength > 0) {
