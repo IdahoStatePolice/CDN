@@ -30,11 +30,37 @@ function getContext() {
 
 /**
  * Calls the initializer callback for each element matching the CSS selector.
+ * Optionally registers a MutationObserver to automatically initialize matching
+ * elements added to the DOM after the initial call.
+ *
  * @param {string} selector - CSS selector identifying target elements.
  * @param {Function} initializer - Function to run on each matched element.
+ * @param {boolean} [registerMutationObserver=true] - When true, observes the DOM
+ *   for dynamically added elements matching the selector and runs the initializer
+ *   on them automatically. Disable if the component is initialized in a context
+ *   where DOM observation is unnecessary or unwanted (e.g., one-time static render).
+ *
+ * @returns {MutationObserver|undefined} The observer instance, if one was registered.
+ *   On single-page apps, call .disconnect() to stop observing when the component is removed.
  */
-function initAll(selector, initializer) {
+function initAll(selector, initializer, registerMutationObserver = true) {
   document.querySelectorAll(selector).forEach(el => initializer(el));
+
+  if (registerMutationObserver) {
+    const mutationCallback = (records) => {
+      const nodes = records.flatMap(r => [...r.addedNodes]);
+      for (const nodeEl of nodes.filter(n => n instanceof Element)) {
+        if (nodeEl.matches(selector)) {
+          initializer(nodeEl);
+        }
+        nodeEl.querySelectorAll(selector).forEach(el => initializer(el));
+      }
+    };
+
+    const observer = new MutationObserver(mutationCallback);
+    observer.observe(document.body, { subtree: true, childList: true });
+    return observer;
+  }
 }
 
 /**
