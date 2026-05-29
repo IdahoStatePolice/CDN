@@ -31,6 +31,9 @@
 
 <div class="container p-3">
   <h1>Countdown.js</h1>
+  <p class="lead">
+    This JavaScript module addes a character countdown under an input or textarea so end users know how many characters they can type.
+  </p>
 
   <div id="tests" class="collapse" data-toggle="tests">
     <div class="card mb-3">
@@ -64,9 +67,9 @@
         <div class="card-body">
           <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
           <template id="template0">
-            import { Countdown } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/Countdown.js";
+            import { Countdown } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Countdown.js";
 
-            Countdown.initAll();
+            const countdown = new Countdown('#id');
             // or
             const el = document.querySelector('#id');
             const countdown = new Countdown(el);
@@ -163,6 +166,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
+  import { initAll } from "../js/utils.js";
   import { Countdown } from "../js/Countdown.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/countdown-tests.js";
@@ -174,8 +178,8 @@
   })();
 
   function doubleInit() {
-    Countdown.initAll();
-    Countdown.initAll();
+    initAll('[data-isp-toggle="countdown"]', el => new Countdown(el));
+    initAll('[data-isp-toggle="countdown"]', el => new Countdown(el));
   }
 </script>
 </body>

@@ -61,9 +61,9 @@
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
             import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-            import { CopyText } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/CopyText.js";
+            import { CopyText } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/CopyText.js";
 
-            CopyText.initAll(Toast);
+            const copyText = new CopyText(Toast, '#id');
             // or
             const el = document.querySelector('#id');
             const copyText = new CopyText(Toast, el);
@@ -164,6 +164,7 @@
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
   import { Toast } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
+  import { initAll } from "../js/utils.js";
   import { CopyText } from "../js/CopyText.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/copy-text-tests.js";
@@ -175,8 +176,8 @@
   })();
 
   function doubleInit() {
-    CopyText.initAll(Toast);
-    CopyText.initAll(Toast);
+    initAll('[data-isp-toggle="copy-text"]', el => new CopyText(Toast, el));
+    initAll('[data-isp-toggle="copy-text"]', el => new CopyText(Toast, el));
   }
 </script>
 </body>

@@ -159,22 +159,6 @@ class RowClick {
       throw new Error('RowClick form target is not a form or submit button.');
     }
   }
-
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {typeof import('bootstrap').Modal} [ModalClass] - Optional Bootstrap Modal constructor used when click targets a modal.
-   * @param {string} [selector = '[data-isp-toggle="row-click"]'] - Selector used to find all elements to initialize.
-   * @param {RowClickSettings} [options] - RowClickSettings object to use with each initialization.
-   *
-   * @returns {RowClick[]} - The array of RowClick objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/row-click.html|Row Click Docs}
-   */
-  static initAll(ModalClass = undefined, selector = '[data-isp-toggle="row-click"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new RowClick(el, ModalClass, options));
-  }
 }
 
 export { RowClick };

@@ -102,22 +102,6 @@ class CopyText {
     CopyText.#initializedEls.delete(this.#el);
   }
 
-  /**
-   * A shortcut to do a mass initialization of any element that needs to be initialized.
-   *
-   * @param {import('https://cdn.jsdelivr.net/npm/bootstrap@latest/+esm').Toast} toastClass - Bootstrap 5 Toast class.
-   * @param {string} [selector = '[data-isp-toggle="copy-text"]'] - Selector used to find all elements to initialize.
-   * @param {CopyTextSettings} [options] - CopyTextSettings object to use with each initialization.
-   *
-   * @returns {CopyText[]} - The array of CopyText objects that were initialized.
-   *
-   * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
-   */
-  static initAll(toastClass, selector = '[data-isp-toggle="copy-text"]', options) {
-    const els = document.querySelectorAll(selector);
-    return [...els].map(el => new CopyText(toastClass, el, options));
-  }
-
   async #doCopy() {
     let textToCopy = this.#settings.copyText;
 

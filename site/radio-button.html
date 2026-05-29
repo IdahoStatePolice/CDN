@@ -49,12 +49,12 @@
         <div class="card-body">
           <pre><code data-code-target="#radioTemplate0" data-code-type="javascript"></code></pre>
           <template id="radioTemplate0">
-            import { RadioButton } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.0/js/RadioButton.js";
+            import { RadioButton } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/RadioButton.js";
 
-            RadioButton.initAll();
+            const radioButton = new RadioButton('#id');
             // or
             const el = document.querySelector('#id');
-            const confirmation = new RadioButton(el);
+            const radioButton = new RadioButton(el);
           </template>
         </div>
       </div>
@@ -94,6 +94,7 @@
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
+  import { initAll } from "../js/utils.js";
   import { RadioButton } from "../js/RadioButton.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/radio-button-tests.js";
@@ -105,8 +106,8 @@
   })();
 
   function doubleInit() {
-    RadioButton.initAll();
-    RadioButton.initAll();
+    initAll('[data-isp-toggle="radio-button"]', el => new RadioButton(el));
+    initAll('[data-isp-toggle="radio-button"]', el => new RadioButton(el));
   }
 </script>
 </body>
