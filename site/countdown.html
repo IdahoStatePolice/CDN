@@ -16,10 +16,14 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
         <div class="dropdown-menu dropdown-menu-end">
-          <a href="#card-1" class="dropdown-item">Simplest Setup</a>
-          <a href="#card-2" class="dropdown-item">Set Max Length</a>
-          <a href="#card-3" class="dropdown-item">Change Label</a>
-          <a href="#card-4" class="dropdown-item">Auto Resize Height While Typing</a>
+          <a href="#how-it-works" class="dropdown-item">How it works</a>
+          <a href="#examples" class="dropdown-item">Examples</a>
+          <a href="#simplest-setup" class="dropdown-item" style="padding-left: 2rem;">Simplest Setup</a>
+          <a href="#set-max-length" class="dropdown-item" style="padding-left: 2rem;">Set Max Length</a>
+          <a href="#change-label" class="dropdown-item" style="padding-left: 2rem;">Change Label</a>
+          <a href="#auto-resize" class="dropdown-item" style="padding-left: 2rem;">Auto Resize Height While Typing</a>
+          <a href="#options" class="dropdown-item">Options</a>
+          <a href="#methods" class="dropdown-item">Methods</a>
         </div>
       </li>
       <li class="nav-item">
@@ -57,14 +61,28 @@
     </div>
   </div>
 
-  <div class="row g-3">
+  <div class="row g-5">
     <div class="col-12">
-      <div class="card">
-        <div class="card-header text-bg-primary d-flex align-items-center">
-          <h5 class="flex-fill mb-0">Import Module</h5>
-          <a href="#" data-clipboard="#template0" title="copy" class="link-light"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <div id="how-it-works" class="anchor-offset"></div>
+      <h2>How it works</h2>
+
+      <p>
+        This simple module creates a counter under a <code>textarea</code> or <code>input</code>
+        that is updated everytime the element <code>input</code> event is fired.
+      </p>
+
+      <p class="mb-0 text-center"><img src="assets/images/countdown/example.png" alt="example"></p>
+    </div>
+
+    <div class="col-12">
+      <div id="examples" class="anchor-offset"></div>
+      <h2>Examples</h2>
+
+      <p>Start by adding the initialization JavaScript to your page.</p>
+
+      <div class="card bg-body-tertiary">
         <div class="card-body">
+          <a href="#" data-clipboard="#template0" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template0" data-code-type="javascript"></code></pre>
           <template id="template0">
             import { Countdown } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/Countdown.js";
@@ -79,18 +97,24 @@
     </div>
 
     <div class="col-12">
-      <div id="card-1" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Simplest Setup</h5>
-        <div class="card-body">
-          <textarea id="countdown1" class="form-control" data-isp-toggle="countdown"></textarea>
-        </div>
+      <div id="simplest-setup" class="anchor-offset"></div>
+      <h3>Simplest Setup</h3>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template1" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <p>The max length defaults to 255 characters, the default length of a varchar column in the database.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <textarea id="countdown1" class="form-control" data-isp-toggle="countdown"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
           <template id="template1">
             <textarea class="form-control" data-isp-toggle="countdown"></textarea>
@@ -100,18 +124,24 @@
     </div>
 
     <div class="col-12">
-      <div id="card-2" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Set Max Length</h5>
-        <div class="card-body">
-          <textarea id="countdown2" class="form-control" data-isp-toggle="countdown" maxlength="4000"></textarea>
-        </div>
+      <div id="set-max-length" class="anchor-offset"></div>
+      <h3>Set Max Length</h3>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template2" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <p>If you want to change that length, just set the <code>maxlength</code> attribute.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <textarea id="countdown2" class="form-control" data-isp-toggle="countdown" maxlength="4000"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
           <template id="template2">
             <textarea class="form-control" data-isp-toggle="countdown" maxlength="4000"></textarea>
@@ -121,18 +151,24 @@
     </div>
 
     <div class="col-12">
-      <div id="card-3" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Change Label</h5>
-        <div class="card-body">
-          <textarea id="countdown3" class="form-control" data-isp-toggle="countdown" maxlength="4000" data-label="Char Left: "></textarea>
-        </div>
+      <div id="change-label" class="anchor-offset"></div>
+      <h3>Change Label</h3>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template3" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <p>You can change the label from 'Characters remaining: ' to whatever you want. Please remember to add a space at the end.</p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <textarea id="countdown3" class="form-control" data-isp-toggle="countdown" maxlength="4000" data-label="Char Left: "></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template3" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
           <template id="template3">
             <textarea class="form-control" data-isp-toggle="countdown" maxlength="4000" data-label="Char Left: "></textarea>
@@ -142,24 +178,102 @@
     </div>
 
     <div class="col-12">
-      <div id="card-4" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">Auto Resize Height While Typing</h5>
-        <div class="card-body">
-          <textarea id="countdown4" class="form-control" data-isp-toggle="countdown" maxlength="4000" data-show-all="true"></textarea>
-        </div>
+      <div id="auto-resize" class="anchor-offset"></div>
+      <h3>Auto Resize Height While Typing</h3>
 
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">HTML</span>
-          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
+      <p>
+        This setting forces a textarea to resize based on the lines of text in it. The minium height
+        is the rendered height. So if you set the rows or CSS height, that will be the minimum height.
+      </p>
+
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <textarea id="countdown4" class="form-control" data-isp-toggle="countdown" maxlength="4000" data-show-all="true"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template4" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template4" data-code-type="xml"></code></pre>
           <template id="template4">
             <textarea class="form-control" data-isp-toggle="countdown" maxlength="4000" data-show-all="true"></textarea>
           </template>
         </div>
       </div>
+    </div>
+
+    <div class="col-12">
+      <div id="options" class="anchor-offset"></div>
+      <h3>Options</h3>
+
+      <div class="alert alert-info">
+        Unlike the other options where you convert the name to a data attribute
+        (e.g. <code>labelClass</code> -> <code>data-label-class</code>),
+        <code>maxLength</code> is just the attribute. This allows it to function
+        like it always does in browsers.
+      </div>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>maxLength</code></td>
+          <td>number</td>
+          <td><code>255</code></td>
+          <td>The maximum length the input (and by extension, the database column) can hold.</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td>string</td>
+          <td><code>'Characters remaining: '</code></td>
+          <td>The label of the counter.</td>
+        </tr>
+        <tr>
+          <td><code>labelClass</code></td>
+          <td>string</td>
+          <td><code>'form-text'</code></td>
+          <td>The CSS class on the div under the textarea/input.</td>
+        </tr>
+        <tr>
+          <td><code>showAll</code></td>
+          <td>boolean</td>
+          <td><code>false</code></td>
+          <td>Toggles the auto resizing of the textarea when an end user types.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="methods" class="anchor-offset"></div>
+      <h3>Methods</h3>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>destroy</code></td>
+          <td>Removes all elements and event listeners created during initialization from the DOM.</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
