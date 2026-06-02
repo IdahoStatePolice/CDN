@@ -31,6 +31,7 @@
           <a href="#custom-names" class="dropdown-item" style="padding-left: 2rem;">Custom Submission Names</a>
           <a href="#disabled" class="dropdown-item" style="padding-left: 2rem;">Disabled</a>
           <a href="#style" class="dropdown-item" style="padding-left: 2rem;">Styled</a>
+          <a href="#events" class="dropdown-item" style="padding-left: 2rem;">Events</a>
           <a href="#options" class="dropdown-item">Options</a>
           <a href="#properties" class="dropdown-item">Properties</a>
           <a href="#methods" class="dropdown-item">Methods</a>
@@ -584,6 +585,84 @@
           </template>
         </div>
       </div>
+    </div>
+
+    <div class="col-12">
+      <div id="events" class="anchor-offset"></div>
+      <h3>Events</h3>
+      <p>Whenever a selection changes, DropdownSelect dispatches standard bubbling <code>input</code> and <code>change</code> events on the decorated <code>&lt;select&gt;</code> element. Existing event listeners attached to the select will continue to function as expected.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="ex11" name="colors" multiple class="invisible form-select" size="1">
+                <option>Hello</option>
+                <option>World</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <pre>
+        <span id="ex11-changes"></span>
+        <span id="ex11-inputs"></span>
+        </pre>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          const ex11 = document.getElementById('ex11');
+          const ex11Changes = document.getElementById('ex11-changes');
+          const ex11Inputs = document.getElementById('ex11-inputs');
+          new DropdownSelect(ex11);
+
+          ex11.addEventListener('change', () => {
+            ex11Changes.innerHTML += 'Change! &nbsp;';
+          });
+
+          ex11.addEventListener('input', () => {
+            ex11Inputs.innerHTML += 'Input! &nbsp;';
+          });
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <pre><code data-code-target="#template11-html" data-code-type="html"></code></pre>
+          <template id="template11-html">
+            <select id="example11" name="colors" multiple class="invisible form-select" size="1">
+              <option>Hello</option>
+              <option>World</option>
+            </select>
+            <span id="example11-changes"></span>
+            <span id="example11-inputs"></span>
+          </template>
+        </div>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template11-js" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template11-js" data-code-type="javascript"></code></pre>
+          <template id="template11-js">
+            import { DropdownSelect } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/DropdownSelect.js";
+
+            const ex11 = document.getElementById('example11');
+            const ex11Changes = document.getElementById('example11-changes');
+            const ex11Inputs = document.getElementById('example11-inputs');
+            new DropdownSelect(ex11);
+
+            ex11.addEventListener('change', () => {
+              ex11Changes.innerHTML += 'Change! &nbsp;';
+            });
+
+            ex11.addEventListener('input', () => {
+              ex11Inputs.innerHTML += 'Input! &nbsp;';
+            });
+          </template>
+        </div>
+      </div>
+
     </div>
 
     <div class="col-12">

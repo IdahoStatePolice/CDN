@@ -416,6 +416,7 @@ class DropdownSelect {
   }
 
   #dispatchChangeEvent() {
+    this.#select.dispatchEvent(new Event('input', { bubbles: true }));
     this.#select.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
