@@ -362,10 +362,11 @@ class DropdownSelect {
       const type = this.#select.multiple || hasSubmitNameOverride ? 'checkbox' : 'radio';
       const disabled = this.#select.disabled || optionEl.disabled ? 'disabled' : '';
       const checked = optionEl.selected ? 'checked' : '';
+      const optionClasses = optionEl.className;
 
       this.#menu.insertAdjacentHTML('beforeend', `
         <label class="dropdown-item text-wrap">
-          <input type="${type}" class="form-check-input" ${disabled} ${checked}> ${optionEl.text}
+          <input type="${type}" class="form-check-input" ${disabled} ${checked}> <span class="${optionClasses}">${optionEl.text}</span>
         </label>
       `);
 

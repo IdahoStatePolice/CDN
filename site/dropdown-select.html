@@ -29,6 +29,8 @@
           <a href="#clear-select-all" class="dropdown-item" style="padding-left: 2rem;">Clear / Select All</a>
           <a href="#filter" class="dropdown-item" style="padding-left: 2rem;">Filter Options</a>
           <a href="#custom-names" class="dropdown-item" style="padding-left: 2rem;">Custom Submission Names</a>
+          <a href="#disabled" class="dropdown-item" style="padding-left: 2rem;">Disabled</a>
+          <a href="#style" class="dropdown-item" style="padding-left: 2rem;">Styled</a>
           <a href="#options" class="dropdown-item">Options</a>
           <a href="#properties" class="dropdown-item">Properties</a>
           <a href="#methods" class="dropdown-item">Methods</a>
@@ -533,6 +535,51 @@
               <option value="Pork">Pork</option>
               <option value="Beef">Beef</option>
               <option value="Tofu">Tofu</option>
+            </select>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="style" class="anchor-offset"></div>
+      <h3>Styled</h3>
+      <p>An <code>&lt;option&gt;</code>'s <code>class</code> attribute is applied to a <code>&lt;span&gt;</code> wrapping the rendered item text, allowing text-level styling without affecting the dropdown item's layout or behavior. Inline <code>style</code> attributes are ignored.</p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <select id="ex10" name="colors" multiple class="invisible form-select" size="1">
+                <option value="none" style="color:red">No Style</option>
+                <option value="red" class="text-danger">Danger</option>
+                <option value="green" class="text-success">Success</option>
+                <option value="blue" class="text-info">Info</option>
+                <option value="badge" class="badge text-bg-primary p-2">Badge</option>
+                <option value="huge" class="h3 alert alert-primary fw-bold p-1 m-0">Huge!</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { DropdownSelect } from "../js/DropdownSelect.js";
+
+          new DropdownSelect('#ex10');
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <pre><code data-code-target="#template10-html" data-code-type="html"></code></pre>
+          <template id="template10-html">
+            <select id="example10" name="colors" multiple class="invisible form-select" size="1">
+              <option value="none" style="color:red">No Style</option>
+              <option value="red" class="text-danger">Danger</option>
+              <option value="green" class="text-success">Success</option>
+              <option value="blue" class="text-info">Info</option>
+              <option value="badge" class="badge text-bg-primary p-2">Badge</option>
+              <option value="huge" class="h3 alert alert-primary fw-bold p-1 m-0">Huge!</option>
             </select>
           </template>
         </div>
