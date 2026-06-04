@@ -27,6 +27,7 @@
  */
 const defaultSettings = {
   transitionTime: .35,
+  transitionCssClass: 'transitioning',
   addItemSelector: '[data-isp-toggle="add-item"]',
   removeItemSelector: '[data-isp-toggle="remove-item"]',
   deleteInputSelector: '[data-delete-input]',
@@ -84,7 +85,7 @@ function initListItems(options) {
    * Function that adds the transitioning CSS class to animate add and remove of items.
    */
   function addTransitioningStyleEl() {
-    const html = `<style> .transitioning { overflow: hidden; transition: all ${settings.transitionTime}s ease; } </style>`;
+    const html = `<style> .${settings.transitionCssClass} { overflow: hidden; transition: all ${settings.transitionTime}s ease; } </style>`;
     document.head.insertAdjacentHTML('beforeend', html);
     styleEl = document.head.lastElementChild;
   }
@@ -109,35 +110,19 @@ function addItem(addBtn) {
     const indexVar = templateEl.dataset.indexVar || '{index}';
     const insertLocation = templateEl.dataset.insertLocation || 'bottom';
 
-    addIndexIfNeeded(listEl);
+    addIndexAndCountIfNeeded(listEl);
     const index = listEl.dataset.index;
     // update index now in case user makes multiple clicks on add.
     listEl.dataset.index = (Number(index) + 1).toString();
 
     const template = templateEl.innerHTML.replaceAll(new RegExp(indexVar, 'g'), index);
-    const wrappedTemplate = `<div class="transitioning" style="height: 0; opacity: 0;">${template}</div>`;
+    const wrappedTemplate = `<div class="${settings.transitionCssClass}" style="height: 0; opacity: 0;">${template}</div>`;
+    const wrappedItemEl = insertTemplate(listEl, insertLocation, wrappedTemplate);
 
-    let wrappedItemEl;
-
-    if (insertLocation === 'top') {
-      listEl.insertAdjacentHTML('afterbegin', wrappedTemplate);
-      wrappedItemEl = listEl.firstElementChild;
-    }
-    else if (insertLocation === 'bottom') {
-      listEl.insertAdjacentHTML('beforeend', wrappedTemplate);
-      wrappedItemEl = listEl.lastElementChild;
-    }
-
-    for (const scriptEl of wrappedItemEl.querySelectorAll('script')) {
-      const newScriptEl = document.createElement('script');
-      newScriptEl.textContent = scriptEl.innerText;
-      scriptEl.parentNode.insertBefore(newScriptEl, scriptEl);
-      scriptEl.remove();
-    }
-
+    initializeJavaScriptTags(wrappedItemEl);
     setTempStyle(listEl, wrappedItemEl.firstElementChild);
 
-    updateCount(listEl);
+    updateCount(listEl, 1);
     wrappedItemEl.style.height = wrappedItemEl.firstElementChild.scrollHeight + 'px';
     wrappedItemEl.style.opacity = '1';
 
@@ -145,8 +130,28 @@ function addItem(addBtn) {
       const itemEl = wrappedItemEl.firstElementChild;
       wrappedItemEl.replaceWith(itemEl);
       removeTempStyle(itemEl);
-      listEl.dispatchEvent(new Event('change', {bubbles: true}));
+      listEl.dispatchEvent(new Event('change', { bubbles: true }));
     });
+
+    function insertTemplate(target, position, string) {
+      if (position === 'top') {
+        target.insertAdjacentHTML('afterbegin', string);
+        return target.firstElementChild;
+      }
+      if (position === 'bottom') {
+        target.insertAdjacentHTML('beforeend', string);
+        return target.lastElementChild;
+      }
+    }
+
+    function initializeJavaScriptTags(target) {
+      for (const scriptEl of target.querySelectorAll('script')) {
+        const newScriptEl = document.createElement('script');
+        newScriptEl.textContent = scriptEl.innerText;
+        scriptEl.parentNode.insertBefore(newScriptEl, scriptEl);
+        scriptEl.remove();
+      }
+    }
   }
 }
 
@@ -155,10 +160,11 @@ function removeItem(removeBtn) {
     const itemEl = removeBtn.closest(removeBtn.dataset.parent);
     const listEl = itemEl.parentElement;
     const deletedEl = itemEl.querySelector(settings.deleteInputSelector);
-    const template = `<div class="transitioning" style="height: ${itemEl.scrollHeight + 'px'}; opacity: 1;"></div>`;
+    const template = `<div class="${settings.transitionCssClass}" style="height: ${itemEl.scrollHeight + 'px'}; opacity: 1;"></div>`;
 
-    addIndexIfNeeded(listEl);
+    addIndexAndCountIfNeeded(listEl);
     setTempStyle(listEl, itemEl);
+
     itemEl.insertAdjacentHTML('beforebegin', template);
     const wrapperEl = itemEl.previousElementSibling;
     wrapperEl.appendChild(itemEl);
@@ -180,19 +186,21 @@ function removeItem(removeBtn) {
           wrapperEl.remove();
         }
 
-        updateCount(listEl);
-        listEl.dispatchEvent(new Event('change', {bubbles: true}));
+        updateCount(listEl, -1);
+        listEl.dispatchEvent(new Event('change', { bubbles: true }));
       });
     }, 5);
   }
 }
 
-function addIndexIfNeeded(listEl) {
-  if (listEl.dataset.index) {
-    return;
+function addIndexAndCountIfNeeded(listEl) {
+  if (!listEl.dataset.index) {
+    listEl.dataset.index = listEl.children.length.toString();
   }
 
-  listEl.dataset.index = listEl.children.length.toString();
+  if (!listEl.dataset.count) {
+    listEl.dataset.count = listEl.dataset.index;
+  }
 }
 
 function setTempStyle(listEl, itemEl) {
@@ -230,25 +238,19 @@ function afterTransition(fn) {
   setTimeout(fn, settings.transitionTime * 1000 + 5);
 }
 
-function updateCount(listEl) {
-  const visibleChildren = [...listEl.children].filter(isVisible);
+function updateCount(listEl, increment) {
+  const count = (Number(listEl.dataset.count) + increment).toString();
+  listEl.dataset.count = count;
 
-  const totalCountSelector = listEl.dataset.totalTarget;
-  if (totalCountSelector) {
-    const totalCountEl = document.querySelector(totalCountSelector);
-    if (totalCountEl) {
-      totalCountEl.innerHTML = visibleChildren.length.toString();
-    }
-  }
+  // update total counts
+  const totalEls = document.querySelectorAll(listEl.dataset.totalTarget);
+  totalEls.forEach(el => el.innerHTML = count);
 
-  for (const [index, childEl] of visibleChildren.entries()) {
-    const itemCountEls = childEl.querySelectorAll(settings.countSelector);
-    itemCountEls.forEach(el => el.innerHTML = index + 1);
-  }
-
-  function isVisible(el) {
-    return el.matches('.transitioning') || el.offsetWidth > 0 && el.offsetHeight > 0;
-  }
+  // update individual counts
+  const individualEls = listEl.querySelectorAll(settings.countSelector);
+  const visibleEls = [...individualEls].filter(el => el.checkVisibility());
+  const canUpdate = visibleEls.length.toString() === count;
+  visibleEls.forEach((el, i) => el.innerHTML = canUpdate ? (i + 1).toString() : '');
 }
 
 export { initListItems }
