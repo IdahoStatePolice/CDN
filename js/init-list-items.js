@@ -247,10 +247,15 @@ function updateCount(listEl, increment) {
   totalEls.forEach(el => el.innerHTML = count);
 
   // update individual counts
-  const individualEls = listEl.querySelectorAll(settings.countSelector);
-  const visibleEls = [...individualEls].filter(el => el.checkVisibility());
-  const canUpdate = visibleEls.length.toString() === count;
-  visibleEls.forEach((el, i) => el.innerHTML = canUpdate ? (i + 1).toString() : '');
+  const visibleEls = [...listEl.children].filter(el => {
+    const countEls = el.querySelectorAll(settings.countSelector);
+    return el.checkVisibility() && countEls.length > 0;
+  });
+
+  visibleEls.forEach((itemEl, i) => {
+    const count = (visibleEls.length.toString() === count) ? (i + 1).toString() : '';
+    itemEl.querySelectorAll(settings.countSelector).forEach(el => el.innerHTML = count);
+  });
 }
 
 export { initListItems }
