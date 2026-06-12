@@ -40,6 +40,7 @@ class PasswordToggle {
   #input;
 
   #wrapper;
+  #ownsWrapper = false;
   #button;
   #icon;
 
@@ -84,9 +85,6 @@ class PasswordToggle {
   }
 
   #render() {
-    this.#wrapper = document.createElement('div');
-    this.#wrapper.className = 'input-group';
-
     this.#button =  document.createElement('button');
     this.#button.type = 'button';
     this.#button.className = this.#settings.toggleBtn;
@@ -95,9 +93,20 @@ class PasswordToggle {
     this.#button.append(this.#icon);
     this.#button.addEventListener('click', () => this.toggle());
 
-    this.#wrapper.append(this.#input);
-    this.#wrapper.append(this.#button);
-    this.#originalParent.insertBefore(this.#wrapper, this.#originalNextSibling);
+    if (this.#originalParent instanceof HTMLElement && this.#originalParent.classList.contains('input-group')) {
+      this.#ownsWrapper = false;
+      this.#wrapper = this.#originalParent;
+      this.#wrapper.insertBefore(this.#button, this.#originalNextSibling);
+    }
+    else {
+      this.#ownsWrapper = true;
+      this.#wrapper = document.createElement('div');
+      this.#wrapper.className = 'input-group';
+      this.#wrapper.append(this.#input);
+      this.#wrapper.append(this.#button);
+      this.#originalParent.insertBefore(this.#wrapper, this.#originalNextSibling);
+    }
+
     this.#updateUi();
   }
 
@@ -124,11 +133,14 @@ class PasswordToggle {
    * Remove the toggle button and restore the original DOM structure.
    */
   destroy() {
-    this.#originalParent.insertBefore(this.#input, this.#originalNextSibling);
-    if (this.#wrapper != null) {
-      this.#wrapper.remove();
+    this.#button?.remove();
+
+    if (this.#ownsWrapper) {
+      this.#originalParent.insertBefore(this.#input, this.#originalNextSibling);
+      this.#wrapper?.remove();
+      this.#wrapper = null;
     }
-    this.#wrapper = null;
+
     PasswordToggle.#initializedEls.delete(this.#input);
   }
 }
