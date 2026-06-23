@@ -109,8 +109,6 @@ class AppNotification extends HTMLElement {
       instance.setAttribute(AppNotification.#CONTEXT_ATTRIBUTE, this.#getContextPath());
       document.body.append(instance);
     }
-
-    instance.getAttribute(AppNotification.#CONTEXT_ATTRIBUTE);
   }
 
   connectedCallback() {

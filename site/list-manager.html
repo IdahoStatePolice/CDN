@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ListManager.js</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1/css/all.css" rel="stylesheet"/>
+  <link href="../css/isp-suggest.css" rel="stylesheet"/>
+  <link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand text-bg-primary position-sticky top-0 z-1">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/CDN/">ISP CDN</a>
+
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a href="https://github.com/IdahoStatePolice/CDN/blob/main/js/ListManager.js" class="nav-link">Source</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contents</a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a href="#motivation" class="dropdown-item">Motivation</a>
+          <a href="#philosophy" class="dropdown-item">Design Philosophy</a>
+          <a href="#examples" class="dropdown-item">Examples</a>
+          <a href="#simple-list" class="dropdown-item" style="padding-left: 2rem;">Simple List</a>
+          <a href="#indexed-list" class="dropdown-item" style="padding-left: 2rem;">Indexed List</a>
+          <a href="#insertion-location" class="dropdown-item" style="padding-left: 2rem;">Insertion Location</a>
+          <a href="#nested" class="dropdown-item" style="padding-left: 2rem;">Nested Lists</a>
+          <a href="#options" class="dropdown-item">Options</a>
+          <a href="#methods" class="dropdown-item">Methods</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a href="https://github.com/IdahoStatePolice/CDN/" class="nav-link"><img src="assets/images/github.png" style="width: 25px; margin-top:-10px;" title="ISP CDN GitHub Repository" alt="ISP CDN GitHub Repository"/></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-5">
+  <h1>ListManager.js</h1>
+  <p class="lead">An instance-based utility for managing dynamic lists within server-rendered pages.</p>
+  <p>Essentially, a component (class) implementation of <code>initListItems()</code>.</p>
+  <p>Its primary purpose is to allow users to dynamically add, remove and optionally soft-delete sections of a form while keeping a single server-rendered template as the source of truth.</p>
+  <hr/>
+
+  <div class="row g-5">
+    <div class="col-12">
+      <div id="motivation" class="anchor-offset"></div>
+      <h2>Motivation</h2>
+
+      <p>Our original <code>initListItems()</code> utility worked well but was architected as a global behavior system. Elements were linked together via selectors:</p>
+
+      <p><code>Add button -> data-template selector -> template -> data-list selector -> list -> count target selector</code></p>
+
+      <p>This created loose coupling throughout the page where the relationship between elements was challenging to discover without understanding all required data attributes.</p>
+
+      <p class="mb-0">Goals of redesign:</p>
+      <ul>
+        <li>Instance based</li>
+        <li>Group ownership under a single root element</li>
+        <li>Eliminate cross-element selectors</li>
+        <li>Configurable via defaults (<em>preferred</em>) + dataset + options</li>
+        <li>Maintain support for nested dynamic lists</li>
+        <li>Preserve server-rendered templates as the source of truth</li>
+        <li>Minimal, simple API</li>
+      </ul>
+    </div>
+
+    <div class="col-12 mt-3">
+      <div id="philosophy" class="anchor-offset"></div>
+      <h2>Design Philosophy</h2>
+
+      <h4>Decorate a root</h4>
+      <p>Instead of connecting independent DOM elements together, ListManager decorates a single root element.</p>
+
+      <p><code>new ListManager('#widget-list');</code></p>
+
+      <p>Everything inside that root becomes part of the component.</p>
+
+      <code>
+        ListManager Root<br>
+        ├── Add button (data-list-add) <br>
+        ├── Remove button (data-list-remove) <br>
+        ├── List count display (data-list-count) <br>
+        ├── Item number display (data-list-item-number) <br>
+        ├── List (data-list) - <b>required</b><br>
+        └── Item Template (&lt;template&gt;) - <b>required</b>
+      </code>
+
+      <h4 class="mt-4">Templates remain server rendered</h4>
+      <p>ListManager intentionally does not generate HTML; the server remains the source of truth. A standard <code>&lt;template&gt;</code> contains the markup.</p>
+
+      <h4 class="mt-4">Soft delete (not DOM removal) if flagged</h4>
+      <p>Persisted records often cannot simply be removed from the DOM. Instead, add <code>data-list-flag-delete</code> to a hidden input to set that value to <code>true</code> when removed from the list.</p>
+
+      <p><code>&lt;input type="hidden" data-list-flag-delete name="widgets[0].deleted"&gt;</code></p>
+
+      <p>The server can then process deletions based on this flag being submitted.</p>
+
+      <p>Non-persisted items are removed from the DOM entirely.</p>
+
+
+      <h4 class="mt-4">Ownership boundaries</h4>
+      <p>ListManagers may be nested. A ListManager only owns descendants whose nearest ListManager ancestor is itself.</p>
+
+      <hr/>
+    </div>
+
+    <div class="col-12 mt-3">
+      <div id="examples" class="anchor-offset"></div>
+      <h2>Examples</h2>
+
+      <div class="alert alert-warning mt-5">
+        <h4>Remember: Single Source of Truth</h4>
+
+        <p>The examples show only the HTML used in list management. In practice, we'd use a reusable server-side component (e.g., JSP/JTE tag) to define and render a single item. The item would be rendered into one of two locations based on whether the item is existing or new.</p>
+
+        <ul>
+          <li>Existing items - in the <code>data-list</code> from a <code>forEach</code> looping over items in the view model and passing them into a tag to render.</li>
+          <li>New items - within the <code>&lt;template&gt;</code> via the same tag but without an item (using a placeholder index string, <code>{index}</code>, if needed).</li>
+        </ul>
+
+        <p>Doing this ensures there is a <b>single source of truth</b> as to how a list item is represented in HTML.</p>
+        <p>The duplication you see in this example HTML should <b>not</b> be present in the server-side templates used to construct the markup.</p>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="simple-list" class="anchor-offset"></div>
+      <h3>Simple List</h3>
+
+      <div class="alert alert-info">
+        <h4><code>List&lt;String&gt;</code></h4>
+        <p>A simple list could be a persisted list of strings annoated with <code>@ElementCollection</code> or primitive values on a DTO list. Because we are dealing with just values, indexes are not needed nor is sending a delete flag to the server.</p>
+        <p>If all items are removed from the list, however, we need a way to inform the server that the list should be cleared. In Spring MVC, we do that using a <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/WebDataBinder.html#DEFAULT_FIELD_MARKER_PREFIX">field marker prefix</a> (underscore <code>_</code> by default).</p>
+        <p>Try submitting an empty list in the example below. The presence of the <code>_names</code> parameter without additional <code>names</code> singals to Spring that the list is empty.</p>
+      </div>
+
+      <p>This example shows sending the server a list of strings having the request parameter name <code>names</code>.</p>
+      <p>Existing items are rendered within the <code>data-list</code>* attributed container element.</p>
+      <p>New items are defined by the <code>&lt;template&gt;</code> markup.</p>
+      <p>An item is expected to have a single parent element (i.e., a single item should not contain sibling elements).</p>
+
+      <p>*<small><code>[data-list]</code> is the default list attribute selector.</small></p>
+
+      <form action="#simple-list" method="GET">
+        <div class="row justify-content-center mb-3">
+          <div class="col-6 col-xl-4">
+            <div class="card bg-body-tertiary">
+              <div class="card-body">
+                <div class="card" id="simple-list-manager">
+                  <div class="card-header d-flex align-items-center">
+                    <h6 class="flex-fill mb-0">Names <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                    <!--Spring MVC field marker prefix. Clears the list server-side when all items are removed and nothing would normally be sent to the server. -->
+                    <input type="hidden" name="_names" value="on">
+
+                    <a href="javascript:void(0);" data-list-add>
+                      <i class="fa-solid fa-plus text-success"></i>
+                    </a>
+
+                    <template>
+                      <div class="list-group-item d-flex gap-2">
+                        <span data-list-item-number></span>
+                        <input type="text" class="form-control" name="names" placeholder="enter name">
+
+                        <button type="button" class="btn btn-outline-danger" data-list-remove>
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div data-list class="list-group list-group-flush">
+                    <div class="list-group-item d-flex gap-2">
+                      <span data-list-item-number></span>
+                      <input type="text" class="form-control" name="names" placeholder="enter name">
+
+                      <button type="button" class="btn btn-outline-danger" data-list-remove>
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+                  <div class="list-group list-group-flush">
+                    <div id="show-params-simple-list" class="list-group-item"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="alert alert-info">
+        <h4>ListManager API</h4>
+        <p>ListManager exposes public methods to be used programmatically. Its API.</p>
+        <p>Clicking the links below invokes the corresponding methods on the ListManager instance backing the simple list example shown above.</p>
+        <p>
+          <a href="javascript:void(0);" id="simple-list-add">add()</a><br>
+          <a href="javascript:void(0);" id="simple-list-remove">remove()</a> <small><em>first item</em></small><br>
+          <a href="javascript:void(0);" id="simple-list-refresh">refresh()</a><br>
+          <a href="javascript:void(0);" id="simple-list-items">items()</a><br>
+          <a href="javascript:void(0);" id="simple-list-count">count()</a><br>
+          <a href="javascript:void(0);" id="simple-list-destroy">destroy()</a><br>
+        </p>
+
+        <div class="mb-3"><pre><code id="dev-html-code"></code></pre></div>
+
+        <p><em>Using the ListManager API should be rare. The intended usage is to decorate a root element (e.g., <code>data-isp-toggle="list-manager"</code>) and interact with the list via (add/remove) click events. View this page's source to see the API usage details.</em></p>
+      </div>
+
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template0" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template0" data-code-type="xml"></code></pre>
+          <template id="template0">
+            <div class="card" id="simple-list-manager">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Names <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                <!--Spring MVC field marker prefix. -->
+                <!-- This informs Spring to clear the 'names' list when all items are removed (and nothing would normally be sent to the server). -->
+                <input type="hidden" name="_names" value="on">
+
+                <!--Add button-->
+                <a href="javascript:void(0);" data-list-add>
+                  <i class="fa-solid fa-plus text-success"></i>
+                </a>
+
+                <!--Template (new items) -->
+                <template>
+                  <div class="list-group-item d-flex gap-2">
+
+                    <!-- Item number -->
+                    <span data-list-item-number></span>
+                    <input type="text" class="form-control" name="names" placeholder="enter name">
+
+                    <!-- Remove button -->
+                    <button type="button" class="btn btn-outline-danger" data-list-remove>
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!--List items (existing or, as in this example, prepped items) -->
+              <div data-list class="list-group list-group-flush">
+                <div class="list-group-item d-flex gap-2">
+
+                  <!-- Item number -->
+                  <span data-list-item-number></span>
+                  <input type="text" class="form-control" name="names" placeholder="enter name">
+
+                  <!-- Remove button -->
+                  <button type="button" class="btn btn-outline-danger" data-list-remove>
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+              <div class="list-group list-group-flush">
+                <div id="show-params-simple-list" class="list-group-item"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="indexed-list" class="anchor-offset"></div>
+      <h3>Indexed List</h3>
+
+      <div class="alert alert-info">
+        <h4><code>@OneToMany List&lt;Entity&gt;</code></h4>
+        <p>An indexed list is often a persisted <code>@OneToMany</code> list on a parent entity. Because items are persisted, they must be explicitly removed server-side using the delete flag usually tracked using an <code>@Transient private boolean deleted;</code> property on the entity itself.</p>
+      </div>
+
+      <p>In this example we are not sending just a list of strings to the server, but values associated to an indexed (persisted) item (e.g., <code>serial</code> and <code>title</code> properties on a <code>Widget</code> in this example).</p>
+      <p>Because existing items are persisted in the database, a hidden input having a <code>data-list-flag-delete</code> attribute is used to flag deletion. This instructs the ListManager to hide the list item and set the <code>data-list-flag-delete</code> input's value to <code>true</code> (a soft-delete). The actual deletion of the item (e.g., delete database record) happens server-side.</p>
+      <p>It is best to only include <code>data-list-flag-delete</code> on existing, persisted items. Flagging a delete on a new item is unnecessary; just don't submit that item to the server. This is exactly how ListManager behaves when it removes an item not having a <code>data-list-flag-delete</code> input element--that item is removed from the DOM and nothing is sent to the server.</p>
+      <p>Look at the difference upon submission between removing an <em>existing</em> versus <em>new</em> item from the list.</p>
+
+
+
+
+      <form action="#indexed-list" method="GET">
+        <div class="row justify-content-center mb-3">
+          <div class="col-6 col-xl-4">
+            <div class="card bg-body-tertiary">
+              <div class="card-body">
+                <div class="card" data-isp-toggle="list-manager">
+                  <div class="card-header d-flex align-items-center">
+                    <h6 class="flex-fill mb-0">Widgets <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                    <a href="javascript:void(0);" data-list-add>
+                      <i class="fa-solid fa-plus text-success"></i>
+                    </a>
+
+                    <template>
+                      <div class="list-group-item d-flex gap-2">
+                        <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
+
+                        <span data-list-item-number></span>
+                        <input type="text" class="form-control" name="widgets[{index}].serial" placeholder="serial">
+                        <input type="text" class="form-control" name="widgets[{index}].title" placeholder="title">
+
+                        <button type="button" class="btn btn-outline-danger" data-list-remove>
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div data-list class="list-group list-group-flush">
+                    <div class="list-group-item d-flex gap-2">
+                      <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
+                      <input type="hidden" name="widgets[0].deleted" data-list-flag-delete>
+
+                      <span data-list-item-number></span>
+                      <input type="text" class="form-control" name="widgets[0].serial" placeholder="serial" value="1A-123">
+                      <input type="text" class="form-control" name="widgets[0].title" placeholder="title" value="NexusCore">
+
+                      <button type="button" class="btn btn-outline-danger" data-list-remove>
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+
+                    <div class="list-group-item d-flex gap-2">
+                      <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
+                      <input type="hidden" name="widgets[1].deleted" data-list-flag-delete>
+
+                      <span data-list-item-number></span>
+                      <input type="text" class="form-control" name="widgets[1].serial" placeholder="serial" value="1A-255">
+                      <input type="text" class="form-control" name="widgets[1].title" placeholder="title" value="EchoMesh">
+
+                      <button type="button" class="btn btn-outline-danger" data-list-remove>
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+                  <div class="list-group list-group-flush">
+                    <div id="show-params-indexed-list" class="list-group-item"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template1" data-code-type="xml"></code></pre>
+          <template id="template1">
+            <div class="card" data-isp-toggle="list-manager">
+              <div class="card-header d-flex align-items-center">
+
+                <!-- Title with list count -->
+                <h6 class="flex-fill mb-0">Widgets <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                <!--Add button-->
+                <a href="javascript:void(0);" data-list-add>
+                  <i class="fa-solid fa-plus text-success"></i>
+                </a>
+
+                <!--Template (new items) -->
+                <template>
+                  <div class="list-group-item d-flex gap-2">
+                    <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
+
+                    <!-- Item number -->
+                    <span data-list-item-number></span>
+                    <input type="text" class="form-control" name="widgets[{index}].serial" placeholder="serial">
+                    <input type="text" class="form-control" name="widgets[{index}].title" placeholder="title">
+
+                    <!--Remove button-->
+                    <button type="button" class="btn btn-outline-danger" data-list-remove>
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!--List items (2 existing items; explicit indexes: 0 and 1) -->
+              <div data-list class="list-group list-group-flush">
+
+                <!-- item 0 -->
+                <div class="list-group-item d-flex gap-2">
+                  <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
+                  <input type="hidden" name="widgets[0].deleted" data-list-flag-delete>
+
+                  <!-- Item number -->
+                  <span data-list-item-number></span>
+                  <input type="text" class="form-control" name="widgets[0].serial" placeholder="serial" value="1A-125">
+                  <input type="text" class="form-control" name="widgets[0].title" placeholder="title" value="NexusCore">
+
+                  <!--Remove button-->
+                  <button type="button" class="btn btn-outline-danger" data-list-remove>
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+
+                <!-- item 1 -->
+                <div class="list-group-item d-flex gap-2">
+                  <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
+                  <input type="hidden" name="widgets[1].deleted" data-list-flag-delete>
+
+                  <!-- Item number -->
+                  <span data-list-item-number></span>
+                  <input type="text" class="form-control" name="widgets[1].serial" placeholder="serial" value="1A-255">
+                  <input type="text" class="form-control" name="widgets[1].title" placeholder="title" value="EchoMesh">
+
+                  <!--Remove button-->
+                  <button type="button" class="btn btn-outline-danger" data-list-remove>
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="insertion-location" class="anchor-offset"></div>
+      <h3>Insertion Location</h3>
+
+      <p>Item insertion can be either at the <code>top</code> or <code>bottom</code> of the list. This is controlled by the <code>data-list-insertion</code> attribute.</p>
+      <p>This example also demonstrates overriding default selector values using data attributes. <em class="text-warning">Don't do this unless there is a real need. Otherwise use the defaults.</em></p>
+
+      <div class="alert alert-info mb-3">
+        Ensure indexes are reversed for existing persisted items (i.e., 0 at the bottom and incrementing up). This avoids issues when you reload the page.
+      </div>
+
+      <form action="#top-insert" method="GET">
+        <div class="row justify-content-center mb-3">
+          <div class="col-6 col-xl-4">
+            <div class="card bg-body-tertiary">
+              <div class="card-body">
+                <div class="card" data-isp-toggle="list-manager" data-list-insertion="top" data-list-selector="#names-list" data-list-add-selector="[data-add]" data-list-remove-selector="[data-remove]">
+                  <div class="card-header d-flex align-items-center">
+                    <h6 class="flex-fill mb-0">Names <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                    <input type="hidden" name="_names" value="on">
+
+                    <a href="javascript:void(0);" data-add>
+                      <i class="fa-solid fa-plus text-success"></i>
+                    </a>
+
+                    <template>
+                      <div class="list-group-item d-flex gap-2">
+                        <span data-list-item-number></span>
+                        <input type="text" class="form-control" name="names">
+
+                        <button type="button" class="btn btn-outline-danger" data-remove>
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div id="names-list" class="list-group list-group-flush">
+                    <div class="list-group-item d-flex gap-2">
+                      <span data-list-item-number></span>
+                      <input type="text" class="form-control" name="names">
+
+                      <button type="button" class="btn btn-outline-danger" data-remove>
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+                  <div class="list-group list-group-flush">
+                    <div id="show-params-top-insert" class="list-group-item"></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template2" data-code-type="xml"></code></pre>
+          <template id="template2">
+            <div class="card" data-isp-toggle="list-manager" data-list-insertion="top" data-list-selector="#names" data-list-add-selector="[data-add]" data-list-remove-selector="[data-remove]">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Names <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                <input type="hidden" name="_names" value="on">
+
+                <a href="javascript:void(0);" data-add>
+                  <i class="fa-solid fa-plus text-success"></i>
+                </a>
+
+                <template>
+                  <div class="list-group-item d-flex gap-2">
+                    <span data-list-item-number></span>
+                    <input type="text" class="form-control" name="names">
+
+                    <button type="button" class="btn btn-outline-danger" data-remove>
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <div id="names" class="list-group list-group-flush">
+                <div class="list-group-item d-flex gap-2">
+                  <span data-list-item-number></span>
+                  <input type="text" class="form-control" name="names">
+
+                  <button type="button" class="btn btn-outline-danger" data-remove>
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+              <div class="list-group list-group-flush">
+                <div id="show-params-top-insert" class="list-group-item"></div>
+              </div>
+
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-12">
+      <div id="flag-delete" class="anchor-offset"></div>
+      <h3>Flagged Delete</h3>
+      <p>A flagged delete is a "soft" delete. The item is not removed from the DOM, only hidden. Add the data attribute <code>data-flag-delete</code> on input elements to be valued "true" when deleted to communicate to the server that a persisted item should be deleted.</p>
+      <p>In this example, the first item is already persisted and therefore a hidden input named <code>numbers[0].deleted</code> is given the <code>data-flag-delete</code> attribute which will be true if removed from the list.</p>
+
+      <form action="#flag-delete" method="GET">
+
+        <div class="row justify-content-center mb-3">
+          <div class="col-6 col-xl-4">
+            <div class="card bg-body-tertiary">
+              <div class="card-body">
+
+                <div class="card" data-isp-toggle="list-manager">
+                  <div class="card-header d-flex align-items-center">
+                    <h6 class="flex-fill mb-0">Phone Numbers <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                    <!--Add Button-->
+                    <a href="javascript:void(0);" data-list-add>
+                      <i class="fa-solid fa-plus text-success"></i>
+                    </a>
+
+                    <!--Template-->
+                    <template>
+                      <div class="list-group-item">
+                        <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
+
+                        <div class="d-flex gap-2">
+                          <span data-list-item-number></span>
+                          <input type="tel" class="form-control" name="numbers[{index}].number" placeholder="number">
+                          <input type="text" class="form-control" name="numbers[{index}].type" placeholder="type">
+
+                          <!--Delete Button-->
+                          <button type="button" class="btn btn-outline-danger" data-list-remove>
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+
+                  <!--List Items-->
+                  <div data-list class="list-group list-group-flush">
+                    <div class="list-group-item">
+                      <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
+                      <input type="hidden" name="numbers[0].deleted" data-list-flag-delete>
+
+                      <div class="d-flex gap-2">
+                        <span data-list-item-number></span>
+                        <input type="tel" class="form-control" name="numbers[0].number" value="208-884-7500">
+                        <input type="text" class="form-control" name="numbers[0].type" value="Work">
+
+                        <!--Delete Button-->
+                        <button type="button" class="btn btn-outline-danger" data-list-remove>
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+                  <div data-list class="list-group list-group-flush">
+                    <div id="show-params-flag-delete" class="list-group-item">
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template3" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
+          <template id="template3">
+            <div class="card" data-isp-toggle="list-manager">
+              <div class="card-header d-flex align-items-center">
+                <h6 class="flex-fill mb-0">Phone Numbers <span class="badge text-bg-secondary" data-list-count></span></h6>
+
+                <!--Add to list-->
+                <a href="javascript:void(0);" data-list-add>
+                  <i class="fa-solid fa-plus text-success"></i>
+                </a>
+
+                <!--Template-->
+                <template>
+                  <div class="list-group-item">
+                    <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
+
+                    <div class="d-flex gap-2">
+                      <input type="tel" class="form-control" name="numbers[{index}].number" placeholder="number">
+                      <input type="text" class="form-control" name="numbers[{index}].type" placeholder="type">
+
+                      <!--Delete Button-->
+                      <button type="button" class="btn btn-outline-danger" data-list-remove>
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <!-- List -->
+              <div data-list class="list-group list-group-flush">
+                <div class="list-group-item">
+                  <!-- Soft-delete. Hidden input in persisted items; marked with data-list-flag-delete -->
+                  <input type="hidden" name="numbers[0].deleted" data-list-flag-delete>
+
+                  <div class="d-flex gap-2">
+                    <input type="tel" class="form-control" name="numbers[0].number" value="208-884-7500">
+                    <input type="text" class="form-control" name="numbers[0].type" value="Work">
+
+                    <!--Remove from list -->
+                    <button type="button" class="btn btn-outline-danger" data-list-remove>
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-12">
+      <div id="nested" class="anchor-offset"></div>
+      <h3>Nested Lists</h3>
+
+      <p>Add/remove events are scoped to their immediate, owning ListManager. Nested lists should be given a unique index placeholder (via <code>data-list-index-placeholder</code> on the root element).</p>
+      <p>Note: newly added items which themselves contain an element intended to be a ListManager need to be initialized as ListManager instances when added to the DOM. The utils.js method <code>initAll</code> already does this by default registering a <code>MutationObserver</code> to run the init callback on any matching elements added to the DOM.</p>
+
+      <form action="#nested" method="GET">
+        <div class="row justify-content-center mb-3">
+          <div class="col-6 col-xxl-4">
+            <div class="card bg-body-tertiary">
+              <div class="card-body">
+                <div class="card" data-isp-toggle="list-manager">
+                  <div class="card-header d-flex align-items-center">
+                    <h4 class="flex-fill mb-0">Contacts <span class="badge text-bg-secondary" data-list-count></span></h4>
+
+                    <a href="javascript:void(0);" data-list-add>
+                      <i class="fa-solid fa-user-plus text-success"></i>
+                    </a>
+
+                    <template>
+                      <div class="list-group-item d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between">
+                          <label class="h5">Contact <span data-list-item-number></span></label>
+                          <a href="javascript:void(0);" data-list-remove><i class="fa-solid fa-user-xmark text-danger"></i></a>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                          <input type="text" class="form-control" name="contacts[{index}].name" placeholder="name">
+                        </div>
+
+                        <div data-isp-toggle="list-manager" data-list-index-placeholder="{phone-index}" class="d-flex flex-column gap-2">
+                          <div class="d-flex align-items-center">
+                            <label class="flex-fill">Phone <span data-list-count></span> <a href="javascript:void(0);" data-list-add><i class="fa-solid fa-plus text-success"></i></a></label>
+
+                            <template>
+                              <div class="input-group">
+                                <input type="tel" class="form-control" name="contacts[{index}].phone[{phone-index}].number" placeholder="###-###-####">
+                                <button type="button" class="btn btn-link" data-list-remove>
+                                  <i class="fa-solid fa-x text-danger"></i>
+                                </button>
+                              </div>
+                            </template>
+                          </div>
+
+                          <div data-list class="d-flex flex-column gap-2">
+                            <div class="input-group">
+                              <input type="tel" class="form-control" name="contacts[{index}].phone[0].number" placeholder="###-###-####">
+                              <button type="button" class="btn btn-link" data-list-remove>
+                                <i class="fa-solid fa-x text-danger"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </template>
+                  </div>
+
+                  <div data-list class="list-group list-group-flush">
+                    <div class="list-group-item d-flex flex-column gap-2">
+
+                      <div class="d-flex justify-content-between">
+                        <label class="h5">Contact <span data-list-item-number></span></label>
+                        <a href="javascript:void(0);" data-list-remove><i class="fa-solid fa-user-xmark text-danger"></i></a>
+                      </div>
+
+                      <div class="d-flex gap-2">
+                        <input type="text" class="form-control" name="contacts[0].name" placeholder="name">
+                      </div>
+
+                      <div data-isp-toggle="list-manager" data-list-index-placeholder="{phone-index}" class="d-flex flex-column gap-2">
+                        <div class="d-flex align-items-center">
+                          <label class="flex-fill">Phone <span data-list-count></span> <a href="javascript:void(0);" data-list-add><i class="fa-solid fa-plus text-success"></i></a></label>
+
+                          <template>
+                            <div class="input-group">
+                              <input type="tel" class="form-control" name="contacts[0].phone[{phone-index}].number" placeholder="###-###-####">
+                              <button type="button" class="btn btn-link" data-list-remove>
+                                <i class="fa-solid fa-x text-danger"></i>
+                              </button>
+                            </div>
+                          </template>
+                        </div>
+
+                        <div data-list class="d-flex flex-column gap-2">
+                          <div class="input-group">
+                            <input type="tel" class="form-control" name="contacts[0].phone[0].number" placeholder="###-###-####">
+                            <button type="button" class="btn btn-link" data-list-remove>
+                              <i class="fa-solid fa-x text-danger"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+
+                  <div data-list class="list-group list-group-flush">
+                    <div id="show-params-nested" class="list-group-item">
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template4" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template4" data-code-type="xml"></code></pre>
+          <template id="template4">
+            <!-- Contacts ListManager -->
+            <div class="card" data-isp-toggle="list-manager">
+              <div class="card-header d-flex align-items-center">
+                <h4 class="flex-fill mb-0">Contacts <span class="badge text-bg-secondary" data-list-count></span></h4>
+
+                <a href="javascript:void(0);" data-list-add>
+                  <i class="fa-solid fa-user-plus text-success"></i>
+                </a>
+
+                <template>
+                  <div class="list-group-item d-flex flex-column gap-2">
+                    <div class="d-flex justify-content-between">
+                      <label class="h5">Contact <span data-list-item-number></span></label>
+                      <a href="javascript:void(0);" data-list-remove><i class="fa-solid fa-user-xmark text-danger"></i></a>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                      <input type="text" class="form-control" name="contacts[{index}].name" placeholder="name">
+                    </div>
+
+                    <!-- Phone number ListManager (nested) for new items; specifies unique index placeholder -->
+                    <div data-isp-toggle="list-manager" data-list-index-placeholder="{phone-index}" class="d-flex flex-column gap-2">
+                      <div class="d-flex align-items-center">
+                        <label class="flex-fill">Phone <span data-list-count></span> <a href="javascript:void(0);" data-list-add><i class="fa-solid fa-plus text-success"></i></a></label>
+
+                        <template>
+                          <div class="input-group">
+                            <input type="tel" class="form-control" name="contacts[{index}].phone[{phone-index}].number" placeholder="###-###-####">
+                            <button type="button" class="btn btn-link" data-list-remove>
+                              <i class="fa-solid fa-x text-danger"></i>
+                            </button>
+                          </div>
+                        </template>
+                      </div>
+
+                      <div data-list class="d-flex flex-column gap-2">
+                        <div class="input-group">
+                          <input type="tel" class="form-control" name="contacts[{index}].phone[0].number" placeholder="###-###-####">
+                          <button type="button" class="btn btn-link" data-list-remove>
+                            <i class="fa-solid fa-x text-danger"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </template>
+              </div>
+
+              <div data-list class="list-group list-group-flush">
+                <div class="list-group-item d-flex flex-column gap-2">
+
+                  <div class="d-flex justify-content-between">
+                    <label class="h5">Contact <span data-list-item-number></span></label>
+                    <a href="javascript:void(0);" data-list-remove><i class="fa-solid fa-user-xmark text-danger"></i></a>
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <input type="text" class="form-control" name="contacts[0].name" placeholder="name">
+                  </div>
+
+                  <!-- Phone number ListManager (nested) for existing items; specifies unique index placeholder -->
+                  <div data-isp-toggle="list-manager" data-list-index-placeholder="{phone-index}" class="d-flex flex-column gap-2">
+                    <div class="d-flex align-items-center">
+                      <label class="flex-fill">Phone <span data-list-count></span> <a href="javascript:void(0);" data-list-add><i class="fa-solid fa-plus text-success"></i></a></label>
+
+                      <template>
+                        <div class="input-group">
+                          <input type="tel" class="form-control" name="contacts[0].phone[{phone-index}].number" placeholder="###-###-####">
+                          <button type="button" class="btn btn-link" data-list-remove>
+                            <i class="fa-solid fa-x text-danger"></i>
+                          </button>
+                        </div>
+                      </template>
+                    </div>
+
+                    <div data-list class="d-flex flex-column gap-2">
+                      <div class="input-group">
+                        <input type="tel" class="form-control" name="contacts[0].phone[0].number" placeholder="###-###-####">
+                        <button type="button" class="btn btn-link" data-list-remove>
+                          <i class="fa-solid fa-x text-danger"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-12">
+      <div id="options" class="anchor-offset"></div>
+      <h3>Options</h3>
+
+      <p>Setting names are prefixed with <code>list</code> to help distinguish them when used as data attributes (their intended primary usage).</p>
+
+      <p>
+      <code>
+        &lt;div data-isp-toggle="list-manager"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-transition-time=".5"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-index-placeholder="{i}"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-selector="[data-widgets]"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-insertion="top"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-add-selector="[data-add-widget]"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-remove-selector="[data-remove-widget]"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-count-selector="[data-widget-count]"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-item-number-selector="[data-widget-number]"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-flag-delete-selector="[data-widget-flag-delete]"&gt;...
+      </code>
+      </p>
+
+      <p class="text-warning fst-italic">Prefer the defaults in almost all cases.</p>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>listTransitionTime</code></td>
+          <td>number</td>
+          <td><code>.25</code></td>
+          <td>Duration of add/remove animations in seconds.</td>
+        </tr>
+        <tr>
+          <td><code>listIndexPlaceholder</code></td>
+          <td>string</td>
+          <td><code>{index}</code></td>
+          <td>Placeholder text replaced with the next item index when cloning template content.</td>
+        </tr>
+        <tr>
+          <td><code>listSelector</code></td>
+          <td>string</td>
+          <td><code>[data-list]</code></td>
+          <td>Selector used to locate the list container within the root element.</td>
+        </tr>
+        <tr>
+          <td><code>listInsertion</code></td>
+          <td>'top'|'bottom'</td>
+          <td><code>'bottom'</code></td>
+          <td>Where newly added items are inserted into the list.</td>
+        </tr>
+        <tr>
+          <td><code>listAddSelector</code></td>
+          <td>string</td>
+          <td><code>'[data-list-add]'</code></td>
+          <td>Selector used to locate add buttons within the root element.</td>
+        </tr>
+        <tr>
+          <td><code>listRemoveSelector</code></td>
+          <td>string</td>
+          <td><code>'[data-list-remove]'</code></td>
+          <td>Selector used to locate remove buttons within the root element.</td>
+        </tr>
+        <tr>
+          <td><code>listCountSelector</code></td>
+          <td>string</td>
+          <td><code>'[data-list-count]'</code></td>
+          <td>Selector used to locate elements that display the total visible item count.</td>
+        </tr>
+        <tr>
+          <td><code>listItemNumberSelector</code></td>
+          <td>string</td>
+          <td><code>'[data-list-item-number]'</code></td>
+          <td>Selector used to locate elements that display an individual item's visible position.</td>
+        </tr>
+        <tr>
+          <td><code>listFlagDeleteSelector</code></td>
+          <td>string</td>
+          <td><code>'[data-list-flag-delete]'</code></td>
+          <td>Selector used to locate hidden inputs that should be set when an item is removed (soft-deleted).</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <div id="methods" class="anchor-offset"></div>
+      <h3>Methods</h3>
+
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th>Method</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>add</code></td>
+          <td>Add a new item to the list based on the <code>&lt;template&gt;</code> markup.</td>
+          <td><code>manager.add();</code></td>
+        </tr>
+        <tr>
+          <td><code>remove</code></td>
+          <td>Remove a given item from the list.</td>
+          <td><code>manager.remove(item);</code></td>
+        </tr>
+        <tr>
+          <td><code>refresh</code></td>
+          <td>Recounts items refreshing the total count and item numbers.</td>
+          <td><code>manager.refresh();</code></td>
+        </tr>
+        <tr>
+          <td><code>items</code></td>
+          <td>Returns all visible list items.</td>
+          <td><code>const items = manager.items;</code></td>
+        </tr>
+        <tr>
+          <td><code>count</code></td>
+          <td>Returns count of all visible list items.</td>
+          <td><code>const count = manager.count();</code></td>
+        </tr>
+        <tr>
+          <td><code>destroy</code></td>
+          <td>Removes click event listener attached to the root element.</td>
+          <td><code>manager.destroy();</code></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+  <script type="module">
+    import { initAll } from "../js/utils.js";
+    import { ListManager } from "../js/ListManager.js";
+    import { initExamples } from "./assets/modules.js";
+
+    (function main() {
+      doubleInit();
+      initExamples();
+      displayUrlParams();
+      demoApi();
+    })();
+
+    function displayUrlParams() {
+      const hash = window.location.hash?.slice(1);
+      const showParamsContainer = document.getElementById("show-params-" + hash);
+      if (showParamsContainer) {
+        const params = new URLSearchParams(window.location.search);
+        params.forEach((value, key) => showParamsContainer.innerHTML += `<div>${key}=${value}</div>`);
+      }
+    }
+
+    function doubleInit() {
+      initAll('[data-isp-toggle="list-manager"]', el => new ListManager(el));
+      initAll('[data-isp-toggle="list-manager"]', el => new ListManager(el));
+    }
+
+    function demoApi() {
+      const manager = new ListManager(document.getElementById("simple-list-manager"));
+      const outputEl = document.getElementById('dev-html-code')
+      document.getElementById("simple-list-add").addEventListener("click", () => manager.add());
+      document.getElementById("simple-list-remove").addEventListener("click", () => manager.remove(manager.items()[0]));
+      document.getElementById("simple-list-refresh").addEventListener("click", () => manager.refresh());
+      document.getElementById("simple-list-count").addEventListener("click", () => outputEl.innerHTML = manager.count());
+      document.getElementById("simple-list-items").addEventListener("click", () => outputEl.textContent = manager.items().map(item => item.outerHTML).join("\n\n"));
+      document.getElementById("simple-list-destroy").addEventListener("click", () => manager.destroy());
+    }
+  </script>
+</body>
+</html>

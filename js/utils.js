@@ -111,4 +111,66 @@ function dirtyCheck() {
   document.addEventListener('submit', dirtySubmitListener);
 }
 
-export { getContext, initAll, initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck };
+/**
+ * Returns an options object built from defaults, data attributes, and explicit options.
+ *
+ * Precedence:
+ * defaults < data attributes < explicit options
+ *
+ * @param {HTMLElement} el
+ * @param {Object} defaults
+ * @param {Object} [options]
+ * @returns {Object}
+ */
+function buildSettings(el, defaults, options = {}) {
+  return {
+    ...defaults,
+    ...parseDataset(el, defaults),
+    ...options
+  };
+}
+
+/**
+ * Parses supported data attributes and coerces values to the types defined by the defaults object.
+ *
+ * @param {HTMLElement} el
+ * @param {Object} defaults
+ * @returns {Object}
+ */
+function parseDataset(el, defaults) {
+  return Object.fromEntries(
+    Object.entries(el.dataset)
+      .filter(([key]) => key in defaults)
+      .map(([key, value]) => [key, coerce(value, defaults[key])])
+  );
+}
+
+/**
+ * Coerces a string to the type of a default value.
+ *
+ * @param {string} value
+ * @param {*} defaultValue
+ * @returns {*}
+ */
+function coerce(value, defaultValue) {
+  if (typeof defaultValue === 'number') {
+    return Number(value);
+  }
+  else if (typeof defaultValue === 'boolean') {
+    return value === 'true';
+  }
+
+  return value;
+}
+
+export {
+  getContext,
+  initAll,
+  initModalAutofocus,
+  initCollapseAutoFocus,
+  initModalShowOnError,
+  dirtyCheck,
+  buildSettings,
+  parseDataset,
+  coerce
+};

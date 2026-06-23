@@ -52,7 +52,8 @@ function initExamples() {
 
   function getTemplateText(selector) {
     const template = document.querySelector(selector).innerHTML;
-    const whitespace = template.match(/^\n(\s*)/)[1];
+    const match = template.match(/^\n(\s*)/);
+    const whitespace = match ? match[1] : '';
     const html = template.replaceAll('\n' + whitespace, '\n').trim();
     return html.replaceAll('=""', '');
   }
