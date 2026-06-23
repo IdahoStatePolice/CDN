@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * RowClick settings object.
  *
@@ -31,19 +33,20 @@ class RowClick {
    * The default settings for a RowClick.
    * @type {RowClickSettings}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     childSelector: ':scope > :not([data-no-click])',
     href: undefined,
     target: '_self',
     modalTarget: undefined,
     formTarget: undefined
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their RowClick objects.
-   * @type {Map<HTMLElement, RowClick>}
+   * @type {WeakMap<HTMLElement, RowClick>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
+
 
   /**
    * The root HTML element associated with this row click.
@@ -64,7 +67,6 @@ class RowClick {
   #childEls;
 
   /**
-   * Settings for the row click.
    * @type {RowClickSettings}
    */
   #settings;
@@ -88,11 +90,11 @@ class RowClick {
     this.#rowEl = typeof el === 'string' ? document.querySelector(el) : el;
     this.#modalClass = ModalClass;
 
-    if (RowClick.#initializedEls.has(this.#rowEl)) {
-      RowClick.#initializedEls.get(this.#rowEl).destroy();
+    if (RowClick.#INSTANCES.has(this.#rowEl)) {
+      RowClick.#INSTANCES.get(this.#rowEl).destroy();
     }
 
-    this.#settings = Object.assign({}, RowClick.#defaultSettings, options, this.#rowEl.dataset);
+    this.#settings = resolveSettings(RowClick.#DEFAULTS, options, this.#rowEl);
     this.#childEls = [...this.#rowEl.querySelectorAll(this.#settings.childSelector)];
 
     for (const childEl of this.#childEls) {
@@ -106,7 +108,7 @@ class RowClick {
       childEl.addEventListener('click', temp.listener);
     }
 
-    RowClick.#initializedEls.set(this.#rowEl, this);
+    RowClick.#INSTANCES.set(this.#rowEl, this);
   }
 
   /**
@@ -117,7 +119,7 @@ class RowClick {
       c.style.cursor = this.#childInitObjects.get(c).cursor;
       c.removeEventListener('click', this.#childInitObjects.get(c).listener);
     });
-    RowClick.#initializedEls.delete(this.#rowEl);
+    RowClick.#INSTANCES.delete(this.#rowEl);
   }
 
   #onClick() {

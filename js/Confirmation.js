@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * Confirmation settings object to configure a new Confirmation object.
  *
@@ -44,7 +46,7 @@ class Confirmation {
    * The default settings for a Confirmation.
    * @type {ConfirmationSettings}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     title: 'Are you sure?',
     body: 'This action may be irreversible.<br><br><b>Are you sure you would like to continue?</b>',
     yesLabel: 'Yes',
@@ -55,13 +57,13 @@ class Confirmation {
     static: false,
     yesCallback: undefined,
     noCallback: undefined,
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their Confirmation objects.
-   * @type {Map<HTMLElement, Confirmation>}
+   * @type {WeakMap<HTMLElement, Confirmation>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
    * Bootstrap 5 Modal class to use for the confirmation modal.
@@ -75,7 +77,6 @@ class Confirmation {
   #el;
 
   /**
-   * Settings for the confirmation.
    * @type {ConfirmationSettings}
    */
   #settings;
@@ -117,11 +118,11 @@ class Confirmation {
     this.#modalClass = modalClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
-    if (Confirmation.#initializedEls.has(this.#el)) {
-      Confirmation.#initializedEls.get(this.#el).destroy();
+    if (Confirmation.#INSTANCES.has(this.#el)) {
+      Confirmation.#INSTANCES.get(this.#el).destroy();
     }
 
-    this.#settings = { ...Confirmation.#defaultSettings, ...options, ...this.#el.dataset };
+    this.#settings = Object.freeze(resolveSettings(Confirmation.#DEFAULTS, options, this.#el));
     this.#eventType = this.#el instanceof HTMLFormElement ? 'submit' : 'click';
 
     this.#eventHandler = e => {
@@ -143,7 +144,7 @@ class Confirmation {
     }
 
     this.#el.addEventListener(this.#eventType, this.#eventHandler);
-    Confirmation.#initializedEls.set(this.#el, this);
+    Confirmation.#INSTANCES.set(this.#el, this);
   }
 
   /**
@@ -151,7 +152,7 @@ class Confirmation {
    */
   destroy() {
     this.#el.removeEventListener(this.#eventType, this.#eventHandler);
-    Confirmation.#initializedEls.delete(this.#el);
+    Confirmation.#INSTANCES.delete(this.#el);
   }
 
   #showConfirmation() {

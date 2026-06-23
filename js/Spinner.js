@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * Must be one of the following:
  * - audio
@@ -270,18 +272,18 @@ class Spinner {
    * The default settings for a Spinner.
    * @type {SpinnerSettings}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     type: undefined,
     position: 'beforeend',
     styles: undefined,
     classes: undefined,
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their Spinner objects.
-   * @type {Map<HTMLElement, Spinner>}
+   * @type {WeakMap<HTMLElement, Spinner>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
    * The root HTML element associated with this spinner.
@@ -314,11 +316,11 @@ class Spinner {
 
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
-    if (Spinner.#initializedEls.has(this.#el)) {
-      Spinner.#initializedEls.get(this.#el).destroy();
+    if (Spinner.#INSTANCES.has(this.#el)) {
+      Spinner.#INSTANCES.get(this.#el).destroy();
     }
 
-    const settings = Object.assign({}, Spinner.#defaultSettings, this.#el.dataset, options);
+    const settings = Object.freeze(resolveSettings(Spinner.#DEFAULTS, options, this.#el));
     const template = Spinner.#templates[settings.type];
 
     if (!template) {
@@ -336,7 +338,7 @@ class Spinner {
       this.#svgEl.setAttribute('class', settings.classes);
     }
 
-    Spinner.#initializedEls.set(this.#el, this);
+    Spinner.#INSTANCES.set(this.#el, this);
   }
 
   /**
@@ -344,7 +346,7 @@ class Spinner {
    */
   destroy() {
     this.#svgEl.remove();
-    Spinner.#initializedEls.delete(this.#el);
+    Spinner.#INSTANCES.delete(this.#el);
   }
 
   /**

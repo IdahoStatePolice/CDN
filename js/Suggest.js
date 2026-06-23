@@ -1,3 +1,4 @@
+import { resolveSettings } from "./utils.js";
 import { Spinner } from "./Spinner.js";
 
 /**
@@ -82,7 +83,7 @@ class Suggest {
    * The default settings for a Suggest.
    * @type {SuggestSettings}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     placeholder: '',
     template: {
       menuEl: '<div class="suggest-menu"></div>',
@@ -98,16 +99,15 @@ class Suggest {
     selectFn: () => {},
     clearFn: () => {},
     enterFn: undefined
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their Suggest objects.
-   * @type {Map<HTMLElement, Suggest>}
+   * @type {WeakMap<HTMLElement, Suggest>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
-   * Settings for this suggest.
    * @type {SuggestSettings}
    */
   #settings;
@@ -161,11 +161,11 @@ class Suggest {
       return;
     }
 
-    if (Suggest.#initializedEls.has(this.#inputEl)) {
-      Suggest.#initializedEls.get(this.#inputEl).destroy();
+    if (Suggest.#INSTANCES.has(this.#inputEl)) {
+      Suggest.#INSTANCES.get(this.#inputEl).destroy();
     }
 
-    this.#settings = Object.assign({}, Suggest.#defaultSettings, options);
+    this.#settings = Object.freeze(resolveSettings(Suggest.#DEFAULTS, options, this.#inputEl));
 
     if (typeof this.#settings.searchFn !== 'function') {
       console.error('Suggest Error: You must define a search function.', this.#settings.searchFn);
@@ -186,10 +186,10 @@ class Suggest {
     this.#inputEl.autocomplete = 'off';
     this.#inputEl.style.zIndex = '0';
 
-    if (Suggest.#initializedEls.size === 0) {
+    if (Suggest.#INSTANCES.size === 0) {
       document.addEventListener('click', Suggest.#documentOnClick);
     }
-    Suggest.#initializedEls.set(this.#inputEl, this);
+    Suggest.#INSTANCES.set(this.#inputEl, this);
   }
 
   /**
@@ -206,8 +206,8 @@ class Suggest {
     revertAttributes(this.#inputEl, 'style', this.#originalAttributes.style);
     revertAttributes(this.#inputEl, 'autocomplete', this.#originalAttributes.autocomplete);
 
-    Suggest.#initializedEls.delete(this.#inputEl);
-    if (Suggest.#initializedEls.size === 0) {
+    Suggest.#INSTANCES.delete(this.#inputEl);
+    if (Suggest.#INSTANCES.size === 0) {
       document.removeEventListener('click', Suggest.#documentOnClick);
     }
 
@@ -469,7 +469,7 @@ class Suggest {
   }
 
   static #documentOnClick(e) {
-    for (const suggest of Suggest.#initializedEls.values()) {
+    for (const suggest of Suggest.#INSTANCES.values()) {
       if (!suggest.#inputEl.contains(e.target) && !suggest.#menuEl.contains(e.target)) {
         [...suggest.#menuEl.children].forEach(el => el.classList.remove('hover'));
         suggest.hide();

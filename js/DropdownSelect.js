@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * DropdownSelect settings object to configure a new DropdownSelect object.
  *
@@ -38,21 +40,21 @@
 class DropdownSelect {
   /**
    * The default settings for a DropdownSelect.
-   * @type {DropdownSelectSettings}
+   * @type {Readonly<DropdownSelectSettings>}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     summarizeMultiple: false,
     showFilter: false,
     filterBehavior: 'only-hidden',
     showClear: false,
     showSelectAll: false
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their DropdownSelect objects.
-   * @type {Map<HTMLElement, DropdownSelect>}
+   * @type {WeakMap<HTMLElement, DropdownSelect>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /** @type {HTMLSelectElement} */
   #select;
@@ -102,11 +104,11 @@ class DropdownSelect {
       throw new Error("DropdownSelect requires an HTMLSelectElement");
     }
 
-    if (DropdownSelect.#initializedEls.has(this.#select)) {
-      DropdownSelect.#initializedEls.get(this.#select).destroy();
+    if (DropdownSelect.#INSTANCES.has(this.#select)) {
+      DropdownSelect.#INSTANCES.get(this.#select).destroy();
     }
 
-    this.#settings = Object.assign({}, DropdownSelect.#defaultSettings, options, this.#parseDatasetOptions());
+    this.#settings = Object.freeze(resolveSettings(DropdownSelect.#DEFAULTS, options, this.#select));
     this.#instanceId = crypto.randomUUID?.() ?? `dropdown_select_${Date.now()}`;
 
     this.#hideSelect();
@@ -114,12 +116,7 @@ class DropdownSelect {
     this.syncFromSelect();
     this.#bindFormDataHandler();
 
-    DropdownSelect.#initializedEls.set(this.#select, this);
-  }
-
-  #parseDatasetOptions() {
-    return Object.fromEntries(Object.entries(this.#select.dataset)
-      .map(([key, value]) => [key, typeof DropdownSelect.#defaultSettings[key] === 'boolean' ? value === 'true' : value]));
+    DropdownSelect.#INSTANCES.set(this.#select, this);
   }
 
   /**
@@ -245,7 +242,7 @@ class DropdownSelect {
     this.#button = null;
     this.#menu = null;
     this.#filterInput = null;
-    DropdownSelect.#initializedEls.delete(this.#select);
+    DropdownSelect.#INSTANCES.delete(this.#select);
   }
 
   #hideSelect() {

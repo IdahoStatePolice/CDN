@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * Countdown settings object to configure a new Countdown object.
  *
@@ -25,20 +27,20 @@
 class Countdown {
   /**
    * The default settings for a Countdown.
-   * @type {CountdownSettings}
+   * @type {Readonly<CountdownSettings>}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     maxLength: 255,
     label: 'Characters remaining: ',
     labelClass: 'form-text',
     showAll: false
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their Countdown objects.
-   * @type {Map<HTMLElement, Countdown>}
+   * @type {WeakMap<HTMLElement, Countdown>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
    * The textarea this Countdown object is initialized on.
@@ -59,7 +61,6 @@ class Countdown {
   #spanEl;
 
   /**
-   * Settings for the countdown.
    * @type {CountdownSettings}
    */
   #settings;
@@ -93,11 +94,14 @@ class Countdown {
   constructor(el, options) {
     this.#inputEl = typeof el === 'string' ? document.querySelector(el) : el;
 
-    if (Countdown.#initializedEls.has(this.#inputEl)) {
-      Countdown.#initializedEls.get(this.#inputEl).destroy();
+    if (Countdown.#INSTANCES.has(this.#inputEl)) {
+      Countdown.#INSTANCES.get(this.#inputEl).destroy();
     }
 
-    this.#settings = Countdown.#getSettings(this.#inputEl, options);
+    this.#settings = Object.freeze(resolveSettings(Countdown.#DEFAULTS, options, this.#inputEl, {
+      ...(this.#inputEl.maxLength > -1 && { maxLength: this.#inputEl.maxLength }),
+    }));
+
     this.#labelEl = Countdown.#buildLabelEl(this.#inputEl, this.#settings);
     this.#spanEl = this.#labelEl.firstElementChild;
     this.#onInput = () => this.#setCount();
@@ -110,7 +114,7 @@ class Countdown {
     this.#inputEl.maxLength = this.#settings.maxLength;
     this.#inputEl.addEventListener('input', this.#onInput);
 
-    Countdown.#initializedEls.set(this.#inputEl, this);
+    Countdown.#INSTANCES.set(this.#inputEl, this);
     this.#inputEl.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
@@ -120,7 +124,7 @@ class Countdown {
   destroy() {
     this.#inputEl.removeEventListener('input', this.#onInput);
     this.#labelEl.remove();
-    Countdown.#initializedEls.delete(this.#inputEl);
+    Countdown.#INSTANCES.delete(this.#inputEl);
   }
 
   #setCount() {
@@ -134,21 +138,6 @@ class Countdown {
 
       this.#inputEl.style.height = height + 'px';
     }
-  }
-
-  static #getSettings(el, options) {
-    const elOptions = {};
-    if (el.maxLength > 0) {
-      elOptions.maxLength = el.maxLength;
-    }
-    if (el.dataset.label) {
-      elOptions.label = el.dataset.label;
-    }
-    if (el.dataset.showAll === 'true') {
-      elOptions.showAll = true;
-    }
-
-    return Object.assign({}, Countdown.#defaultSettings, options, elOptions);
   }
 
   static #buildLabelEl(el, settings) {

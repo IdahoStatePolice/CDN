@@ -112,21 +112,27 @@ function dirtyCheck() {
 }
 
 /**
- * Returns an options object built from defaults, data attributes, and explicit options.
+ * Returns an options object built from defaults, constructor options, and data attributes.
  *
  * Precedence:
- * defaults < data attributes < explicit options
+ * defaults < constructor options < data attributes < element properties
  *
- * @param {HTMLElement} el
- * @param {Object} defaults
- * @param {Object} [options]
- * @returns {Object}
+ * @example <caption>For string-only settings, consider inlining:</caption>
+ * Object.assign({}, Component.#DEFAULTS, options, this.#el.dataset);
+ *
+ * @template {Object} T
+ * @param {T} defaults
+ * @param {Partial<T>} [options]
+ * @param {HTMLElement} [el]
+ * @param {Partial<T>} [elProps]
+ * @returns {T}
  */
-function buildSettings(el, defaults, options = {}) {
+function resolveSettings(defaults, options = {}, el = null, elProps = {}) {
   return {
     ...defaults,
-    ...parseDataset(el, defaults),
-    ...options
+    ...options,
+    ...(el ? parseDataset(el, defaults) : {}),
+    ...elProps
   };
 }
 
@@ -170,7 +176,7 @@ export {
   initCollapseAutoFocus,
   initModalShowOnError,
   dirtyCheck,
-  buildSettings,
+  resolveSettings,
   parseDataset,
   coerce
 };

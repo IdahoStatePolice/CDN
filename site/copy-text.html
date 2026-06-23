@@ -19,6 +19,8 @@
           <a href="#card-1" class="dropdown-item">Copy Text to Clipboard</a>
           <a href="#card-2" class="dropdown-item">Copy Text From Another Element</a>
           <a href="#card-3" class="dropdown-item">Copy Text From Input</a>
+          <a href="#custom-toast-text" class="dropdown-item">Custom Toast Text</a>
+          <a href="#custom-toast" class="dropdown-item">Custom Toast</a>
         </div>
       </li>
       <li class="nav-item">
@@ -158,6 +160,78 @@
         </div>
       </div>
     </div>
+
+    <div class="col-12">
+      <div id="custom-toast-text" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Custom Toast Text</h5>
+        <div class="card-body">
+          <a id="target4" href="mailto:test@email.com">test@email.com</a>
+          <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#target4" data-copy-toast-text="Go forth and paste!">
+            <i class="fa-solid fa-clone"></i>
+          </a>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template4" data-code-type="xml"></code></pre>
+          <template id="template4">
+            <div class="card-body">
+              <a id="example4" href="mailto:test@email.com">test@email.com</a>
+              <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#example4" data-copy-toast-text="Go forth and paste!">
+                <i class="fa-solid fa-clone"></i>
+              </a>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div id="custom-toast" class="anchor-offset"></div>
+      <div class="card">
+        <h5 class="card-header text-bg-primary">Custom Toast</h5>
+
+        <div id="your-toast1" class="position-fixed bottom-0 end-0 p-3">
+          <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body"><b>Hey!</b><br>This toast and container is all custom!</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <a id="target5">Custom Toast! 🥂</a>
+          <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#target5" data-copy-toast="#your-toast1">
+            <i class="fa-solid fa-clone"></i>
+          </a>
+        </div>
+
+        <div class="card-header border-top d-flex">
+          <span class="flex-fill">HTML</span>
+          <a href="#" data-clipboard="#template4" title="copy"><i class="fa-solid fa-copy"></i></a>
+        </div>
+        <div class="card-body">
+          <pre><code data-code-target="#template5" data-code-type="xml"></code></pre>
+          <template id="template5">
+            <div id="your-toast" class="position-fixed bottom-0 end-0 p-3">
+              <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"><b>Hey!</b><br>This toast and container is all custom!</div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <a id="example5">Custom Toast! 🥂</a>
+              <a href="javascript:void(0);" data-isp-toggle="copy-text" data-copy-target="#example5" data-copy-toast="#your-toast">
+                <i class="fa-solid fa-clone"></i>
+              </a>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

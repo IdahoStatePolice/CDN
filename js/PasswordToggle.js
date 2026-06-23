@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * PasswordToggle settings object to configure a new PasswordToggle object.
  *
@@ -22,19 +24,19 @@ class PasswordToggle {
 
   /**
    * The default settings for a PasswordToggle.
-   * @type {PasswordToggleSettings}
+   * @type {Readonly<PasswordToggleSettings>}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     showIcon: 'fa-solid fa-eye',
     hideIcon: 'fa-solid fa-eye-slash',
     toggleBtn: 'btn btn-outline-secondary'
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their PasswordToggle objects.
-   * @type {Map<HTMLElement, PasswordToggle>}
+   * @type {WeakMap<HTMLElement, PasswordToggle>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /** @type {HTMLInputElement} */
   #input;
@@ -63,25 +65,16 @@ class PasswordToggle {
       throw new Error('PasswordToggle requires an HTMLInputElement');
     }
 
-    if (PasswordToggle.#initializedEls.has(this.#input)) {
-      PasswordToggle.#initializedEls.get(this.#input).destroy();
+    if (PasswordToggle.#INSTANCES.has(this.#input)) {
+      PasswordToggle.#INSTANCES.get(this.#input).destroy();
     }
 
-    this.#settings = Object.assign({}, PasswordToggle.#defaultSettings, options, this.#parseDatasetOptions());
+    this.#settings = Object.freeze(resolveSettings(PasswordToggle.#DEFAULTS, options, this.#input));
     this.#originalParent = this.#input.parentNode;
     this.#originalNextSibling = this.#input.nextSibling;
     this.#render();
 
-    PasswordToggle.#initializedEls.set(this.#input, this);
-  }
-
-  #parseDatasetOptions() {
-    const { showIcon, hideIcon, toggleBtn } = this.#input.dataset;
-    return {
-      ...(showIcon && { showIcon }),
-      ...(hideIcon && { hideIcon }),
-      ...(toggleBtn && { toggleBtn })
-    };
+    PasswordToggle.#INSTANCES.set(this.#input, this);
   }
 
   #render() {
@@ -141,7 +134,7 @@ class PasswordToggle {
       this.#wrapper = null;
     }
 
-    PasswordToggle.#initializedEls.delete(this.#input);
+    PasswordToggle.#INSTANCES.delete(this.#input);
   }
 }
 

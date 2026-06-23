@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * CopyText settings object to configure a new CopyText object.
  *
@@ -29,22 +31,22 @@
 class CopyText {
   /**
    * The default settings for a CopyText.
-   * @type {CopyTextSettings}
+   * @type {Readonly<CopyTextSettings>}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     copyText: undefined,
     copyTarget: undefined,
     copyTrigger: 'click',
     copyElProperty: 'textContent',
     copyToastText: 'Copied to clipboard',
     copyToast: '#copyTextToast'
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their CopyText objects.
-   * @type {Map<HTMLElement, CopyText>}
+   * @type {WeakMap<HTMLElement, CopyText>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
    * The root HTML element associated with the copy text functionality
@@ -53,7 +55,6 @@ class CopyText {
   #el;
 
   /**
-   * Settings for the copy text.
    * @type {CopyTextSettings}
    */
   #settings;
@@ -83,15 +84,15 @@ class CopyText {
     this.#toastClass = toastClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
-    if (CopyText.#initializedEls.has(this.#el)) {
-      CopyText.#initializedEls.get(this.#el).destroy();
+    if (CopyText.#INSTANCES.has(this.#el)) {
+      CopyText.#INSTANCES.get(this.#el).destroy();
     }
 
-    this.#settings = Object.assign({}, CopyText.#defaultSettings, options, this.#el.dataset);
+    this.#settings = Object.freeze(resolveSettings(CopyText.#DEFAULTS, options, this.#el));
     this.#copyHandler = () => this.#doCopy();
 
     this.#el.addEventListener(this.#settings.copyTrigger, this.#copyHandler);
-    CopyText.#initializedEls.set(this.#el, this);
+    CopyText.#INSTANCES.set(this.#el, this);
   }
 
   /**
@@ -99,7 +100,7 @@ class CopyText {
    */
   destroy() {
     this.#el.removeEventListener(this.#settings.copyTrigger, this.#copyHandler);
-    CopyText.#initializedEls.delete(this.#el);
+    CopyText.#INSTANCES.delete(this.#el);
   }
 
   async #doCopy() {
@@ -155,13 +156,13 @@ class CopyText {
     if (!toastEl) {
       temporary = true;
       const toastMarkup = `
-        <div class="toast-container position-fixed bottom-0 end-0 p-3" data-temp-toast>
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
           <div class="toast border-success text-success-emphasis bg-success-subtle" role="alert">
             <div class="toast-body">${copyToastText}</div>
           </div>
         </div>`;
       document.body.insertAdjacentHTML('beforeend', toastMarkup);
-      toastEl = document.querySelector('[data-temp-toast] .toast');
+      toastEl = document.body.lastElementChild.querySelector('.toast');
     }
 
     if (!toastEl.classList.contains('toast')) {
@@ -172,10 +173,7 @@ class CopyText {
     toast.show();
 
     if (temporary) {
-      toastEl.addEventListener('hidden.bs.toast', () => {
-        const container = toastEl.closest('[data-temp-toast]');
-        container?.remove();
-      }, { once: true });
+      toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove(), { once: true });
     }
   }
 }

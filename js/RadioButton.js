@@ -1,3 +1,5 @@
+import { resolveSettings } from "./utils.js";
+
 /**
  * RadioButton settings object.
  *
@@ -21,15 +23,15 @@ class RadioButton {
    * The default settings for a RadioButton.
    * @type {RadioButtonSettings}
    */
-  static #defaultSettings = {
+  static #DEFAULTS = Object.freeze({
     activeClass: 'active'
-  };
+  });
 
   /**
    * All the initialized HTMLElements and their RadioButton objects.
-   * @type {Map<HTMLElement, RadioButton>}
+   * @type {WeakMap<HTMLElement, RadioButton>}
    */
-  static #initializedEls = new Map();
+  static #INSTANCES = new WeakMap();
 
   /**
    * HTML element containing all the buttons for the group.
@@ -50,7 +52,6 @@ class RadioButton {
   #btnEls;
 
   /**
-   * Settings for this RadioButton group.
    * @type {RadioButtonSettings}
    */
   #settings;
@@ -72,8 +73,8 @@ class RadioButton {
   constructor(el, options) {
     this.#groupEl = typeof el === 'string' ? document.querySelector(el) : el;
 
-    if (RadioButton.#initializedEls.has(this.#groupEl)) {
-      RadioButton.#initializedEls.get(this.#groupEl).destroy();
+    if (RadioButton.#INSTANCES.has(this.#groupEl)) {
+      RadioButton.#INSTANCES.get(this.#groupEl).destroy();
     }
 
     if (!this.#groupEl.dataset.name) {
@@ -82,7 +83,7 @@ class RadioButton {
 
     this.#hiddenEl = RadioButton.#createHiddenEl(this.#groupEl);
     this.#btnEls = [...this.#groupEl.querySelectorAll('button[value]')];
-    this.#settings = Object.assign({}, RadioButton.#defaultSettings, options);
+    this.#settings = Object.freeze(resolveSettings(RadioButton.#DEFAULTS, options, this.#groupEl));
 
     for (const btnEl of this.#btnEls) {
       const listener = e => this.#select(e.target.closest('button[value]'));
@@ -94,7 +95,7 @@ class RadioButton {
       }
     }
 
-    RadioButton.#initializedEls.set(this.#groupEl, this);
+    RadioButton.#INSTANCES.set(this.#groupEl, this);
   }
 
   /**
@@ -108,7 +109,7 @@ class RadioButton {
       btnEl.removeEventListener('click', listener);
     }
 
-    RadioButton.#initializedEls.delete(this.#groupEl);
+    RadioButton.#INSTANCES.delete(this.#groupEl);
   }
 
   #select(btnEl) {

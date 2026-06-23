@@ -96,7 +96,7 @@ import { buildSettings } from "./utils.js";
  *
  * Precedence:
  *
- * defaults < data attributes < constructor options
+ * defaults < constructor options < data attributes
  *
  * @example
  * new ListManager('#my-list', {
@@ -123,13 +123,7 @@ class ListManager {
   });
 
   /**
-   * Maps root elements to their owning ListManager instance.
-   *
-   * Usage:
-   * - Preventing double initialization
-   * - Supporting nested ListManagers
-   * - Determining ownership boundaries
-   *
+   * All the initialized HTMLElements and their ListManager objects.
    * @type {WeakMap<HTMLElement, ListManager>}
    */
   static #INSTANCES = new WeakMap();
@@ -159,8 +153,7 @@ class ListManager {
   #templateEl;
 
   /**
-   * Effective immutable settings after merging defaults, root data attributes, and constructor options.
-   * @type {Readonly<ListManagerSettings>}
+   * @type {ListManagerSettings}
    */
   #settings;
 
@@ -183,7 +176,7 @@ class ListManager {
     }
     ListManager.#INSTANCES.set(this.#rootEl, this);
 
-    this.#settings =  Object.freeze(buildSettings(this.#rootEl, ListManager.#DEFAULTS, options));
+    this.#settings = Object.freeze(buildSettings(ListManager.#DEFAULTS, options, this.#rootEl));
 
     this.#listEl = this.#queryOwned(this.#settings.listSelector);
     if (!this.#listEl) {

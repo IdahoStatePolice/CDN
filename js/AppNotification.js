@@ -1,8 +1,12 @@
 /**
  * Self-bootstrapping singleton web component that displays centralized application notifications retrieved from the AppAudit service.
  *
- * Include this script on a page and an <app-notification> element will automatically be registered, inserted into the document, and
- * configured using the application's context path.
+ * @example <caption>Usage — script tag only, no configuration needed</caption>
+ * <script defer src="https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/AppNotification.js"></script>
+ *
+ * An <app-notification> element is automatically registered, inserted into the document, and configured using the
+ * application's context path. This module intentionally exports nothing. Exposing an API would imply that initialization
+ * is the caller's responsibility (it is not).
  *
  * Features:
  * - Encapsulated UI via Shadow DOM
