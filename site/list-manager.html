@@ -64,7 +64,7 @@
         <li>Instance based</li>
         <li>Group ownership under a single root element</li>
         <li>Eliminate cross-element selectors</li>
-        <li>Configurable via defaults (<em>preferred</em>) + dataset + options</li>
+        <li>Configurable via defaults (<em>preferred</em>) + options + dataset</li>
         <li>Maintain support for nested dynamic lists</li>
         <li>Preserve server-rendered templates as the source of truth</li>
         <li>Minimal, simple API</li>
@@ -95,7 +95,7 @@
       <h4 class="mt-4">Templates remain server rendered</h4>
       <p>ListManager intentionally does not generate HTML; the server remains the source of truth. A standard <code>&lt;template&gt;</code> contains the markup.</p>
 
-      <h4 class="mt-4">Soft delete (not DOM removal) if flagged</h4>
+      <h4 class="mt-4">Soft-delete (not DOM removal) if flagged</h4>
       <p>Persisted records often cannot simply be removed from the DOM. Instead, add <code>data-list-flag-delete</code> to a hidden input to set that value to <code>true</code> when removed from the list.</p>
 
       <p><code>&lt;input type="hidden" data-list-flag-delete name="widgets[0].deleted"&gt;</code></p>
@@ -115,10 +115,39 @@
       <div id="examples" class="anchor-offset"></div>
       <h2>Examples</h2>
 
-      <div class="alert alert-warning mt-5">
-        <h4>Remember: Single Source of Truth</h4>
+      <p>To begin, a ListManager must be imported and created:</p>
 
-        <p>The examples show only the HTML used in list management. In practice, we'd use a reusable server-side component (e.g., JSP/JTE tag) to define and render a single item. The item would be rendered into one of two locations based on whether the item is existing or new.</p>
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template-init1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template-init1" data-code-type="javascript"></code></pre>
+          <template id="template-init1">
+            import { ListManager } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/ListManager.js";
+
+            const manager = new ListManager('[data-isp-toggle="list-manager"]');
+          </template>
+        </div>
+      </div>
+
+      <p>Or, if there are more than one list on the page, or you are using nested lists, or you want to stay consistent with other component initialization, use the <code>initAll</code> method from <code>utils.js</code>:</p>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template-init2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template-init2" data-code-type="javascript"></code></pre>
+          <template id="template-init2">
+            import { initAll } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/utils.js";
+            import { ListManager } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/ListManager.js";
+
+            initAll('[data-isp-toggle="list-manager"]', el => new ListManager(el));
+          </template>
+        </div>
+      </div>
+
+      <div class="alert alert-warning mt-5">
+        <h4>Single Source of Truth</h4>
+
+        <p>The examples show only the HTML used in list management. In practice, we'd use a reusable server-side component (e.g., JSP/JTE tag or fragment) to define and render a single item. The item would be rendered into one of two locations based on whether the item is existing or new.</p>
 
         <ul>
           <li>Existing items - in the <code>data-list</code> from a <code>forEach</code> looping over items in the view model and passing them into a tag to render.</li>
@@ -126,7 +155,7 @@
         </ul>
 
         <p>Doing this ensures there is a <b>single source of truth</b> as to how a list item is represented in HTML.</p>
-        <p>The duplication you see in this example HTML should <b>not</b> be present in the server-side templates used to construct the markup.</p>
+        <p>Bottom line: The duplication you see in this example HTML should <b>not</b> be present in the server-side templates used to construct the markup.</p>
       </div>
     </div>
 
@@ -544,137 +573,6 @@
                 <div id="show-params-top-insert" class="list-group-item"></div>
               </div>
 
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="col-12">
-      <div id="flag-delete" class="anchor-offset"></div>
-      <h3>Flagged Delete</h3>
-      <p>A flagged delete is a "soft" delete. The item is not removed from the DOM, only hidden. Add the data attribute <code>data-flag-delete</code> on input elements to be valued "true" when deleted to communicate to the server that a persisted item should be deleted.</p>
-      <p>In this example, the first item is already persisted and therefore a hidden input named <code>numbers[0].deleted</code> is given the <code>data-flag-delete</code> attribute which will be true if removed from the list.</p>
-
-      <form action="#flag-delete" method="GET">
-
-        <div class="row justify-content-center mb-3">
-          <div class="col-6 col-xl-4">
-            <div class="card bg-body-tertiary">
-              <div class="card-body">
-
-                <div class="card" data-isp-toggle="list-manager">
-                  <div class="card-header d-flex align-items-center">
-                    <h6 class="flex-fill mb-0">Phone Numbers <span class="badge text-bg-secondary" data-list-count></span></h6>
-
-                    <!--Add Button-->
-                    <a href="javascript:void(0);" data-list-add>
-                      <i class="fa-solid fa-plus text-success"></i>
-                    </a>
-
-                    <!--Template-->
-                    <template>
-                      <div class="list-group-item">
-                        <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
-
-                        <div class="d-flex gap-2">
-                          <span data-list-item-number></span>
-                          <input type="tel" class="form-control" name="numbers[{index}].number" placeholder="number">
-                          <input type="text" class="form-control" name="numbers[{index}].type" placeholder="type">
-
-                          <!--Delete Button-->
-                          <button type="button" class="btn btn-outline-danger" data-list-remove>
-                            <i class="fa-solid fa-trash"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </template>
-                  </div>
-
-                  <!--List Items-->
-                  <div data-list class="list-group list-group-flush">
-                    <div class="list-group-item">
-                      <!-- Hidden input in persisted items; marked with data-list-flag-delete -->
-                      <input type="hidden" name="numbers[0].deleted" data-list-flag-delete>
-
-                      <div class="d-flex gap-2">
-                        <span data-list-item-number></span>
-                        <input type="tel" class="form-control" name="numbers[0].number" value="208-884-7500">
-                        <input type="text" class="form-control" name="numbers[0].type" value="Work">
-
-                        <!--Delete Button-->
-                        <button type="button" class="btn btn-outline-danger" data-list-remove>
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mt-2">Submit</button>
-
-                  <div data-list class="list-group list-group-flush">
-                    <div id="show-params-flag-delete" class="list-group-item">
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <div class="card bg-body-tertiary">
-        <div class="card-body">
-          <a href="#" data-clipboard="#template3" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
-          <pre><code data-code-target="#template3" data-code-type="xml"></code></pre>
-          <template id="template3">
-            <div class="card" data-isp-toggle="list-manager">
-              <div class="card-header d-flex align-items-center">
-                <h6 class="flex-fill mb-0">Phone Numbers <span class="badge text-bg-secondary" data-list-count></span></h6>
-
-                <!--Add to list-->
-                <a href="javascript:void(0);" data-list-add>
-                  <i class="fa-solid fa-plus text-success"></i>
-                </a>
-
-                <!--Template-->
-                <template>
-                  <div class="list-group-item">
-                    <!-- Hidden input intentionally absent in template for new (non-persisted) items -->
-
-                    <div class="d-flex gap-2">
-                      <input type="tel" class="form-control" name="numbers[{index}].number" placeholder="number">
-                      <input type="text" class="form-control" name="numbers[{index}].type" placeholder="type">
-
-                      <!--Delete Button-->
-                      <button type="button" class="btn btn-outline-danger" data-list-remove>
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                </template>
-              </div>
-
-              <!-- List -->
-              <div data-list class="list-group list-group-flush">
-                <div class="list-group-item">
-                  <!-- Soft-delete. Hidden input in persisted items; marked with data-list-flag-delete -->
-                  <input type="hidden" name="numbers[0].deleted" data-list-flag-delete>
-
-                  <div class="d-flex gap-2">
-                    <input type="tel" class="form-control" name="numbers[0].number" value="208-884-7500">
-                    <input type="text" class="form-control" name="numbers[0].type" value="Work">
-
-                    <!--Remove from list -->
-                    <button type="button" class="btn btn-outline-danger" data-list-remove>
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
           </template>
         </div>

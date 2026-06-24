@@ -1,4 +1,4 @@
-import { buildSettings } from "./utils.js";
+import { resolveSettings } from "./utils.js";
 
 /**
  * Settings used to configure a ListManager.
@@ -176,7 +176,7 @@ class ListManager {
     }
     ListManager.#INSTANCES.set(this.#rootEl, this);
 
-    this.#settings = Object.freeze(buildSettings(ListManager.#DEFAULTS, options, this.#rootEl));
+    this.#settings = Object.freeze(resolveSettings(ListManager.#DEFAULTS, options, this.#rootEl));
 
     this.#listEl = this.#queryOwned(this.#settings.listSelector);
     if (!this.#listEl) {

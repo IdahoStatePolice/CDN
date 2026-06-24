@@ -47,7 +47,6 @@ class RowClick {
    */
   static #INSTANCES = new WeakMap();
 
-
   /**
    * The root HTML element associated with this row click.
    * @type {HTMLElement}

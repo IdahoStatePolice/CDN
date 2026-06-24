@@ -49,7 +49,7 @@ class Spinner {
    * String templates for all the different {@link SpinnerType}s.
    * @type {{audio: string, rings: string, grid: string, hearts: string, oval: string, threeDots: string, spinningCircles: string, puff: string, circles: string, tailSpin: string, bars: string, ballTriangle: string}}
    */
-  static #templates = {
+  static #TEMPLATES = {
     audio: `
       <svg viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg">
         <g transform="matrix(1 0 0 -1 0 80)">
@@ -321,10 +321,10 @@ class Spinner {
     }
 
     const settings = Object.freeze(resolveSettings(Spinner.#DEFAULTS, options, this.#el));
-    const template = Spinner.#templates[settings.type];
+    const template = Spinner.#TEMPLATES[settings.type];
 
     if (!template) {
-      const list = Object.keys(Spinner.#templates).join(', ');
+      const list = Object.keys(Spinner.#TEMPLATES).join(', ');
       throw new Error(`Type '${settings.type}' is invalid, must be one of the following: ${list}.`);
     }
 
