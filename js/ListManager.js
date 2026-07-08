@@ -16,6 +16,7 @@ import { resolveSettings } from "./utils.js";
  * ```
  * defaults = {
  *   listTransitionTime: .25,
+ *   listIndexing: 'contiguous',
  *   listIndexPlaceholder: '{index}',
  *   listSelector: '[data-list]',
  *   listInsertion: 'bottom',
@@ -29,6 +30,7 @@ import { resolveSettings } from "./utils.js";
  *
  * @typedef {Object} ListManagerSettings
  * @prop {number} listTransitionTime - Duration of add/remove animations in seconds.
+ * @prop {'contiguous'|'sparse'} listIndexing - Determines whether index values are reordered sequentially after a remove (contiguous) or if gaps are allowed (sparse).
  * @prop {string} listIndexPlaceholder - Placeholder text replaced with the next item index when cloning template content.
  * @prop {string} listSelector - Selector used to locate the list container within the root element.
  * @prop {'top'|'bottom'} listInsertion - Where newly added items are inserted into the list.
@@ -36,13 +38,13 @@ import { resolveSettings } from "./utils.js";
  * @prop {string} listRemoveSelector - Selector used to locate remove buttons within the root element.
  * @prop {string} listCountSelector - Selector used to locate elements that display the total visible item count.
  * @prop {string} listItemNumberSelector - Selector used to locate elements that display an individual item's visible position.
- * @prop {string} listFlagDeleteSelector - Selector used to locate hidden inputs that should be set when an item is soft deleted.
+ * @prop {string} listFlagDeleteSelector - Selector used to locate hidden inputs that should be set when an item is soft-deleted.
  */
 
 /**
  * Decorates a root element to manage a dynamic list of items.
  *
- * ListManager adds, removes, animates and optionally soft-deletes items
+ * ListManager adds, removes, animates, and optionally soft-deletes items
  * using a single server-rendered <template> as the source of truth.
  *
  * Features:
@@ -112,6 +114,7 @@ class ListManager {
    */
   static #DEFAULTS = Object.freeze({
     listTransitionTime: .25,
+    listIndexing: 'contiguous',
     listIndexPlaceholder: '{index}',
     listSelector: '[data-list]',
     listInsertion: 'bottom',
@@ -164,6 +167,22 @@ class ListManager {
    */
   #nextIndex;
 
+  /**
+   * Tracks items whose indexes may be reassigned. Persisted items retain stable indexes; dynamically added items may be
+   * renumbered when contiguous indexing is enabled.
+   * @type {WeakSet<HTMLElement>}
+   */
+  #dynamicItems = new WeakSet();
+
+  /**
+   * Stores the original indexed name pattern for each input. The captured pattern always retains the unresolved index
+   * placeholder (for example, {@code contacts[{index}].name}), allowing indexes to be rendered repeatedly without losing
+   * the original pattern. Includes inputs within nested <template> elements so that parent indexes are resolved before
+   * child ListManagers are instantiated.
+   * @type {WeakMap<HTMLElement, string>}
+   */
+  #namePatterns = new WeakMap();
+
   constructor(el, options = {}) {
     this.#rootEl = typeof el === 'string' ? document.querySelector(el) : el;
 
@@ -193,7 +212,7 @@ class ListManager {
     }
 
     this.#rootEl.addEventListener('click', this.#onClick);
-    this.#nextIndex = this.#listEl.children.length;
+    this.#nextIndex = this.#allItems().length;
     this.#animator = new Animator(this.#settings.listTransitionTime);
     this.refresh();
   }
@@ -205,15 +224,8 @@ class ListManager {
    * @returns {HTMLElement} The newly added item element.
    */
   add() {
-    const index = this.#nextIndex++;
-    const itemHtml  = this.#templateEl.innerHTML.replaceAll(this.#settings.listIndexPlaceholder, index);
-
-    const container = document.createElement('div');
-    container.innerHTML = itemHtml ;
-
-    const item = container.firstElementChild;
-    this.#initializeScripts(item);
-
+    const item = this.#createItem();
+    this.#initializeItem(item, this.#nextIndex++);
     this.#animator.enter(item, this.#listEl, this.#settings.listInsertion, () => {
       this.refresh();
       this.#dispatchChange();
@@ -233,8 +245,7 @@ class ListManager {
     }
 
     this.#animator.exit(item, () => {
-      const flagDelete = item.querySelectorAll(this.#settings.listFlagDeleteSelector);
-      if (flagDelete.length > 0) {
+      if (this.#hasSoftDeleteFlag(item)) {
         this.#softDelete(item);
       }
       else {
@@ -250,7 +261,8 @@ class ListManager {
    * Refreshes all derived list state. Updates visible item counts and item numbering.
    */
   refresh() {
-    this.#updateCount();
+    this.#updateIndexes();
+    this.#updatePresentation();
   }
 
   /**
@@ -301,6 +313,84 @@ class ListManager {
     }
   }
 
+  #createItem() {
+    return this.#templateEl.content.firstElementChild.cloneNode(true);
+  }
+
+  #initializeItem(item, index) {
+    this.#captureNamePatterns(item);
+    this.#applyIndex(item, index);
+    this.#dynamicItems.add(item);
+    this.#initializeScripts(item);
+  }
+
+  #captureNamePatterns(item) {
+    item.querySelectorAll("[name]").forEach(input => {
+      this.#namePatterns.set(input, input.name);
+    });
+
+    item.querySelectorAll("template").forEach(template => {
+      template.content.querySelectorAll("[name]").forEach(input => {
+        this.#namePatterns.set(input, input.name);
+      });
+    });
+  }
+
+  #applyIndex(item, index) {
+    this.#replaceIndexes(item, index);
+
+    for (const template of item.querySelectorAll("template")) {
+      this.#replaceIndexes(template.content, index);
+    }
+  }
+
+  #replaceIndexes(root, index) {
+    root.querySelectorAll("[name]").forEach(input => {
+      const pattern = this.#namePatterns.get(input);
+      if (pattern) {
+        input.name = pattern.replaceAll(this.#settings.listIndexPlaceholder, index);
+      }
+    });
+  }
+
+  #updateIndexes() {
+    if (this.#settings.listIndexing !== "contiguous") {
+      return;
+    }
+
+    const dynamicItems = this.#allItems().filter(item => this.#dynamicItems.has(item));
+
+    if (this.#settings.listInsertion === "top") {
+      dynamicItems.reverse();
+    }
+
+    let index = this.#allItems().length - dynamicItems.length;
+    for (const item of dynamicItems) {
+      this.#applyIndex(item, index++);
+    }
+
+    this.#nextIndex = index;
+  }
+
+  #updatePresentation() {
+    const visible = this.#visibleItems();
+    this.#updateListCount(visible);
+    this.#updateItemNumbers(visible);
+  }
+
+  #updateListCount(visibleItems) {
+    const count = visibleItems.length;
+    this.#queryAllOwned(this.#settings.listCountSelector).forEach(el => el.textContent = count);
+  }
+
+  #updateItemNumbers(visibleItems) {
+    visibleItems.forEach((item, i) => item.querySelectorAll(this.#settings.listItemNumberSelector).forEach(el => el.textContent = i + 1));
+  }
+
+  #hasSoftDeleteFlag(item) {
+    return item.querySelectorAll(this.#settings.listFlagDeleteSelector).length > 0;
+  }
+
   #softDelete(item) {
     item.hidden = true;
     item.style.setProperty('display', 'none', 'important');
@@ -309,6 +399,10 @@ class ListManager {
 
   #visibleItems() {
     return [...this.#listEl.children].filter(el => !el.hidden);
+  }
+
+  #allItems() {
+    return [...this.#listEl.children];
   }
 
   #findItem(el) {
@@ -327,13 +421,6 @@ class ListManager {
     }
 
     return null;
-  }
-
-  #updateCount() {
-    const visible = this.#visibleItems();
-    const count = visible.length;
-    this.#queryAllOwned(this.#settings.listCountSelector).forEach(el => el.textContent = count);
-    visible.forEach((item, i) => item.querySelectorAll(this.#settings.listItemNumberSelector).forEach(el => el.textContent = i + 1));
   }
 
   #dispatchChange() {

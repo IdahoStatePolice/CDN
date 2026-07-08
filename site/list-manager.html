@@ -252,7 +252,7 @@
           <a href="#" data-clipboard="#template0" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template0" data-code-type="xml"></code></pre>
           <template id="template0">
-            <div class="card" id="simple-list-manager">
+            <div class="card" data-isp-toggle="list-manager">
               <div class="card-header d-flex align-items-center">
                 <h6 class="flex-fill mb-0">Names <span class="badge text-bg-secondary" data-list-count></span></h6>
 
@@ -281,7 +281,7 @@
                 </template>
               </div>
 
-              <!--List items (existing or, as in this example, prepped items) -->
+              <!--List items (existing or, as in this example, new unpersisted/blank items) -->
               <div data-list class="list-group list-group-flush">
                 <div class="list-group-item d-flex gap-2">
 
@@ -313,23 +313,20 @@
 
       <div class="alert alert-info">
         <h4><code>@OneToMany List&lt;Entity&gt;</code></h4>
-        <p>An indexed list is often a persisted <code>@OneToMany</code> list on a parent entity. Because items are persisted, they must be explicitly removed server-side using the delete flag usually tracked using an <code>@Transient private boolean deleted;</code> property on the entity itself.</p>
+        <p>An indexed list is often a persisted <code>@OneToMany</code> list on a parent entity. Because items are persisted, they must be explicitly removed server-side using the delete flag usually tracked by a property on the entity iteslf, like: <code>@Transient private boolean deleted;</code></p>
       </div>
 
-      <p>In this example we are not sending just a list of strings to the server, but values associated to an indexed (persisted) item (e.g., <code>serial</code> and <code>title</code> properties on a <code>Widget</code> in this example).</p>
+      <p>In this example we are not sending just a list of strings to the server, but values associated to an indexed (persisted) item (e.g., <code>serial</code> and <code>title</code> properties on a <code>Widget</code>).</p>
       <p>Because existing items are persisted in the database, a hidden input having a <code>data-list-flag-delete</code> attribute is used to flag deletion. This instructs the ListManager to hide the list item and set the <code>data-list-flag-delete</code> input's value to <code>true</code> (a soft-delete). The actual deletion of the item (e.g., delete database record) happens server-side.</p>
-      <p>It is best to only include <code>data-list-flag-delete</code> on existing, persisted items. Flagging a delete on a new item is unnecessary; just don't submit that item to the server. This is exactly how ListManager behaves when it removes an item not having a <code>data-list-flag-delete</code> input element--that item is removed from the DOM and nothing is sent to the server.</p>
+      <p>It is best to only include <code>data-list-flag-delete</code> on existing, persisted items. Flagging a delete on a new item is unnecessary; just don't submit that item to the server. This is exactly how ListManager behaves when it removes an item not having a <code>data-list-flag-delete</code> input element—that item is removed from the DOM and nothing is sent to the server.</p>
       <p>Look at the difference upon submission between removing an <em>existing</em> versus <em>new</em> item from the list.</p>
-
-
-
 
       <form action="#indexed-list" method="GET">
         <div class="row justify-content-center mb-3">
           <div class="col-6 col-xl-4">
             <div class="card bg-body-tertiary">
               <div class="card-body">
-                <div class="card" data-isp-toggle="list-manager">
+                <div class="card" data-isp-toggle="list-manager" id="widgets">
                   <div class="card-header d-flex align-items-center">
                     <h6 class="flex-fill mb-0">Widgets <span class="badge text-bg-secondary" data-list-count></span></h6>
 
@@ -475,10 +472,10 @@
       <p>This example also demonstrates overriding default selector values using data attributes. <em class="text-warning">Don't do this unless there is a real need. Otherwise use the defaults.</em></p>
 
       <div class="alert alert-info mb-3">
-        Ensure indexes are reversed for existing persisted items (i.e., 0 at the bottom and incrementing up). This avoids issues when you reload the page.
+        Ensure indexes are reversed for existing persisted items (i.e., 0 at the bottom and incrementing up). This avoids issues when reloading the page.
       </div>
 
-      <form action="#top-insert" method="GET">
+      <form action="#insertion-location" method="GET">
         <div class="row justify-content-center mb-3">
           <div class="col-6 col-xl-4">
             <div class="card bg-body-tertiary">
@@ -519,7 +516,7 @@
                   <button type="submit" class="btn btn-primary mt-2">Submit</button>
 
                   <div class="list-group list-group-flush">
-                    <div id="show-params-top-insert" class="list-group-item"></div>
+                    <div id="show-params-insertion-location" class="list-group-item"></div>
                   </div>
 
                 </div>
@@ -801,6 +798,7 @@
       <code>
         &lt;div data-isp-toggle="list-manager"<br>
         &nbsp;&nbsp;&nbsp;&nbsp; data-list-transition-time=".5"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; data-list-indexing="sparse"<br>
         &nbsp;&nbsp;&nbsp;&nbsp; data-list-index-placeholder="{i}"<br>
         &nbsp;&nbsp;&nbsp;&nbsp; data-list-selector="[data-widgets]"<br>
         &nbsp;&nbsp;&nbsp;&nbsp; data-list-insertion="top"<br>
@@ -829,6 +827,12 @@
           <td>number</td>
           <td><code>.25</code></td>
           <td>Duration of add/remove animations in seconds.</td>
+        </tr>
+        <tr>
+          <td><code>listIndexing</code></td>
+          <td>'contiguous'|'sparse'</td>
+          <td><code>contiguous</code></td>
+          <td>Controls how items are indexed after a remove: sequentially (contiguous) or retain assigned index resulting in index gaps (sparse). Persisted items (those flgs with a soft-delete) are never reindexed.</td>
         </tr>
         <tr>
           <td><code>listIndexPlaceholder</code></td>
