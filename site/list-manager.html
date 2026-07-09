@@ -832,7 +832,7 @@
           <td><code>listIndexing</code></td>
           <td>'contiguous'|'sparse'</td>
           <td><code>contiguous</code></td>
-          <td>Controls how items are indexed after a remove: sequentially (contiguous) or retain assigned index resulting in index gaps (sparse). Persisted items (those flgs with a soft-delete) are never reindexed.</td>
+          <td>Controls indexing after removals: 'contiguous' reindexes items sequentially; 'sparse' preserves existing indices leaving gaps. Soft-deleted (persisted) items are never reindexed.</td>
         </tr>
         <tr>
           <td><code>listIndexPlaceholder</code></td>

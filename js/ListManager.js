@@ -174,15 +174,6 @@ class ListManager {
    */
   #dynamicItems = new WeakSet();
 
-  /**
-   * Stores the original indexed name pattern for each input. The captured pattern always retains the unresolved index
-   * placeholder (for example, {@code contacts[{index}].name}), allowing indexes to be rendered repeatedly without losing
-   * the original pattern. Includes inputs within nested <template> elements so that parent indexes are resolved before
-   * child ListManagers are instantiated.
-   * @type {WeakMap<HTMLElement, string>}
-   */
-  #namePatterns = new WeakMap();
-
   constructor(el, options = {}) {
     this.#rootEl = typeof el === 'string' ? document.querySelector(el) : el;
 
@@ -326,19 +317,28 @@ class ListManager {
 
   #captureNamePatterns(item) {
     item.querySelectorAll("[name]").forEach(input => {
-      this.#namePatterns.set(input, input.name);
+      this.#captureNamePattern(input);
     });
 
     item.querySelectorAll("template").forEach(template => {
       template.content.querySelectorAll("[name]").forEach(input => {
-        this.#namePatterns.set(input, input.name);
+        this.#captureNamePattern(input);
       });
     });
   }
 
+  #captureNamePattern(input) {
+    if (!input.dataset.listNamePattern) {
+      input.dataset.listNamePattern = input.name;
+    }
+
+    if (!input.dataset.listNameIndexes) {
+      input.dataset.listNameIndexes = "{}";
+    }
+  }
+
   #applyIndex(item, index) {
     this.#replaceIndexes(item, index);
-
     for (const template of item.querySelectorAll("template")) {
       this.#replaceIndexes(template.content, index);
     }
@@ -346,11 +346,32 @@ class ListManager {
 
   #replaceIndexes(root, index) {
     root.querySelectorAll("[name]").forEach(input => {
-      const pattern = this.#namePatterns.get(input);
-      if (pattern) {
-        input.name = pattern.replaceAll(this.#settings.listIndexPlaceholder, index);
-      }
+      this.#captureNamePattern(input);
+
+      const indexes = this.#readNameIndexes(input);
+      indexes[this.#settings.listIndexPlaceholder] = index.toString();
+
+      input.dataset.listNameIndexes = JSON.stringify(indexes);
+      input.name = this.#renderNamePattern(input.dataset.listNamePattern, indexes);
     });
+  }
+
+  #readNameIndexes(input) {
+    try {
+      return JSON.parse(input.dataset.listNameIndexes || "{}");
+    }
+    catch {
+      return {};
+    }
+  }
+
+  #renderNamePattern(pattern, indexes) {
+    let rendered = pattern;
+    for (const placeholder of Object.keys(indexes)) {
+      rendered = rendered.replaceAll(placeholder, indexes[placeholder]);
+    }
+
+    return rendered;
   }
 
   #updateIndexes() {
