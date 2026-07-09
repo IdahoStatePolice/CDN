@@ -155,10 +155,8 @@ class Suggest {
    */
   constructor(el, options) {
     this.#inputEl = typeof el === 'string' ? document.querySelector(el) : el;
-
-    if (this.#inputEl === null) {
-      console.error('Suggest Error: Suggest input element is null. First constructor parameter must be a query selector or DOM element to attach the suggest to.',);
-      return;
+    if (!(this.#inputEl instanceof HTMLElement)) {
+      throw new Error(`Suggest could not find HTMLElement: ${el}. The first constructor parameter must be a query selector or DOM element to attach the suggest to.`);
     }
 
     if (Suggest.#INSTANCES.has(this.#inputEl)) {

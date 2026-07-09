@@ -131,7 +131,7 @@ function resolveSettings(defaults, options = {}, el = null, elProps = {}) {
   return {
     ...defaults,
     ...options,
-    ...(el ? parseDataset(el, defaults) : {}),
+    ...(el && el.dataset ? parseDataset(el, defaults) : {}),
     ...elProps
   };
 }

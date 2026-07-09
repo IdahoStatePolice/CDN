@@ -94,6 +94,10 @@ class Countdown {
   constructor(el, options) {
     this.#inputEl = typeof el === 'string' ? document.querySelector(el) : el;
 
+    if (!(this.#inputEl instanceof HTMLElement)) {
+      throw new Error(`Countdown could not find HTMLElement: ${el}`);
+    }
+
     if (Countdown.#INSTANCES.has(this.#inputEl)) {
       Countdown.#INSTANCES.get(this.#inputEl).destroy();
     }

@@ -89,6 +89,10 @@ class RowClick {
     this.#rowEl = typeof el === 'string' ? document.querySelector(el) : el;
     this.#modalClass = ModalClass;
 
+    if (!(this.#rowEl instanceof HTMLElement)) {
+      throw new Error(`RowClick could not find HTMLElement: ${el}`);
+    }
+
     if (RowClick.#INSTANCES.has(this.#rowEl)) {
       RowClick.#INSTANCES.get(this.#rowEl).destroy();
     }

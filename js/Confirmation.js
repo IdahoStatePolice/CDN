@@ -118,6 +118,10 @@ class Confirmation {
     this.#modalClass = modalClass;
     this.#el = typeof el === 'string' ? document.querySelector(el) : el;
 
+    if (!(this.#el instanceof HTMLElement)) {
+      throw new Error(`Confirmation could not find HTMLElement: ${el}`);
+    }
+
     if (Confirmation.#INSTANCES.has(this.#el)) {
       Confirmation.#INSTANCES.get(this.#el).destroy();
     }
