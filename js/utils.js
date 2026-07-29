@@ -29,6 +29,27 @@ function getContext() {
 }
 
 /**
+ * Attach a delegated event listener to a parent element.
+ * The handler runs when the event bubbles from a descendant matching `selector`.
+ * This works for elements that already exist and for elements added later.
+ *
+ * @template {Element} T
+ * @param {ParentNode & EventTarget} parent - Element or document to listen on.
+ * @param {string} eventType - Event name, such as "click" or "input".
+ * @param {string} selector - CSS selector used to match the event target or its ancestors.
+ * @param {(event: Event, match: T) => void} handler - Called when a matching descendant triggers the event.
+ * @returns {void}
+ */
+function on(parent, eventType, selector, handler) {
+  parent.addEventListener(eventType, (e) => {
+    const match = e.target.closest(selector);
+    if (match && parent.contains(match)) {
+      handler.call(match, e);
+    }
+  });
+}
+
+/**
  * Calls the initializer callback for each element matching the CSS selector.
  * Optionally registers a MutationObserver to automatically initialize matching
  * elements added to the DOM after the initial call.
@@ -171,6 +192,7 @@ function coerce(value, defaultValue) {
 
 export {
   getContext,
+  on,
   initAll,
   initModalAutofocus,
   initCollapseAutoFocus,
