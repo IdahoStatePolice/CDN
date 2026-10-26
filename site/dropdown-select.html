@@ -514,8 +514,14 @@
                 <option value="Chicken">Chicken</option>
                 <option value="Pork">Pork</option>
                 <option value="Beef">Beef</option>
-                <option value="Tofu">Tofu</option>
+                <option value="Tofu" disabled>Tofu (currently unavailable) </option>
               </select>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-4">
+              <button id="disable-toggle" class="btn btn-secondary">Toggle Disabled State</button>
             </div>
           </div>
         </div>
@@ -523,7 +529,10 @@
         <script type="module">
           import { DropdownSelect } from "../js/DropdownSelect.js";
 
-          new DropdownSelect('#ex9');
+          const ex9 = new DropdownSelect('#ex9');
+          document.querySelector('#disable-toggle').addEventListener('click', () => {
+            ex9.disabled = !ex9.disabled;
+          });
         </script>
       </div>
 
@@ -730,6 +739,12 @@
           <td>
             <p>Contains the names and values of all selected items. Normally, if not adding extra options with <code>data-submit-name</code>, value is an object having a single property, the name of the &lt;select&gt;, with an array of selectecd items.<br><code>{ 'order': [ 'pork' ] }</code> or <code>{ 'order': [ 'pork', 'beef', 'fish' ] }</code></p>
             <p>When setting the value, the same object form should be used or, when only a single item is selected, a convenience form can be used where the selected item is provided as a single string value.<br> <code>{ 'order': 'pork' }</code> or <code>{ 'order': [ 'pork' ] }</code> </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td>
+            <p>The disabled state.</p>
           </td>
         </tr>
         </tbody>

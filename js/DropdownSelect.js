@@ -74,6 +74,9 @@ class DropdownSelect {
   /** @type {((event: FormDataEvent) => void) | null} */
   #formDataHandler;
 
+  /** @type {(() => void) | null} */
+  #formResetHandler = null;
+
   /** @type {HTMLInputElement | null} */
   #filterInput = null;
 
@@ -115,6 +118,7 @@ class DropdownSelect {
     this.#build();
     this.syncFromSelect();
     this.#bindFormDataHandler();
+    this.#bindFormResetHandler();
 
     DropdownSelect.#INSTANCES.set(this.#select, this);
   }
@@ -124,9 +128,10 @@ class DropdownSelect {
    */
   syncFromSelect() {
     for (const item of this.#items) {
-      item.input.checked = item.option.hasAttribute('selected');
+      item.input.checked = item.option.selected;
     }
 
+    this.#syncDisabledState();
     this.#updateButtonText();
   }
 
@@ -148,6 +153,26 @@ class DropdownSelect {
 
     form.removeEventListener('formdata', this.#formDataHandler);
     this.#formDataHandler = null;
+  }
+
+  #bindFormResetHandler() {
+    const form = this.#select.form;
+    if (!form) {
+      return;
+    }
+
+    this.#formResetHandler = () => queueMicrotask(() => this.syncFromSelect());
+    form.addEventListener('reset', this.#formResetHandler);
+  }
+
+  #unbindFormResetHandler() {
+    const form = this.#select.form;
+    if (!form || !this.#formResetHandler) {
+      return;
+    }
+
+    form.removeEventListener('reset', this.#formResetHandler);
+    this.#formResetHandler = null;
   }
 
   /**
@@ -232,12 +257,28 @@ class DropdownSelect {
   }
 
   /**
+   * @returns {boolean} The current disabled state.
+   */
+  get disabled() {
+    return this.#select.disabled;
+  }
+
+  /**
+   * @param {boolean} value - Whether the component should be disabled.
+   */
+  set disabled(value) {
+    this.#select.disabled = Boolean(value);
+    this.#syncDisabledState();
+  }
+
+  /**
    * Destroy component and restore original select.
    */
   destroy() {
     this.#wrapper.remove();
     this.#select.classList.remove('d-none');
     this.#unbindFormDataHandler();
+    this.#unbindFormResetHandler();
     this.#wrapper = null;
     this.#button = null;
     this.#menu = null;
@@ -383,6 +424,21 @@ class DropdownSelect {
         submitName: optionEl.dataset.submitName ?? this.#select.name
       });
     });
+  }
+
+  #syncDisabledState() {
+    const disabled = this.#select.disabled;
+
+    if (disabled) {
+      this.#wrapper.click(); // force the menu closed if open
+    }
+
+    for (const item of this.#items) {
+      item.input.disabled = disabled || item.option.disabled
+    }
+
+    this.#button.disabled = disabled;
+    this.#wrapper.classList.toggle("is-disabled", disabled);
   }
 
   #insertIntoDom() {
