@@ -19,6 +19,22 @@ import { resolveSettings } from "./utils.js";
  * @see {@link https://idahostatepolice.github.io/CDN/site/radio-button.html|Radio Button Docs}
  */
 class RadioButton {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="radio-button"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return RadioButton.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a RadioButton.
    * @type {RadioButtonSettings}
@@ -96,6 +112,14 @@ class RadioButton {
     }
 
     RadioButton.#INSTANCES.set(this.#groupEl, this);
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {RadioButton | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return RadioButton.#INSTANCES.get(el);
   }
 
   /**

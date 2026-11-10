@@ -29,6 +29,22 @@ import { resolveSettings } from "./utils.js";
  * @see {@link https://idahostatepolice.github.io/CDN/site/copy-text.html|Copy Text Docs}
  */
 class CopyText {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="copy-text"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return CopyText.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a CopyText.
    * @type {Readonly<CopyTextSettings>}
@@ -93,6 +109,14 @@ class CopyText {
 
     this.#el.addEventListener(this.#settings.copyTrigger, this.#copyHandler);
     CopyText.#INSTANCES.set(this.#el, this);
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {CopyText | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return CopyText.#INSTANCES.get(el);
   }
 
   /**

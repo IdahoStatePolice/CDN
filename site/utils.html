@@ -20,7 +20,6 @@
           <a href="#card-2" class="dropdown-item">Modal Autofocus</a>
           <a href="#card-3" class="dropdown-item">Collapse Autofocus</a>
           <a href="#card-4" class="dropdown-item">Modal Show on Error</a>
-          <a href="#card-5" class="dropdown-item">dirtyCheck</a>
         </div>
       </li>
       <li class="nav-item">
@@ -293,38 +292,13 @@
         </div>
       </div>
     </div>
-
-    <div class="col-12">
-      <div id="card-5" class="anchor-offset"></div>
-      <div class="card">
-        <h5 class="card-header text-bg-primary">dirtyCheck</h5>
-        <div class="card-body">
-          The <code>dirtyCheck</code> function initializes a collection of event listeners based on the <code>beforeunload</code> event to prevent users from leaving the page.
-          While it is considered unreliable (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#usage_notes" target="_blank">see usage notes</a>), it works for our needs.
-        </div>
-
-        <div class="card-header border-top d-flex">
-          <span class="flex-fill">JavaScript</span>
-          <a href="#" data-clipboard="#template5" title="copy"><i class="fa-solid fa-copy"></i></a>
-        </div>
-
-        <div class="card-body">
-          <pre><code data-code-target="#template5" data-code-type="javascript"></code></pre>
-          <template id="template5">
-            import { dirtyCheck } from "https://cdn.jsdelivr.net/gh/IdahoStatePolice/CDN@0.1/js/utils.js";
-
-            dirtyCheck();
-          </template>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm"></script>
 <script type="module">
   import { Modal } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3/+esm";
-  import { initModalAutofocus, initCollapseAutoFocus, initModalShowOnError, dirtyCheck } from "../js/utils.js";
+  import { initModalAutofocus, initCollapseAutoFocus, initModalShowOnError } from "../js/utils.js";
   import { initExamples, initTestRunner } from "./assets/modules.js";
   import { tests } from "./tests/utils-tests.js";
 
@@ -337,11 +311,9 @@
   function doubleInit() {
     initModalAutofocus();
     initCollapseAutoFocus();
-    dirtyCheck();
 
     initModalAutofocus();
     initCollapseAutoFocus();
-    dirtyCheck();
   }
 
   window.showModalsWithErrors = function() {

@@ -23,6 +23,21 @@ import { resolveSettings } from "./utils.js";
 class PasswordToggle {
 
   /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="password-toggle"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return PasswordToggle.#COMPONENT_SELECTOR;
+  }
+
+  /**
    * The default settings for a PasswordToggle.
    * @type {Readonly<PasswordToggleSettings>}
    */
@@ -120,6 +135,14 @@ class PasswordToggle {
     this.#icon.className = visible ? this.#settings.hideIcon : this.#settings.showIcon;
     this.#button.title = visible ? 'Hide' : 'Show';
     this.#button.setAttribute('aria-label', visible ? 'Hide input content' : 'Show input content');
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {PasswordToggle | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return PasswordToggle.#INSTANCES.get(el);
   }
 
   /**

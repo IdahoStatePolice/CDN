@@ -25,6 +25,22 @@ import { resolveSettings } from "./utils.js";
  * @see {@link https://idahostatepolice.github.io/CDN/site/countdown.html|Countdown Docs}
  */
 class Countdown {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="countdown"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return Countdown.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a Countdown.
    * @type {Readonly<CountdownSettings>}
@@ -120,6 +136,14 @@ class Countdown {
 
     Countdown.#INSTANCES.set(this.#inputEl, this);
     this.#inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {Countdown | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return Countdown.#INSTANCES.get(el);
   }
 
   /**

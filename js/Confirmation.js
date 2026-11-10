@@ -42,6 +42,22 @@ import { resolveSettings } from "./utils.js";
  * @see {@link https://idahostatepolice.github.io/CDN/site/confirmation.html|Confirmation Docs}
  */
 class Confirmation {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="confirmation"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return Confirmation.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a Confirmation.
    * @type {ConfirmationSettings}
@@ -149,6 +165,14 @@ class Confirmation {
 
     this.#el.addEventListener(this.#eventType, this.#eventHandler);
     Confirmation.#INSTANCES.set(this.#el, this);
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {Confirmation | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return Confirmation.#INSTANCES.get(el);
   }
 
   /**

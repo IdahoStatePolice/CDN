@@ -38,6 +38,22 @@ import { resolveSettings } from "./utils.js";
  *   <option data-submit-name="rushOrder" ...>
  */
 class DropdownSelect {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="dropdown-select"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return DropdownSelect.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a DropdownSelect.
    * @type {Readonly<DropdownSelectSettings>}
@@ -269,6 +285,14 @@ class DropdownSelect {
   set disabled(value) {
     this.#select.disabled = Boolean(value);
     this.#syncDisabledState();
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {DropdownSelect | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return DropdownSelect.#INSTANCES.get(el);
   }
 
   /**

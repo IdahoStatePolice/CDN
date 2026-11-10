@@ -108,6 +108,21 @@ import { resolveSettings } from "./utils.js";
 class ListManager {
 
   /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="list-manager"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return ListManager.#COMPONENT_SELECTOR;
+  }
+
+  /**
    * Immutable default configuration used by all ListManager instances.
    * Precedence: defaults < root data attributes < constructor options
    * @type {Readonly<ListManagerSettings>}
@@ -272,6 +287,14 @@ class ListManager {
    */
   items() {
     return this.#visibleItems();
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {ListManager | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return ListManager.#INSTANCES.get(el);
   }
 
   /**

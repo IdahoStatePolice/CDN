@@ -75,14 +75,18 @@ function initTestRunner(tests) {
   async function runTests() {
     running = true;
     for (const test of tests) {
+      let resultEl;
+
       try {
-        const resultEl = await new Promise(test);
+        resultEl = await new Promise(test);
         resultEl.classList.replace('text-warning', 'text-success');
         resultEl.innerHTML = 'Success';
       }
-      catch (resultEl) {
-        resultEl.classList.replace('text-warning', 'text-danger');
-        resultEl.innerHTML = 'Failed';
+      catch (error) {
+        if (resultEl instanceof Element) {
+          resultEl.classList.replace('text-warning', 'text-danger');
+          resultEl.textContent = 'Failed';
+        }
       }
     }
     running = false;

@@ -29,6 +29,22 @@ import { resolveSettings } from "./utils.js";
  * @see {@link https://idahostatepolice.github.io/CDN/site/row-click.html|Row Click Docs}
  */
 class RowClick {
+
+  /**
+   * The selector used to find elements to enhance with this component.
+   * @type {string}
+   */
+  static #COMPONENT_SELECTOR = '[data-isp-toggle="row-click"]';
+
+  /**
+   * The default selector identifying elements this component should be attached to.
+   * Read-only; consumed by whatever helper performs construction (e.g. initAll).
+   * @type {string}
+   */
+  static get SELECTOR() {
+    return RowClick.#COMPONENT_SELECTOR;
+  }
+
   /**
    * The default settings for a RowClick.
    * @type {RowClickSettings}
@@ -112,6 +128,14 @@ class RowClick {
     }
 
     RowClick.#INSTANCES.set(this.#rowEl, this);
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @returns {RowClick | undefined} The instance attached to the element, if any.
+   */
+  static for(el) {
+    return RowClick.#INSTANCES.get(el);
   }
 
   /**
