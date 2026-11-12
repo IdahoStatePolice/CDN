@@ -20,7 +20,7 @@
           <a href="#how-it-works" class="dropdown-item">How it works</a>
           <a href="#examples" class="dropdown-item">Examples</a>
           <a href="#min-setup" class="dropdown-item" style="padding-left: 2rem;">Minimum setup</a>
-          <a href="#search-functions" class="dropdown-item" style="padding-left: 3rem;">Pre-made search functions</a>
+          <a href="#search-functions" class="dropdown-item" style="padding-left: 3rem;">Ajax helper search function</a>
           <a href="#placeholder" class="dropdown-item" style="padding-left: 2rem;">Placeholder</a>
           <a href="#handling-objects" class="dropdown-item" style="padding-left: 2rem;">Handling an array of objects</a>
           <a href="#highlighting" class="dropdown-item" style="padding-left: 2rem;">Highlighting labels</a>
@@ -101,8 +101,8 @@
       <h3>Minimum setup</h3>
 
       <p>
-        The most basic setup expects an array of strings returned from the search function. Almost all
-        of our suggests rely on an ajax request where we do the filtering and sorting server side.
+        The most basic setup expects an array of strings returned from the search function.
+        Most of our suggests rely on an ajax request where filtering and sorting is done server side.
       </p>
 
       <div class="alert alert-info mb-3">
@@ -131,7 +131,7 @@
         </script>
       </div>
 
-      <div class="card bg-body-tertiary">
+      <div class="card bg-body-tertiary mb-3">
         <div class="card-body">
           <a href="#" data-clipboard="#template1" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
           <pre><code data-code-target="#template1" data-code-type="javascript"></code></pre>
@@ -147,16 +147,63 @@
           </template>
         </div>
       </div>
+
+      <p>
+        Calling the server via an ajax request to search and sort results is not a requirement.
+      </p>
+      <p>
+        This example shows how JS can be used to implement a search function client-side.
+      </p>
+
+      <div class="card bg-body-tertiary mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <label>Common Fruit</label>
+              <input id="fruit" type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { Suggest } from "../js/Suggest.js";
+
+          const fruits = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Orange', 'Pear', 'Peach'];
+          const fruitSearchFn = query => {
+            const q = query.trim().toLowerCase();
+            return fruits.filter(fruit => fruit.toLowerCase().startsWith(q));
+          };
+
+          new Suggest('#fruit', { searchFn: fruitSearchFn } );
+        </script>
+      </div>
+
+      <div class="card bg-body-tertiary">
+        <div class="card-body">
+          <a href="#" data-clipboard="#template1-2" title="copy" class="float-end"><i class="fa-solid fa-copy"></i></a>
+          <pre><code data-code-target="#template1-2" data-code-type="javascript"></code></pre>
+          <template id="template1-2">
+            import { Suggest } from "../js/Suggest.js";
+
+            const fruits = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Orange', 'Pear', 'Peach'];
+            const fruitSearchFn = query => {
+              const q = query.trim().toLowerCase();
+              return fruits.filter(fruit => fruit.toLowerCase().startsWith(q));
+            };
+
+            new Suggest('#fruit', { searchFn: fruitSearchFn });
+          </template>
+        </div>
+      </div>
     </div>
 
     <div class="col-12">
       <div id="search-functions" class="anchor-offset"></div>
-      <h4>Pre-made search functions</h4>
+      <h4>Ajax helper search function</h4>
 
       <p>
-        The above function does not do any error checking and there is a lot that can go wrong in an ajax
-        request. To handle some of these errors, we created a reusable object to provide common search functions.
-        You can import the <code>search</code> object from the Suggest module to get access to those functions.
+        A lot can go wrong in an ajax request. The <code>search</code> object provides an <code>ajax</code> function to handle common errors.
+        Import the <code>search</code> object from the Suggest module to access the <code>ajax</code> helper function:
       </p>
 
       <div class="card bg-body-tertiary">

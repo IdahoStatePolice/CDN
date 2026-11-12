@@ -70,7 +70,7 @@ import { Spinner } from "./Spinner.js";
  * @prop {MarkFunction} [markFn] - Function that takes the query string and label and returns an HTML string with the label marked using mark tags.
  * @prop {SelectFunction} [selectFn] - Function that is called when an item in the list is selected. Takes the item from the list and the element that represents it. No return is expected.
  * @prop {ClearFunction} [clearFn] - Function that is called when the input has been cleared.
- * @prop {EnterFunction} [enterFn] - Function that is called when the enter key is pressed and the menu is visible. Takes the item from the list and the element that represents it that is highlighted, selected or null in that order.
+ * @prop {EnterFunction} [enterFn] - Called when Enter is pressed while the menu is visible. Receives the highlighted list item if there is one, otherwise the selected item, otherwise `undefined`.
  */
 
 /**
@@ -372,7 +372,7 @@ class Suggest {
   /**
    * Handles `Enter` and `Tab` keys from the `#handleKeyEvent` handler.
    * If the `Enter` key is pressed and a `enterFn` has been provided, it will execute that function.
-   * Otherwise, it selects either the focused, active, or first element in the list.
+   * Otherwise, it selects either the focused or active list item.
    *
    * @param {KeyboardEvent} e - A KeyboardEvent event from the onKeydown listener.
    */
@@ -388,12 +388,12 @@ class Suggest {
       this.#settings.enterFn.call(this, currentEl?.suggestItem, currentEl);
     }
     else {
-      this.#select(currentEl || this.#menuEl.firstElementChild);
+      this.#select(currentEl);
     }
   }
 
   /**
-   * Handles moving the hover class to the focused element in the list.
+   * Handles moving the hover class to the focused list item.
    * Will also scroll the list if needed.
    *
    * @param {KeyboardEvent} event - A KeyboardEvent event.
